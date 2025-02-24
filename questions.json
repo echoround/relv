@@ -1,0 +1,938 @@
+{
+    "questions": [
+      {
+        "id": 1,
+        "text": "Soetamisluba ja/või relvaluba ei väljastata isikule, kes",
+        "options": [
+          "on piiratud teovõimega ja kellel on seetõttu määratud eestkostja",
+          "on raskekujulise psüühikahäirega",
+          "ei oma Eesti kodakondsust",
+          "on aasta jooksul mitmel korral vahetanud elukohta"
+        ],
+        "correct": [0, 1],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 2,
+        "text": "Riiklikku järelevalvet tsiviilkäibes lubatud relvade üle teostab",
+        "options": [
+          "Käitlemise üle teostab Tarbijakaitseamet",
+          "Käitlemise üle teostab Politsei- ja Piirivalveamet",
+          "Sisseveo, väljaveo ja edasitoimetamise seaduslikkuse üle Kaitseministeerium",
+          "Sisseveo, väljaveo ja edasitoimetamise seaduslikkuse üle Maksu- ja Tolliamet"
+        ],
+        "correct": [1, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 3,
+        "text": "Relvakapp kuni 8 relva hoidmiseks",
+        "options": [
+          "Ainult padrunite ja/või sütikute hoidmisel võib relvakapil olla üks eraldi lukustatav laegas",
+          "Peab omama vähemalt kahte turvalukku",
+          "Relvakapis peab olema vähemalt kaks eraldi lukustatavat laegast, millest üks on ettenähtud laskemoona ja sütikute ning teine püssirohu hoidmiseks",
+          "Peab olema valmistatud vähemalt 3mm paksusest teras (raud-) plekist"
+        ],
+        "correct": [0, 2, 3],
+        "multiple": true,
+        "explanation": "Relvakapp peab tervikuna olema valmistatud vähemalt 3 mm paksusest terasplekist ja omama vähemalt ühte turvalukku. Lisaks peab relvakapis olema vähemalt kaks eraldi lukustatavat laegast laskemoona ja sütikute ning püssirohu hoidmiseks. Ainult padrunite ja/või sütikute hoidmisel võib relvakapil olla üks eraldi lukustatav laegas."
+      },
+      {
+        "id": 4,
+        "text": "Relvasoetamisluba annab selle omajale õiguse soetda",
+        "options": [
+          "Loal märgitud relvaliigi hulka kuuluvat relva",
+          "Mistahes tsiviilkäibes keelatud relva",
+          "Mistahes relvaliigi hulka kuuluvat relva",
+          "Mistahes relvaliigi hulka kuuluvat relva"
+        ],
+        "correct": [0],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 5,
+        "text": "Relva kandmisel",
+        "options": [
+          "Peab kaasas olema isikut tõendav dokument",
+          "Püstoli padrunipesas võib olla padrun",
+          "Revolvri padrunipesas võib olla padrun",
+          "Peab kaasas olema isikut tõendav dokument"
+        ],
+        "correct": [0, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 6,
+        "text": "Relvakapp 9 ja enam tulirelva hoidmiseks peab olema",
+        "options": [
+          "Relvakapil peab olema vähemalt üks turvalukk",
+          "Valmistatud vähemalt 3mm paksusest teras(raud-) plekist või sellele vastava tugevusega materjalist",
+          "Relvakapil peab olema vähemalt kaks turvalukku",
+          "Valmistatud vähemalt 4mm paksusest teras(raud-) plekist või sellele vastava tugevusega materjalist"
+        ],
+        "correct": [0, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 7,
+        "text": "Relva ja laskemoona hävitamise kord",
+        "options": [
+          "Hävitatamisele ei kuulu kultuuriväärtusega relv",
+          "Hävitatamisele ei kuulu ajaloo väärtusega relv",
+          "Relva ja laskemoona hävitamise korraldab Politsei- ja Piirivalveamet",
+          "Relva ja laskemoona hävitamise korraldab relvaomanik ise"
+        ],
+        "correct": [0, 1, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 8,
+        "text": "Relva registreerimise ajaks võib relvaomanik või -valdaja",
+        "options": [
+          "Anda relv hoiule juriidilisele isikule teenistusrelvade hoidlasse",
+          "Anda relv hoiule teisele relvaomanikule, kellel on relvakapp isiklike relvade hoidmiseks",
+          "Hoida relva oma elu- või asukohas relvaseadusega sätestatud tingimuste kohaselt",
+          "Anda relv hoiule politseisse"
+        ],
+        "correct": [2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 9,
+        "text": "Avaldus relvaloa vahetamiseks seoses kehtivuse lõppemisega tuleb Politsei- ja Piirivalveametile esitada",
+        "options": [
+          "Vahetult peale lõppemist",
+          "Viimasel tööpäeval enne lõppemist",
+          "Vähemalt 30 tööpäeva enne kehtivuse lõppu",
+          "Vähemalt kaks kuud enne kehtivuse lõppemist"
+        ],
+        "correct": [3],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 10,
+        "text": "Relva kontrollimisel teostatakse toimingud antud järjekorras",
+        "options": [
+          "Eemalda padrunisalv, sulge relvalukk, soorita ohutus suunas sihitud kontrolllask ja lülita peale kaitseriiv",
+          "Eemalda padrunisalv ja soorita ohutus suunas sihitud kontrolllask",
+          "Eemalda padrunisalv, ava relvalukk ja seejärel sule relvalukk, lülita peale kaitseriiv",
+          "Eemalda padrunisalv, ava relvalukk, kontrolli üle padrunipesa ja salvekanal, sulge relvalukk ja soorita ohutus suunas sihitud kontrolllask, lülita peale kaitseriiv"
+        ],
+        "correct": [3],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 11,
+        "text": "Relvaloa kehtivusaeg ei saa olla pikem, kui",
+        "options": [
+          "Isikule väljastatud tervisetõendi kehtivusaeg",
+          "5 aastat",
+          "10 aastat",
+          "Kehtivusaeg on piiramata"
+        ],
+        "correct": [0, 1],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 12,
+        "text": "Paralleelrelvaloa korral võib relvaomanik anda relva ja laskemoona üle",
+        "options": [
+          "Paralleelrelvaloas märgitud isikule lisadokumente vormistamata, kui ta teavitab sellest kirjalikult või sidevahendi teel elukohajärgset prefektuuri",
+          "Paralleelrelvaloas märgitud isikule ilma mingeid lisadokumente koostamata",
+          "Paralleelrelvaloas märgitud isikule üleandmise-vastuvõtmise akti alusel",
+          "Paralleelrelvaloas märgitud isikule lisadokumente vormistamata, kui ta teeb seda mistahes relvamüügi kohas ning see fikseeritakse vastavas raamatus"
+        ],
+        "correct": [1],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 13,
+        "text": "Tsiviilkäibes on keelatud",
+        "options": [
+          "Ajaloolise kultuuri-, võitlus- või sporditraditsiooniga seonduv külmrelv (mõõk, pistoda, rapiir jt) või selle koopia",
+          "Õõnsaotsalise kuuliga püstoli- ja revolvripadrun",
+          "Tulirelv, mis lahtivõetuna võimaldab lasu sooritamist",
+          "Tulirelv, millel puudub valmistaja markeering",
+          "Akustilised relvad",
+          "Soomust läbistava toimega lõhkelaskemoon ja sellise laskemoona kuulid"
+        ],
+        "correct": [1, 2, 3, 5],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 14,
+        "text": "Püssirohu ja sütikute hoidmine",
+        "options": [
+          "Püssirohtu hoitakse ainult tehasepakendis või suletud metallpurkides, koos laskemoona ja sütikutega",
+          "Püssirohi peab asuma kütte seadmest vähemalt 10 cm kaugusel",
+          "Püssirohi peab asuma kütte seadmest vähemalt 1m kaugusel",
+          "Püssirohtu hoitakse ainult tehasepakendis või suletud metallpurkides ning laskemoonast ja sütikutest eraldi"
+        ],
+        "correct": [2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 15,
+        "text": "Relvao kehtivusaeg, kui see on pikendatud",
+        "options": [
+          "isiku väljastatud tervisetõendi kehtivus",
+          "Kehtivusaeg on piiramatu",
+          "5 aastat",
+          "10 aastat"
+        ],
+        "correct": [0, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 16,
+        "text": "Kriminaalkorras karistatakse",
+        "options": [
+          "Tulirelva kaotamise eest",
+          "Tsiviilkäibes keelatud tulirelva ebaseadusliku käitlemise eest",
+          "Tsiviilkäibes keelatud laskemoona ebaseadusliku käitlemise eest, välja arvatud laskemoona ebaolulises koguses ebaseaduslik käitlemine",
+          "Tulirelva lohaka hoidmise eest, kui selle relvaga on toime pandud kuritegu"
+        ],
+        "correct": [1, 2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 17,
+        "text": "Tulireva lasköblmatuks muutmine on",
+        "options": [
+          "Tulireva töötlemine vedelike, mille temperatuuril Kaab väimalik tapsuslaskmiseks",
+          "Trumli oleva padrunipesa kinnikevitamine sellisel, et sinna ei ole vöimalik padrunit sisestada",
+          "Tulireva ohtuse osa mehhaanil töötlemine, mille tulemusena relv kaotab ajutiselt vöi jäädavalt lasu sooritamise võime",
+          "Tulireva ohtuse osa mehhaanil töötlemine, mille tulemusena relv kaotab jäädavalt lasu sooritamise võime"
+        ],
+        "correct": [1, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 18,
+        "text": "Relvaloa kehtivuse lõppemisel peab omanik relva ja selle laskemoona üle andma politseile",
+        "options": [
+          "Üks päev peale loa kehtivuse lõppemist",
+          "Loa kehtivuse viimasel tööpäeval",
+          "Üks nädal enne loa kehtivuse lõppemist",
+          "Ei pea relva ja laskemoona üle andma"
+        ],
+        "correct": [1],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 19,
+        "text": "Relvakapp, kustutatav säilit ega laegas ei ole nõutav",
+        "options": [
+          "Ühe vintsaud ja jahirelva ja ühe püstoli korral",
+          "Ühe sileraude jahirelva korral",
+          "Ühe tulireva ja selle relva laskemoona korral",
+          "Kahe püstoli või revolvi korral, kui isikul on võimalik neid turvaliselt hoida"
+        ],
+        "correct": [2],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 20,
+        "text": "Relva lammutamine",
+        "options": [
+          "Relva võib lammutada ainult tegevusluba omav isik",
+          "Lammutamisest järelejäänud kasutuskõlblikud tulirelva olulised osad peab andma hävitusse",
+          "Lammutamisest järelejäänud kasutuskõlblikud tulirelva olulisi osi võib kasutada relvade parandamiseks või ümbertegemiseks",
+          "Relva võib lammutada relva lammutamise loa alusel relvaomanik või tema tellimusel relva parandamise või ümbertegemise tegevusluba omav isik"
+        ],
+        "correct": [2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 21,
+        "text": "Relva võib võõrandada",
+        "options": [
+          "Vastavat tegevusluba omavale isikule või tema vahendusel",
+          "Vastavat soetamisluba omavale isikule Politsei- ja Piirivalveameti pädeva ametniku juuresolekul",
+          "Isikule, kellel on relvaluba",
+          "Mistahes isikule sõltumata relvaloa või soetamisloa omamisest"
+        ],
+        "correct": [0, 1],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 22,
+        "text": "Relva on keelatud müüa",
+        "options": [
+          "Isikule, kes ei esita isikut tõendavat dokumenti ja antud liki relva soetamisluba",
+          "Isikule, kes ei esita relvaloa ja isiku tõendava dokumenti",
+          "Kui müüja teab, et relv on defektiga",
+          "Alla 18-aastasele isikule piiramata tsiviilkäibega relva"
+        ],
+        "correct": [0, 2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 23,
+        "text": "Relva ja laskemoona võib kanda",
+        "options": [
+          "Koolis, pidustustel ja teistel avalikel üritustel",
+          "Koos vastava relvaloa või relvakandmisloaga",
+          "Avalikus kohas relva varjamata",
+          "Ilma vastava relvaloa või relvakandmisloata"
+        ],
+        "correct": [1],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 24,
+        "text": "Paralleelrelvaluba võib anda",
+        "options": [
+          "Kuni viiele füüsilisele isikule",
+          "Kuni kahele füüsilisele isikule",
+          "Kuni kolmele füüsilisele isikule",
+          "Piiramatule hulgale füüsilistele isikutele"
+        ],
+        "correct": [1],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 25,
+        "text": "Soetamisluba ja/või relvaluba ei väljastata isikule,",
+        "options": [
+          "Ei vasta koodakondsust",
+          "On aasta jooksul mitmel korral vahetanud elukohta",
+          "On raskekujulise psüühikahäirega",
+          "On piiratud teovõimega ja kellele on seetõttu määratud eestkostja"
+        ],
+        "correct": [2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 26,
+        "text": "Relvaluba antakse välja lühemaks tähtajaks kui viis aastat",
+        "options": [
+          "Kui isiku vanus ületab 80 eluaastat",
+          "Kui taotleja seda soovib",
+          "Juriidilisele isikule, kelle tegevuse määratud tähtaeg on lühem kui 5 aastat",
+          "Välismaalasele, kellel elamisloa kehtivuse aeg on vähem kui 5 aastat"
+        ],
+        "correct": [1, 2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 27,
+        "text": "Kohaliku relvaed võib teostada",
+        "options": [
+          "Kui relva ja laskemoon on valmista ja pakendis",
+          "Füüsiline või juriidiline isik, kellel on relvaluba või soetamisluba",
+          "Kui relva ja laskemoon on pakitud viski, mis ei võimalda kohest kasutuselevõttu",
+          "Füüsiline või juriidiline isik, kellel on tegevusluba relvade valmiamiks või müügiks"
+        ],
+        "correct": [1, 2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 28,
+        "text": "Tegu ei ole õigusvastane, kui see pannakse toime",
+        "options": [
+          "Häda¬seisundis",
+          "Häda¬kaitse piire ületades otsese tahtlusega",
+          "Äkkviha seisundis",
+          "Häda¬kaitse piire ületades ettevaatamatusest"
+        ],
+        "correct": [0, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 29,
+        "text": "Tulirelva osad on",
+        "options": [
+          "Relva lukukoda",
+          "Relvaraud",
+          "Padrunisalv",
+          "Padrun",
+          "Lasersihik",
+          "Relvarihm"
+        ],
+        "correct": [0, 1, 2, 4],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 30,
+        "text": "Relvapi nüüd tulireva hoidmiseks",
+        "options": [
+          "Ei sölta relvade arvust, vaid relvade likidest ja suurustest",
+          "Erinevad kuni 8 tulireva ning 9 ja enam tulireva hoidmiseks",
+          "Ei ole sätestatud ning omanik soetab selle omal valikul",
+          "Erinevad kuni 5 tulireva ning 6 ja enam tulireva hoidmiseks"
+        ],
+        "correct": [1],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 31,
+        "text": "Tsiviilkäibes lubatud laskemoon on:",
+        "options": [
+          "äretulepadrun",
+          "kesktulepadrun",
+          "tulireva padrun, mille kuulli on soomusläbistav kavasüdamik",
+          "sõjatõlgatalse kuuliga püstoli- ja revolvripadrun"
+        ],
+        "correct": [0, 1],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 32,
+        "text": "Politsei- ja Piirivalveametis tuleb vormistada muudatused seoses",
+        "options": [
+          "Relvaomaniku 3-kuulise töölähetuse korral välisriiki",
+          "Relvaandmete muudatusega (mark, liik, kaliiber, markeering)",
+          "Relvaomaniku või -valdaja nime muutumisega",
+          "Relvaomaniku töökoha vahetusega"
+        ],
+        "correct": [1, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 33,
+        "text": "Kollektsioneerida võib",
+        "options": [
+          "Üle 12,7 mm kaliibriga laskekõlblik vintraudne tulirelv või akustiline relv, mille mudeli tootmist alustati enne 1945. aastat",
+          "Üle 20 mm kaliibriga sileraudse tulirelva laskemoon, mille padrunimudeli tootmist alustati enne 1945. aastat",
+          "Kuni 200 padrunit ühe padrunimudeli kohta",
+          "Üle 20 mm kaliibriga laskekõlblik sileraudne tulirelv või akustiline relv, mille mudeli tootmist alustati enne 1945. aastat",
+          "Relv, mille mõju põhineb elektrienergia, radioaktiivse kiirguse või bioloogilise faktori kasutamisel",
+          "Üle 12,7 mm kaliibriga vintraudse tulirelva laskemoon, mille padrunimudeli tootmist alustati pärast 1945. aastat"
+        ],
+        "correct": [0, 1, 2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 34,
+        "text": "Relvaluba, millele on kantud vaid relv lik annab selle omajale õiguse",
+        "options": [
+          "Lasersihiku kasutamiseks",
+          "Osta relv",
+          "Helisummuti kasutamiseks",
+          "Soetada seaduslikult kasutusse võetud relva laskemoona"
+        ],
+        "correct": [3],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 35,
+        "text": "Relva ümbertegemise all mõistetakse relvaseaduses",
+        "options": [
+          "Relva muutmist viisil, millega kaasneb relva omaduste oluline muutmine",
+          "Relva ümbervormistamist teisele relvaluba omavale isikule",
+          "Tulirelva olulise osa mehhaanilist töötlemist, mille tulemusena relv kaotab lasu sooritamise võime",
+          "Relva defekti kõrvaldamist viisil, millega ei kaasne relva omaduste olulist muutumist"
+        ],
+        "correct": [0],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 36,
+        "text": "Füüsiline isik võib relva või laskemoona oma tarbeks Euroopa Liidu liikmesriigist Eestisse toimetada, kui tal on:",
+        "options": [
+          "Relvaluba või vastava relva soetamisluba",
+          "Euroopa Liidus edasitoimetamise eelluba",
+          "Euroopa Liidus edasitoimetamise luba",
+          "Strateegilise kauba komisjoni eriluba"
+        ],
+        "correct": [0, 1, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 37,
+        "text": "Teises riigis laskekõlbmatuks muudetud relva",
+        "options": [
+          "Eestisse toonud isik peab esitama taotluse Politsei- ja Piirivalveametile relva laskekõlbmatuse tõestavate vastavate tõenditega 30 päeva jooksul peale Eestisse toomist",
+          "Vastavalt Eesti Vabariigis kehtivatele laskekõlbmatuse kontrolli reeglitele võib relva parandamise või ümbertegemise tegevusluba omav isik",
+          "Tunnistab laskekõlbmatuks pädev laskekõlbmatuse tõestavate vastavate tõenditega relva parandamise või ümbertegemise tegevusluba omav isik",
+          "Eestisse toomiseks peab taotlema eelluba nagu tulirelva puhul"
+        ],
+        "correct": [0, 1, 2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 38,
+        "text": "Relvaluba vahetatakse",
+        "options": [
+          "Relvaloa kõlbmatuks muutumisel",
+          "Relvaloa omaniku töökoha muutumisel",
+          "Relvahoidla asukoha muutumisel",
+          "Relvaloa omaniku andmete muutumisel"
+        ],
+        "correct": [0, 2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 39,
+        "text": "Relvaloa vahetamiseks selle kehtivuse lõppemisega peab esitama:",
+        "options": [
+          "ainult tervisetõend koos konstaabli kontrollaktiga",
+          "ainult konstaabli kontrollakt ja avaldus",
+          "avaldus, med. tõend, kontrollakt ja kodus olevad relvad",
+          "Avalduse vähemalt 2 kuud ette"
+        ],
+        "correct": [3],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 40,
+        "text": "Relva võib parandada",
+        "options": [
+          "Relva müügi tegevusluba omav isik",
+          "Vastavate tegevusluba omav isik",
+          "Vastavate oskustega isik",
+          "Relvaomanik ise"
+        ],
+        "correct": [1, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 41,
+        "text": "Füüsilist isikut karistatakse väärteokorras",
+        "options": [
+          "Elektrišokirelva omamise eest",
+          "Relva kandmise eest avalikul üritusel",
+          "Avaliku korra rikkumise eest, kui see rikkumine oli toimepandud relvaga",
+          "Relva kandmise eest alkoholijoobes"
+        ],
+        "correct": [0, 1, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 42,
+        "text": "Kriminaalkorras karistatakse",
+        "options": [
+          "Tulirelva lohaka hoidmise eest, kui selle relvaga on toime pandud kuritegu",
+          "Tsiviilkäibes keelatud tulirelva ebaseadusliku käitlemise eest",
+          "Tulirelva kaotamise eest",
+          "Tsiviilkäibes keelatud tulirelva, selle olulise osa ja laskemoona ebaseadusliku käitlemise eest"
+        ],
+        "correct": [0, 1, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 43,
+        "text": "Tsiviilkäibes on lubatud",
+        "options": [
+          "piiramata käibega padrunikomponent sütik",
+          "ajaloolise kultuuri-, võitlus- või sporditraditsiooniga seonduv külmrelv või selle koopia",
+          "allveepüss",
+          "piiramata käibega kõik padrunisalved, olenemata mahust",
+          "tulirelv, mis imiteerib mõne muu eseme kuju",
+          "elektrišokirelv"
+        ],
+        "correct": [1, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 44,
+        "text": "Relva ja laskemoona edasitoimetamine on",
+        "options": [
+          "Selle saatmine posti teel teisele isikule",
+          "Selle kaasaskandmine toimetamiseks sõidukiga ühest kohast teise ilma relva vahepealse kasutamise eesmärgita",
+          "Selle kaasaskandmine toimetamiseks jalgsi ühest kohast teise ilma relva vahepealse kasutamise eesmärgita",
+          "Selle saatmine posti teel iseendale ühest kohast teise"
+        ],
+        "correct": [1, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 45,
+        "text": "Tulirelva osad on",
+        "options": [
+          "kaitseriiv",
+          "öösihik",
+          "ainult alla 21 padrunit mahutav salv",
+          "adapter",
+          "ainult üle 21 padrunit mahutav salv",
+          "trummel"
+        ],
+        "correct": [0, 1, 3, 5],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 46,
+        "text": "Relva ja laskemoona võõrandamine on",
+        "options": [
+          "Üleandmine hoiule Politsei- ja Piirivalveametile",
+          "Kinkimine",
+          "Müümine",
+          "Üleandmine ajutisele hoidmisele vastavat teenust osutavale isikule"
+        ],
+        "correct": [1, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 47,
+        "text": "Relva võib anda ajutiselt hoiule",
+        "options": [
+          "Isikule, kellel puudub relvaluba üleandmise-vastuvõtmise aktiga",
+          "Isikule, kellel on tegevusluba relvade hoidmiseks teenusena",
+          "Relvaluba omavale teisele isikule kuni viieks ööpäevaks",
+          "Üleandmise-vastuvõtmise akti alusel relvaluba omavale teisele isikule kuni üheks ööpäevaks"
+        ],
+        "correct": [1, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 48,
+        "text": "Enne relvaloa vahetamist",
+        "options": [
+          "Peab relvaloa omaja tasuma riigilõivu",
+          "Peab relvaloa omaja tõestama tema relvaloale kantud relvade olemasolu",
+          "Ei pea relvaloa omaja tõestama tema relvaloale kantud relvade olemasolu",
+          "Ei pea paralleelrelvaloa vahetaja esitama relvaomaniku kirjalikku nõusolekut tema relva kasutamiseks"
+        ],
+        "correct": [0, 1],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 49,
+        "text": "Euroopa Liidu territooriumilt teise liikmesriiki relvade ja laskemoona edasitoimetamise aluseks on",
+        "options": [
+          "Euroopa tulirelvapass",
+          "Eestis väljastatud relvasoetamisluba",
+          "Ükskõik, millises Euroopa Liidu liikmesriigis väljastatud relvaluba",
+          "Eestis väljastatud relvaluba"
+        ],
+        "correct": [0, 1, 2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 50,
+        "text": "Kollektsioneerida ei tohi",
+        "options": [
+          "üle 12,7 mm kaliibriga vintraudse tulirelva laskemoon, mille padrunimudeli tootmist alustati pärast 1945. aastat",
+          "Akustilist tulirelva kaliibriga üle 20mm, mille mudeli tootmist alustati enne 1945. aastat",
+          "relv, mille mõju põhineb elektrienergia, radioaktiivse kiirguse või bioloogilise faktori kasutamisel",
+          "kasteet, kasteetnuga, teraspiits, samuti muu spetsiaalselt kehavigastuse tekitamiseks valmistatud ese",
+          "üle 12,7 mm kaliibriga laskekõlblik vintraudne tulirelv või akustiline relv, mille mudeli tootmist alustati pärast 1945. aastat",
+          "lõhkelaskemoon, sütetlaskemoon"
+        ],
+        "correct": [0, 2, 3, 4, 5],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 51,
+        "text": "Politsei- ja Piirivalveamet tunnistab soetamisloa ja/või relvaloa kehtetuks kui",
+        "options": [
+          "Loa omaja on enda või teise isiku turvalisust ohustava eluviisi või käitumise tõttu sobimatu seda liiki relva soetama või omama",
+          "Loa omaja on surnud või teadmata kadunuks tunnistatud",
+          "Relv on kaotsi läinud või hävinud",
+          "Isikupoolse relva käitlemise või kasutamisega on põhjustanud isiku surm või tekitanud isikule tervisekahjustus või varaline kahju",
+          "Relvaomanik või -valdaja on vähemalt kaks korda viimase kolme aasta jooksul rikkunud käesoleva seaduse või selle alusel antud õigusakti nõudeid või on jätnud täitmata temale tehtud ettekirjutuse nõuded"
+        ],
+        "correct": [0, 1, 2, 4],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 52,
+        "text": "Kodusel teel valmisatud padruneid",
+        "options": [
+          "Ei tohi võõrandada",
+          "tohib kinkida",
+          "Tohib võõrandada pädeva PPA ametniku juuresolekul",
+          "Tohib võõrandada igas olukorras"
+        ],
+        "correct": [0],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 53,
+        "text": "Nõuded relvahoidlale",
+        "options": [
+          "Seina paksus peab olema vähemalt 20cm",
+          "Seina paksus peab olema vähemalt 40cm",
+          "Relvahoidla seinad on valmistatud alumiiniumist",
+          "Relvahoidla seinad on valmistatud raudbetoonist või silikaatellistest"
+        ],
+        "correct": [1, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 54,
+        "text": "Paralleelrelvaloa või relvakandmisloa vahetamine relvaloa vastu peab toimuma",
+        "options": [
+          "Üks kuu enne loa kehtivuse lõppemist",
+          "Kolme kuu jooksul loa kehtivuse lõppemise päevast arvates",
+          "Ühe kuu jooksul loa kehtivuse lõppemise päevast arvates",
+          "Kolm kuud enne loa kehtivuse lõppemist"
+        ],
+        "correct": [1],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 55,
+        "text": "Lasketirus laenutatud relv",
+        "options": [
+          "Võib kasutada ükskõik millises lasketirus iseseisvalt",
+          "Võib kasutada ükskõik millises lasketirus laskeinstruktoru juhendamisel",
+          "Võib kasutada ainult samas lasketirus relvaluba omav isik iseseisvalt",
+          "Võib kasutada ainult samas lasketirus laskeinstruktoru juhendamisel"
+        ],
+        "correct": [2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 56,
+        "text": "Avaldus relvaloa vahetamisega seoses relva, relvaloa või relvakandmisloa omaja andmete või relvahoidla asukoha muutmise korral tuleb Politsei- ja Piirivalveametile esitada",
+        "options": [
+          "14 kalendripäeva jooksul andmete või asukoha muutumisest arvates",
+          "7 kalendripäeva jooksul andmete või asukoha muutumisest arvates",
+          "7 tööpäeva jooksul andmete või asukoha muutumisest arvates",
+          "14 tööpäeva jooksul andmete või asukoha muutumisest arvates"
+        ],
+        "correct": [2],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 57,
+        "text": "Euroopa tulirelvapassi kantakse relvad, mis on registreeritud",
+        "options": [
+          "Enese ja vara kaitse otstarbel",
+          "Kutsealal tegutsemise otstarbel",
+          "Jahipidamise otstarbel",
+          "Vastava spordialaga tegelemise otstarbel"
+        ],
+        "correct": [2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 58,
+        "text": "Tegu ei ole õigusvastane, kui see pannakse toime",
+        "options": [
+          "Hädakaitse piire ületades otsese tahtlusega",
+          "Hädaolukorras",
+          "Äkkviha seisundis",
+          "Hädakaitse piire ületades ettevaatamatusest"
+        ],
+        "correct": [1, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 59,
+        "text": "Relva võib muuta laskevõimetuks",
+        "options": [
+          "Vastavate oskustega isik",
+          "Relva parandamise või ümbertegemise tegevusluba omav isik",
+          "Relva müüki teostav tegevusluba omav isik",
+          "Relvaomanik ise"
+        ],
+        "correct": [1],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 60,
+        "text": "Hädakaitseseisundis võib kahjustada ründaja õigushüvesid",
+        "options": [
+          "Kahjustades kolmanda isiku õigusi, kelle läbi võib ründajat mõjutada",
+          "Kui ta on ründe lõpetanud, kuid püüab põgeneda",
+          "Kui on teada, et ta teostab vahetult eesseisvat õigusvastast rünnet",
+          "Kes vahetut rünnet teostab"
+        ],
+        "correct": [3],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 61,
+        "text": "Relvasoetamisluba on kehtiv selle väljastamisest",
+        "options": [
+          "9 kuud",
+          "6 kuud",
+          "Kuni relva soetamiseni mistahes ajal, kuid mitte kauem kui 3 aastat",
+          "3 kuud"
+        ],
+        "correct": [3],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 62,
+        "text": "Relvahoidla on",
+        "options": [
+          "Topeltuksed, neist välimine vähemalt 6mm paksusest terasest, sisemine vähemalt 15mm läbimõõduga terasvarrastest",
+          "Välisuksel on kaks turvalukku ning uks avaneb ainult väljapoole",
+          "Välisuksel on vähemalt üks turvalukk ning uks avaneb ainult väljapoole",
+          "Topeltuksed, neist välimine vähemalt 4mm paksusest terasest, sisemine vähemalt 10mm läbimõõduga terasvarrastest"
+        ],
+        "correct": [0, 1],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 63,
+        "text": "Tulirelva võib laskekõlbmatuks muuta",
+        "options": [
+          "Maksu- ja Tolliameti loal",
+          "Siseministri loal",
+          "Tulirelva omaniku enda loal",
+          "Politsei- ja Piirivalveameti loal"
+        ],
+        "correct": [3],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 65,
+        "text": "Relva võõrandamise luba",
+        "options": [
+          "Antakse relvaomanikule taotluse alusel",
+          "On kehtiv kolm kuud",
+          "On kehtiv üks kuu",
+          "Antakse isikule, kes kasutab relva paralleelrelvaloa alusel"
+        ],
+        "correct": [0, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 66,
+        "text": "Tulirelva hoidmisel",
+        "options": [
+          "Ei pea olema tühjaks laetud, kui seda hoitakse relvakapis",
+          "Tühjaks laadimise või mittelaadmisel otsustab selle omanik",
+          "Ei pea olema tühjaks laetud, kui seda hoitakse relvakapis, mis asub eraldi ruumis",
+          "Peab see olema alati tühjaks laetud"
+        ],
+        "correct": [3],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 67,
+        "text": "Relvaomanik peab järgivalt teostavale ametnikule",
+        "options": [
+          "Andma selgitusi",
+          "Esitama järelevalveks vajalikke dokumente",
+          "Alluma alkoholijoobe tuvastamise protseduurile, kui teda kahtlustatakse alkoholijoobes relva kandmises",
+          "Võimaldama relva hoidmise koha ülevaatamist"
+        ],
+        "correct": [0, 1, 2, 3],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 68,
+        "text": "Relvasoetamisluba annab selle omajale õiguse soetda",
+        "options": [
+          "Loal märgitud relvaliigi hulka kuuluvat relva",
+          "Mistahes tsiviilkäibes keelatud relav",
+          "Mistahes relvaliigi hulka kuuluvat relva",
+          "Mistahes relvaliigi hulka kuuluvat relva"
+        ],
+        "correct": [0],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 69,
+        "text": "Soetamisluba ja/või relvaloa kehtivus peatatakse",
+        "options": [
+          "Kui loa omaja suhtes esineb põhjendatud kahtlus, et ta võib oma eluviisi või käitumisega ohustada enda või teise isiku turvalisust",
+          "Kui loa omajat on väärteo korras karistatud mootorsõiduki või trammi juhtimise eest lubatud alkoholi piirmäära ületades",
+          "Kui kontrollimisel on tuvastatud, et loa omajal ei ole relvaseaduses ettenähtud tingimusi relva ja laskemoona hoidmiseks",
+          "Kui loa omajat on karistatud ükskõik millise väärteo eest"
+        ],
+        "correct": [0, 1, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 70,
+        "text": "Soetamisluba ja/või relvaloa kehtivus peatatakse",
+        "options": [
+          "Kui kontrollimisel on tuvastatud, et loa omajal ei ole relvaseaduses ettenähtud tingimusi relva ja laskemoona hoidmiseks",
+          "Kui loa omajat on väärteo korras karistatud mootorsõiduki või trammi juhtimise eest lubatud alkoholi piirmäära ületades",
+          "Kui loa omaja suhtes esineb põhjendatud kahtlus, et ta võib oma eluviisi või käitumisega ohustada enda või teise isiku turvalisust",
+          "Kui loa omajat on väärteo korras karistatud ükskõik, millise rikkumise eest"
+        ],
+        "correct": [0, 1, 2],
+        "multiple": true,
+        "explanation": ""
+      },
+      {
+        "id": 72,
+        "text": "Laskekõlbmatu relv on",
+        "options": [
+          "Tulirelv või akustiline relv, mis on muudetud laskekõlbmatuks nii, et tulirelva kõik olulised osad on muudetud kasutuskõlbmatuks ning neid ei ole võimalik relva taas laskekõlblikuks muutmiseks eemaldada, asendada ega ümber ehitada",
+          "Tulirelv või akustiline relv, mis on muudetud laskekõlbmatuks nii, et tulirelva kõik olulised osad on muudetud kasutuskõlbmatuks ning neid on võimalik relva taas laskekõlblikuks muutmiseks eemaldada, asendada ega ümber ehitada"
+        ],
+        "correct": [0],
+        "multiple": false,
+        "explanation": ""
+      },
+      {
+        "id": 73,
+        "text": "Relva ostmisel tuleb selle registreerimiseks Politsei- ja Piirivalveametile esitada",
+        "options": [
+          "Soetatud relv",
+          "Relvaomaniku abikaasa või muu lähedase isiku nõusolek relva omamiseks",
+          "Soetamisluba, millele relva müüja on kandnud andmed müüdud relva kohta",
+          "Fotod soetatud relvast"
+        ],
+        "correct": [0, 2],
+        "multiple": true,
+        "explanation": ""
+      }
+    ]
+  }
