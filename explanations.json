@@ -1,0 +1,288 @@
+{
+    "explanations": [
+      {
+        "id": 1,
+        "text": "Soetamisluba ja/või relvaluba ei väljastata isikutele, kes ei ole seaduslikult võimelised relva vastutustundlikult käsitsema, nagu piiratud teovõimega inimesed eestkostjaga või raskekujulise psüühikahäirega inimesed, kuna need tingimused võivad ohustada turvalisust."
+      },
+      {
+        "id": 2,
+        "text": "Riiklik järelevalve tsiviilkäibes lubatud relvade üle kuulub Politsei- ja Piirivalveameti ja Maksu- ja Tolliameti pädevusse, kuna need asutused vastutavad relvade ja laskemoona reguleerimise ning piiriülese liikumise eest."
+      },
+      {
+        "id": 3,
+        "text": "Relvakapp kuni 8 relva hoidmiseks peab vastama rangetele nõuetele, nagu vähemalt 3 mm paksune terasplekk, turvalukk ja eraldi lukustatavad laegad laskemoona, sütikute ja püssirohu hoidmiseks, et tagada turvalisus ja vastavus seadustele."
+      },
+      {
+        "id": 4,
+        "text": "Relvasoetamisluba lubab soetada ainult loal märgitud relvaliiki, et tagada, et isikud omavad ainult neid relvi, millele nad on seaduslikult volitatud."
+      },
+      {
+        "id": 5,
+        "text": "Relva kandmisel peab kaasas olema isikut tõendav dokument ning revolvril võib olla padrun padrunipesas, kuid püstoli puhul on see keelatud turvalisuse tagamiseks."
+      },
+      {
+        "id": 6,
+        "text": "Relvakapp 9 ja enam tulirelva hoidmiseks peab olema tugevam (vähemalt 4 mm terasplekist) ja omama vähemalt üht turvalukku, et tagada kõrgem turvalisustase suurema relvade arvu puhul."
+      },
+      {
+        "id": 7,
+        "text": "Relva ja laskemoona hävitamine korraldatakse Politsei- ja Piirivalveameti poolt, jättes kultuuriväärtusega ja ajaloolised relvad hävitamata, kuna need võivad omada ajaloolist tähtsust."
+      },
+      {
+        "id": 8,
+        "text": "Relva registreerimise ajaks võib seda hoida seaduslikult oma elukohas või anda politseile hoiule, et tagada vastavus relvaseadusele ja turvalisus."
+      },
+      {
+        "id": 9,
+        "text": "Relvaloa vahetamise avaldus tuleb esitada vähemalt kaks kuud enne kehtivuse lõppemist, et anda Politsei- ja Piirivalveametile piisavalt aega dokumendi töötlemiseks."
+      },
+      {
+        "id": 10,
+        "text": "Relva kontrollimisel tuleb järgida kindlat järjekorda (padrunisalvi eemaldamine, lukustuse avamine ja sulgemine, padrunipesa kontroll, kontrolllask ja kaitseriivi lülitamine), et tagada ohutus."
+      },
+      {
+        "id": 11,
+        "text": "Relvaloa kehtivusaeg on piiratud isiku tervisetõendi kehtivusega ja maksimaalselt 5 aastaga, et tagada regulaarne tervisekontroll ja sobivus relva omamiseks."
+      },
+      {
+        "id": 12,
+        "text": "Paralleelrelvaloa korral võib relva anda üle märgitud isikule ilma lisadokumentideta, kuna see on seaduslikult lubatud ja lihtsustab protsessi."
+      },
+      {
+        "id": 13,
+        "text": "Tsiviilkäibes on keelatud relvad ja laskemoon, mis on ohtlikud või ebaseaduslikud, nagu õõnsaotsalised padrunid, lasu sooritamise võimaldavad lahtivõetud tulirelvad, markeeringuta relvad ja soomust läbistav laskemoon."
+      },
+      {
+        "id": 14,
+        "text": "Püssirohu ja sütikute hoidmine peab olema eraldi tehasepakendis või metallpurkides, vähemalt 1 m kaugusel küttearvest, et minimeerida tuleohtu."
+      },
+      {
+        "id": 15,
+        "text": "Pikendatud relvaloa kehtivusaeg on piiratud isiku tervisetõendi kehtivusega või 5 aastaga, et tagada jätkuv sobivus relva omamiseks."
+      },
+      {
+        "id": 16,
+        "text": "Kriminaalkorras karistatakse relvaseaduse tõsiste rikkumiste eest, nagu ebaseaduslik käitlemine, lohakas hoidmine kuriteo korral ja keelatud laskemoona käitlemine, välja arvatud väikestes kogustes."
+      },
+      {
+        "id": 17,
+        "text": "Tulireva laskekõlbmatuks muutmine tähendab mehhaanilist töötlemist, näiteks padrunipesa kinnikevitamist või lasu sooritamise võime täielikku kaotamist, et tagada relva ohutus ja seaduslikkus."
+      },
+      {
+        "id": 18,
+        "text": "Relvaloa kehtivuse lõppemisel tuleb relv ja laskemoon anda politseile viimasel tööpäeval, et vältida ebaseaduslikku omamist."
+      },
+      {
+        "id": 19,
+        "text": "Relvakapp ei nõua eraldiseisvat laegast ühe tulireva ja selle laskemoona korral, kuna väiksema koguse puhul piisab lihtsamatest turvameetmetest."
+      },
+      {
+        "id": 20,
+        "text": "Relva lammutamisel võib kasutada kasutuskõlblikke osi parandamiseks või ümbertegemiseks, kui see on lubatud relvaomaniku või tegevusloaga isiku poolt, säilitades seaduslikkuse."
+      },
+      {
+        "id": 21,
+        "text": "Relva võib võõrandada ainult vastavate lubadega isikutele, nagu tegevusloaga isikud või Politsei- ja Piirivalveameti järelevalve all, et tagada turvalisus."
+      },
+      {
+        "id": 22,
+        "text": "Relva müük on keelatud isikutele, kellel puuduvad vajalikud dokumendid, defektsetele relvadele või alaealistele, et ennetada ohte ja seaduserikkumisi."
+      },
+      {
+        "id": 23,
+        "text": "Relva ja laskemoona kandmine on lubatud ainult vastava loaga, et tagada avalik turvalisus ja vastavus seadustele."
+      },
+      {
+        "id": 24,
+        "text": "Paralleelrelvaluba võib anda kuni kahele füüsilisele isikule, et piirata relva kasutamist ja vastutust kindla hulga inimeste vahel."
+      },
+      {
+        "id": 25,
+        "text": "Soetamisluba ja relvaluba ei väljastata isikutele, kellel on raskekujuline psüühikahäire või piiratud teovõime, kuna need tingimused võivad ohustada turvalisust."
+      },
+      {
+        "id": 26,
+        "text": "Relvaluba antakse lühemaks tähtajaks taotleja soovil, juriidilistele isikutele lühema tegevusperioodi korral või välismaalastele lühema elamisloa kehtivuse tõttu, et tagada jätkuv sobivus."
+      },
+      {
+        "id": 27,
+        "text": "Kohalik relvaed võib teostada ainult lubadega isikud ja pakitud relvade korral, et tagada ohutus ja vastavus seadustele."
+      },
+      {
+        "id": 28,
+        "text": "Tegu ei ole õigusvastane hädaolukorras ega hädakaitse piire ületades ettevaatamatusest, kuna need olukorrad võivad olla seaduslikult põhjendatud kaitseks."
+      },
+      {
+        "id": 29,
+        "text": "Tulirelva osad hõlmavad relva lukukoda, raua, padrunisalvet ja lisaseadmeid nagu lasersihik, mis on relva funktsionaalsed komponendid."
+      },
+      {
+        "id": 30,
+        "text": "Relvapi nõuded tulireva hoidmiseks erinevad relvade arvu järgi, 9 ja enam tulirelva puhul kehtivad ranged nõuded, et tagada turvalisus."
+      },
+      {
+        "id": 31,
+        "text": "Tsiviilkäibes lubatud laskemoon on äretule- ja kesktulepadrunid, kuna need vastavad ohutuse ja seaduslikkuse nõuetele."
+      },
+      {
+        "id": 32,
+        "text": "Relvaandmete ja omaniku nime muutumisel tuleb teavitada Politsei- ja Piirivalveametit, et hoida relva registreering ajakohasena."
+      },
+      {
+        "id": 33,
+        "text": "Kollektsioneerida võib ajaloolisi ja sporditraditsiooniga relvi, piiratud padrunite arvuga, kuna need on kultuuri- ja ajaloolised väärtused."
+      },
+      {
+        "id": 34,
+        "text": "Relvaluba, millele on kantud relv, lubab soetada ainult selle laskemoona, et piirata relva kasutust ja ohutust."
+      },
+      {
+        "id": 35,
+        "text": "Relva ümbertegemine tähendab olulisi muudatusi, mis muudavad relva omadusi, et vastata seaduslikele nõuetele või eesmärkidele."
+      },
+      {
+        "id": 36,
+        "text": "Relva ja laskemoona toimetamiseks Eestisse on vaja vastavaid lubasid, et tagada seaduslikkus ja turvalisus Euroopa Liidu raames."
+      },
+      {
+        "id": 37,
+        "text": "Laskekõlbmatuks muudetud relva Eestisse toomisel tuleb esitada tõendid ja taotlused, et tagada selle staatus ja vastavus seadusele."
+      },
+      {
+        "id": 38,
+        "text": "Relvaluba vahetatakse, kui see muutub kõlbmatuks, asukoht muutub või andmed uuenevad, et hoida registreering korras."
+      },
+      {
+        "id": 39,
+        "text": "Relvaloa vahetamiseks tuleb esitada avaldus vähemalt kaks kuud ette, et tagada protsessi sujuvus ja dokumendi kehtivus."
+      },
+      {
+        "id": 40,
+        "text": "Relva võib parandada ainult vastavate oskustega isikud või relvaomanik ise, et tagada ohutus ja seaduslikkus."
+      },
+      {
+        "id": 41,
+        "text": "Füüsilist isikut karistatakse väärteo korras elektrišokirelva omamise, avalikel üritustel kandmise ja alkoholijoobes kandmise eest, kuna need ohustavad avalikku turvalisust."
+      },
+      {
+        "id": 42,
+        "text": "Kriminaalkorras karistatakse tõsiste relvaseaduse rikkumiste eest, nagu lohakas hoidmine kuriteo korral, ebaseaduslik käitlemine ja keelatud relvade omamine."
+      },
+      {
+        "id": 43,
+        "text": "Tsiviilkäibes on lubatud ajaloolised külmrelvad ja allveepüssid, kuna need vastavad kultuuri- ja sporditraditsioonidele, ilma ohtlikku mõju avaldamata."
+      },
+      {
+        "id": 44,
+        "text": "Relva ja laskemoona edasitoimetamine on lubatud sõiduki või jalgsi ilma vahepealse kasutamiseta, et tagada ohutus ja seaduslikkus."
+      },
+      {
+        "id": 45,
+        "text": "Tulirelva osad hõlmavad kaitseriivi, öösihi, adaptereid ja trummeleid, mis on relva funktsionaalsed komponendid, kuid mitte padruneid ega liigseid salve."
+      },
+      {
+        "id": 46,
+        "text": "Relva ja laskemoona võõrandamine hõlmab kinkimist ja müümist, et tagada seaduslik üleviimine teistele isikutele."
+      },
+      {
+        "id": 47,
+        "text": "Relva võib anda hoiule ainult lubadega isikutele või lühiajaliselt teisele relvaloa omajale, et tagada turvalisus ja vastavus seadusele."
+      },
+      {
+        "id": 48,
+        "text": "Enne relvaloa vahetamist tuleb tasuda riigilõiv ja tõestada relvade olemasolu, et tagada protsessi seaduslikkus ja korrektsus."
+      },
+      {
+        "id": 49,
+        "text": "Relvade ja laskemoona edasitoimetamine Euroopa Liidus nõuab tulirelvapassi ja vastavaid lubasid, et tagada piiriülese liikumise seaduslikkus."
+      },
+      {
+        "id": 50,
+        "text": "Kollektsioneerida ei tohi ohtlikke relvi, nagu elektrienergiat, kiirgust või bioloogilisi faktoreid kasutavaid relvi, ega kaasaegseid keelatud laskemoone, kuna need on ohtlikud."
+      },
+      {
+        "id": 51,
+        "text": "Soetamis- ja relvaload tunnistatakse kehtetuks, kui isik ei vasta turvalisuse nõuetele, on surnud, relv on kaotsi läinud või rikutud seadusi korduvalt."
+      },
+      {
+        "id": 52,
+        "text": "Kodusel teel valmisatud padruneid ei tohi võõrandada, kuna need ei vasta seaduslikele tootmisnõuetele ja võivad olla ohtlikud."
+      },
+      {
+        "id": 53,
+        "text": "Relvahoidla nõuded hõlmavad vähemalt 40 cm paksuseid seinu ja raudbetooni või silikaatelliste materjale, et tagada relvade turvaline hoidmine."
+      },
+      {
+        "id": 54,
+        "text": "Paralleelrelvaloa vahetamine peab toimuma kolme kuu jooksul loa lõppemisest, et tagada jätkuv vastavus seadusele."
+      },
+      {
+        "id": 55,
+        "text": "Lasketirus laenutatud relva võib kasutada ainult samas lasketirus lubadega isikute poolt, et tagada ohutus ja vastavus reeglitele."
+      },
+      {
+        "id": 56,
+        "text": "Relva, loa või hoidla andmete muutumisel tuleb esitada avaldus 7 tööpäeva jooksul, et hoida registreering ajakohasena."
+      },
+      {
+        "id": 57,
+        "text": "Euroopa tulirelvapassi kantakse relvad, mis on registreeritud jahipidamise ja spordialade jaoks, et tagada nende seaduslik kasutamine Euroopas."
+      },
+      {
+        "id": 58,
+        "text": "Tegu ei ole õigusvastane hädaolukorras ega hädakaitse piire ületades ettevaatamatusest, kuna need olukorrad võivad olla seaduslikult põhjendatud."
+      },
+      {
+        "id": 59,
+        "text": "Relva võib muuta laskevõimetuks ainult vastavate tegevuslubadega isik, et tagada ohutus ja seaduslikkus."
+      },
+      {
+        "id": 60,
+        "text": "Hädakaitseseisundis võib kahjustada ründaja õigusi ainult siis, kui ründaja teostab vahetut rünnet, et kaitsta ennast seaduslikult."
+      },
+      {
+        "id": 61,
+        "text": "Relvasoetamisluba kehtib 3 kuud, et tagada kiire relva soetamine ja vastavus seadusele."
+      },
+      {
+        "id": 62,
+        "text": "Relvahoidla peab olema tugev (topeltuksed ja turvalukud), et tagada relvade ohutu hoidmine vastavalt seadusele."
+      },
+      {
+        "id": 63,
+        "text": "Tulirelva laskekõlbmatuks muutmine nõuab Politsei- ja Piirivalveameti luba, et tagada protsessi seaduslikkus."
+      },
+      {
+        "id": 65,
+        "text": "Relva võõrandamise luba antakse taotluse alusel ja kehtib ühe kuu, et tagada kiire ja seaduslik tehing."
+      },
+      {
+        "id": 66,
+        "text": "Tulirelva peab hoidmisel alati tühjaks laadima, et minimeerida õnnetuste riski."
+      },
+      {
+        "id": 67,
+        "text": "Relvaomanik peab koostööle ametnikega, et tagada relvade ohutu ja seaduslik hoidmine ja kasutamine."
+      },
+      {
+        "id": 68,
+        "text": "Relvasoetamisluba lubab soetada ainult loal märgitud relva, et piirata relva omamist seaduslikult."
+      },
+      {
+        "id": 69,
+        "text": "Soetamis- ja relvaloa kehtivus peatatakse, kui isik ohustab turvalisust, rikutud liiklusreegleid või puuduvad hoidmistingimused, et kaitsta avalikku turvalisust."
+      },
+      {
+        "id": 70,
+        "text": "Soetamis- ja relvaloa kehtivus peatatakse turvalisuse, liikluseeskirjade rikkumiste ja hoidmistingimuste puudumise tõttu, et kaitsta avalikku turvalisust."
+      },
+      {
+        "id": 72,
+        "text": "Laskekõlbmatu relv on selline, mille olulised osad on kasutuskõlbmatuks muudetud ja neid ei saa taastada, et tagada ohutus ja seaduslikkus."
+      },
+      {
+        "id": 73,
+        "text": "Relva ostmisel tuleb esitada relv ja soetamisluba registreerimiseks, et tagada selle seaduslik registreering."
+      }
+    ]
+  }
