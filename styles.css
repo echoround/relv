@@ -145,12 +145,12 @@
   
   .grid-container {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 columns to match your image */
+    grid-template-columns: repeat(7, 1fr); /* 7 columns */
     gap: 2px; /* Reduced gap for less spacing, denser layout */
     padding: 2px;
-  }
-  
-  .grid-item {
+}
+
+.grid-item {
     width: 35px; /* Smaller, square cards for denser layout */
     height: 35px;
     border: 1px solid #5d6d7e; /* Dark gray border for crisp look */
@@ -162,7 +162,7 @@
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.1s;
-  }
+}
   
   .grid-item:hover {
     transform: scale(1.05); /* Slight zoom on hover for interactivity */
@@ -214,23 +214,20 @@
   
   #explanation-tooltip {
     position: absolute;
-    top: 100%; /* Position below feedback */
-    left: 50%;
-    transform: translateX(-50%);
+    display: none;
     background-color: #3a5064; /* Match feedback background for consistency, matching reference */
     color: #e5e5e5;
     padding: 10px 15px;
     border-radius: 8px; /* Rounded corners like reference */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    max-width: 300px;
-    width: max-content;
-    z-index: 200; /* Above everything else */
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease-in-out;
+    z-index: 200; /* Above the grid and everything else */
     font-size: 14px;
     white-space: normal; /* Allow text wrapping */
-  }
+    overflow-y: auto; /* Enable scrolling if text exceeds grid size */
+    max-width: 100%; /* Ensure it doesn’t exceed viewport width */
+    max-height: 100%; /* Ensure it doesn’t exceed viewport height */
+}
+
   
   #feedback:hover #explanation-tooltip {
     opacity: 1;
