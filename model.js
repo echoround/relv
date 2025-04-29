@@ -66,7 +66,7 @@ controls.addEventListener('end', () => {
 
 const loader = new THREE.GLTFLoader();
 loader.load(
-    'gun.glb',
+    'gun3.glb',
     (gltf) => {
         console.log('GLTF model loaded successfully:', gltf);
         const object = gltf.scene;
