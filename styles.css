@@ -21,8 +21,9 @@ body {
 #model-container {
   width: 100%;
   max-width: 800px; /* Match quiz and content containers */
-  height: calc(100vh - 80px); /* Full height minus header (approx) */
-  position: relative;
+  height: calc(100vh - 50px); /* Reduced to account for intro text */
+  /* height: calc(100vh - 80px);  */
+  position: absolute;
   margin: 0 auto; /* Center horizontally */
 }
 
