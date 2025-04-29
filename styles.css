@@ -14,7 +14,7 @@ body {
   margin: 0;
   color: #e5e5e5;
   position: relative;
-  overflow: hidden;
+  /* Removed overflow: hidden to allow scrolling */
 }
 
 /* Header Styles */
@@ -77,6 +77,8 @@ header nav a:hover {
   margin-bottom: 20px;
   position: relative;
   z-index: 10;
+  min-height: 100%; /* Ensure it takes at least full viewport height */
+  box-sizing: border-box;
 }
 
 #content-container h2 {
@@ -336,6 +338,7 @@ button {
   visibility: visible;
 }
 
+/* Green flash effect */
 #green-flash {
   position: fixed;
   top: 0;
@@ -352,6 +355,8 @@ button {
   opacity: 0;
   pointer-events: none;
   animation: flashFade 0.4s ease-out;
+  /* Ensure green flash stays within viewport */
+  overflow: hidden;
 }
 
 #green-flash::before {
@@ -370,13 +375,17 @@ button {
   mix-blend-mode: overlay;
 }
 
+/* Fireworks effect */
 .firework {
-  position: absolute;
+  position: fixed;
   width: 5px;
   height: 5px;
   background: rgba(144, 238, 144, 0.8);
   border-radius: 50%;
   animation: explode 1s ease-out forwards;
+  /* Ensure fireworks stay within viewport */
+  contain: strict;
+  clip-path: inset(0 0 0 0); /* Prevent overflow outside viewport */
 }
 
 @keyframes flashFade {
