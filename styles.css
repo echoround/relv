@@ -7,13 +7,23 @@
 body {
   font-family: 'Montserrat', Arial, sans-serif;
   background-color: #2c3e50;
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   min-height: 100vh;
   margin: 0;
   color: #e5e5e5;
   position: relative;
-  overflow-y: auto;
+  overflow-y: auto; /* Show scrollbar only when needed */
+}
+
+/* Model Container for index.html */
+#model-container {
+  width: 100%;
+  max-width: 800px; /* Match quiz and content containers */
+  height: calc(100vh - 80px); /* Full height minus header (approx) */
+  position: relative;
+  margin: 0 auto; /* Center horizontally */
 }
 
 /* Custom Scrollbar for WebKit browsers (Chrome, Edge, Safari) */
@@ -28,11 +38,6 @@ body.scrolling::-webkit-scrollbar {
 
 body::-webkit-scrollbar-track {
   background: transparent; /* Transparent track by default */
-}
-
-#model-container {
-  position: relative;
-  width: 100%;
 }
 
 body.scrolling::-webkit-scrollbar-track {
