@@ -1,333 +1,458 @@
 :root {
-    --color-correct: #1c9862a4; /* Centralized green for correct answers */
-    --color-incorrect: #ac0000bd; /* Centralized dark red for incorrect answers */
-    --color-partial: #eac150d1; /* Centralized orange for partial (half-right) answers */
-  }
-  
-  body {
-    font-family: 'Montserrat', Arial, sans-serif; /* Montserrat with fallbacks */
-    background-color: #2c3e50; /* Dark navy background from reference image */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    color: #e5e5e5; /* Light text for readability on dark background */
-    position: relative; /* Allow positioning of overlay effects */
-    overflow: hidden; /* Prevent overflow from fireworks */
-  }
-  
-  #quiz-container {
-    background-color: #34495e; /* Darker blue-gray for container, matching reference */
-    padding: 20px;
-    border-radius: 15px; /* Rounded corners like reference */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    max-width: 800px;
-    width: 90%;
-    margin-bottom: 20px;
-    position: relative; /* Ensure container stays above fireworks */
-    z-index: 10; /* Keep quiz content above effects */
-  }
-  
-  #progress {
-    margin-bottom: 20px;
-    font-weight: bold;
-    color: #a2d2ff; /* Light blue for progress text */
-    font-size: 16px; /* Match reference text size */
-  }
-  
-  #question-text {
-    margin-bottom: 20px;
-    font-size: 18px;
-    color: #ffffff; /* Pure white for question text */
-  }
-  
-  #options {
-    margin-bottom: 20px;
-  }
-  
-  .option {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  .option input[type="radio"], .option input[type="checkbox"] {
-    margin-right: 10px;
-    accent-color: #27ae60; /* Green checkmark/accent for correct answers, matching reference */
-  }
-  
-  #submit-btn {
-    background-color: #7b2cbf; /* Purple for submit button, matching reference */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px; /* Rounded corners like reference */
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  #submit-btn:hover {
-    background-color: #6b2aa1; /* Slightly darker purple on hover */
-  }
-  
-  #feedback {
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 8px; /* Rounded corners like reference */
-    background-color: #3a5064; /* Slightly lighter than container for contrast, matching reference */
-    color: #ffffff;
-    position: relative; /* For positioning the question mark button */
-  }
-  
-  #feedback-message {
-    margin-bottom: 5px; /* Space for question mark button */
-  }
-  
-  #navigation {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px; /* Rounded corners like reference */
-    cursor: pointer;
-    font-family: 'Montserrat', Arial, sans-serif; /* Ensure buttons use Montserrat */
-  }
-  
-  #prev-btn {
-    background-color: #5d6d7e; /* Dark gray for previous button */
-    color: #e5e5e5;
-    opacity: 0.7; /* Match reference opacity */
-  }
-  
-  #prev-btn:hover {
-    background-color: #7b8a99; /* Lighter gray on hover */
-    opacity: 1; /* Full opacity on hover */
-  }
-  
-  #next-btn {
-    background-color: #3498db; /* Blue for next button, matching reference */
-    color: white;
-  }
-  
-  #next-btn:hover {
-    background-color: #2980b9; /* Slightly darker blue on hover */
-  }
-  
-  /* Unified color definitions using CSS variables */
-  .correct {
-    background-color: var(--color-correct); /* Use variable for correct */
-    color: #e5e5e5;
-  }
-  
-  .incorrect {
-    background-color: var(--color-incorrect); /* Use variable for incorrect */
-    color: #e5e5e5;
-  }
-  
-  .partial {
-    background-color: var(--color-partial); /* Use variable for partial */
-    color: #e5e5e5;
-  }
-  
-  #question-grid {
-    background-color: #34495e; /* Match container background */
-    padding: 10px;
-    border-radius: 15px; /* Rounded corners like reference */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    max-width: 800px;
-    width: 90%;
-    margin-bottom: 20px;
-  }
-  
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 columns */
-    gap: 2px; /* Reduced gap for less spacing, denser layout */
-    padding: 2px;
+  --color-correct: #1c9862a4; /* Centralized green for correct answers */
+  --color-incorrect: #ac0000bd; /* Centralized dark red for incorrect answers */
+  --color-partial: #eac150d1; /* Centralized orange for partial (half-right) answers */
+}
+
+body {
+  font-family: 'Montserrat', Arial, sans-serif;
+  background-color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  color: #e5e5e5;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Header Styles */
+header {
+  background-color: #34495e; /* Match quiz container background */
+  width: 100%;
+  padding: 20px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 20; /* Above quiz content and effects */
+}
+
+.header-container {
+  max-width: 800px;
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 24px;
+  color: #ffffff;
+  margin: 0;
+  font-weight: bold;
+}
+
+header nav {
+  display: flex;
+  gap: 15px;
+}
+
+header nav a {
+  color: #a2d2ff; /* Light blue to match progress text */
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+header nav a:hover {
+  color: #ffffff; /* White on hover for contrast */
+}
+
+/* Optional logo styling */
+.header-logo {
+  height: 40px; /* Adjust based on logo size */
+  width: auto;
+}
+
+/* Content Container for kuidas.html */
+#content-container {
+  background-color: #34495e; /* Match quiz container background */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  width: 90%;
+  margin-top: 40px; /* Match quiz container spacing */
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 10;
+}
+
+#content-container h2 {
+  font-size: 22px;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+#content-container h3 {
+  font-size: 18px;
+  color: #a2d2ff; /* Light blue for headings */
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+#content-container p {
+  font-size: 16px;
+  color: #e5e5e5;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+#content-container ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+#content-container ul li {
+  font-size: 16px;
+  color: #e5e5e5;
+  margin-bottom: 8px;
+}
+
+#content-container a {
+  color: #3498db; /* Blue for links, matching next button */
+  text-decoration: none;
+}
+
+#content-container a:hover {
+  text-decoration: underline;
+}
+
+/* Quiz Container */
+#quiz-container {
+  background-color: #34495e;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  width: 90%;
+  margin-top: 40px; /* Increased margin for spacing */
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 10;
+}
+
+/* Rest of the existing styles remain unchanged */
+#progress {
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #a2d2ff;
+  font-size: 16px;
+}
+
+#question-text {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+#options {
+  margin-bottom: 20px;
+}
+
+.option {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.option input[type="radio"], .option input[type="checkbox"] {
+  margin-right: 10px;
+  accent-color: #27ae60;
+}
+
+#submit-btn {
+  background-color: #7b2cbf;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#submit-btn:hover {
+  background-color: #6b2aa1;
+}
+
+#feedback {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #3a5064;
+  color: #ffffff;
+  position: relative;
+}
+
+#feedback-message {
+  margin-bottom: 5px;
+}
+
+#navigation {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+
+#prev-btn {
+  background-color: #5d6d7e;
+  color: #e5e5e5;
+  opacity: 0.7;
+}
+
+#prev-btn:hover {
+  background-color: #7b8a99;
+  opacity: 1;
+}
+
+#next-btn {
+  background-color: #3498db;
+  color: white;
+}
+
+#next-btn:hover {
+  background-color: #2980b9;
+}
+
+.correct {
+  background-color: var(--color-correct);
+  color: #e5e5e5;
+}
+
+.incorrect {
+  background-color: var(--color-incorrect);
+  color: #e5e5e5;
+}
+
+.partial {
+  background-color: var(--color-partial);
+  color: #e5e5e5;
+}
+
+#question-grid {
+  background-color: #34495e;
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  width: 90%;
+  margin-bottom: 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
 }
 
 .grid-item {
-    width: 35px; /* Smaller, square cards for denser layout */
-    height: 35px;
-    border: 1px solid #5d6d7e; /* Dark gray border for crisp look */
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 12px; /* Smaller font for denser cards */
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
-}
-  
-  .grid-item:hover {
-    transform: scale(1.05); /* Slight zoom on hover for interactivity */
-  }
-  
-  .grid-item.correct {
-    background-color: var(--color-correct); /* Use variable for correct */
-  }
-  
-  .grid-item.incorrect {
-    background-color: var(--color-incorrect); /* Use variable for incorrect */
-  }
-  
-  .grid-item.partial {
-    background-color: var(--color-partial); /* Use variable for partial */
-  }
-  
-  .grid-item.unanswered {
-    background-color: #5d6d7e; /* Dark gray for unanswered */
-  }
-  
-  .grid-item.current {
-    border: 2px solid #a2d2ff; /* Light blue border for current question */
-    background-color: #46637f; /* Slightly lighter than container for current */
-  }
-  
-  /* Question mark button and tooltip */
-  #question-mark-btn {
-    display: none; /* Initially hidden, shown via JavaScript */
-    background-color: #5d6d7e; /* Dark gray for button */
-    color: #ffffff;
-    border: none;
-    border-radius: 50%; /* Circular button like reference */
-    width: 24px; /* Larger for visibility, matching reference */
-    height: 24px;
-    font-size: 16px; /* Larger font for clarity */
-    cursor: pointer;
-    margin-left: 10px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 10px;
-    z-index: 20; /* Ensure above feedback */
-  }
-  
-  #question-mark-btn:hover {
-    background-color: #7b8a99; /* Lighter gray on hover */
-  }
-  
-  #explanation-tooltip {
-    position: absolute;
-    display: none;
-    background-color: #3a5064; /* Match feedback background for consistency, matching reference */
-    color: #e5e5e5;
-    padding: 10px 15px;
-    border-radius: 8px; /* Rounded corners like reference */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 200; /* Above the grid and everything else */
-    font-size: 14px;
-    white-space: normal; /* Allow text wrapping */
-    overflow-y: auto; /* Enable scrolling if text exceeds grid size */
-    max-width: 100%; /* Ensure it doesn’t exceed viewport width */
-    max-height: 100%; /* Ensure it doesn’t exceed viewport height */
+  width: 35px;
+  height: 35px;
+  border: 1px solid #5d6d7e;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
 }
 
-  
-  #feedback:hover #explanation-tooltip {
+.grid-item:hover {
+  transform: scale(1.05);
+}
+
+.grid-item.correct {
+  background-color: var(--color-correct);
+}
+
+.grid-item.incorrect {
+  background-color: var(--color-incorrect);
+}
+
+.grid-item.partial {
+  background-color: var(--color-partial);
+}
+
+.grid-item.unanswered {
+  background-color: #5d6d7e;
+}
+
+.grid-item.current {
+  border: 2px solid #a2d2ff;
+  background-color: #46637f;
+}
+
+#question-mark-btn {
+  display: none;
+  background-color: #5d6d7e;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 10px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+  z-index: 20;
+}
+
+#question-mark-btn:hover {
+  background-color: #7b8a99;
+}
+
+#explanation-tooltip {
+  position: absolute;
+  display: none;
+  background-color: #3a5064;
+  color: #e5e5e5;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  font-size: 14px;
+  white-space: normal;
+  overflow-y: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#feedback:hover #explanation-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+#green-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(40, 167, 69, 0.3),
+    rgba(60, 179, 113, 0.3),
+    rgba(34, 139, 34, 0.3)
+  );
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  animation: flashFade 0.4s ease-out;
+}
+
+#green-flash::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at 25% 25%,
+    rgba(0, 255, 0, 0.05) 0%,
+    rgba(0, 128, 0, 0.05) 50%,
+    rgba(0, 100, 0, 0.05) 100%
+  );
+  mix-blend-mode: overlay;
+}
+
+.firework {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: rgba(144, 238, 144, 0.8);
+  border-radius: 50%;
+  animation: explode 1s ease-out forwards;
+}
+
+@keyframes flashFade {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes explode {
+  0% {
+    transform: scale(0);
     opacity: 1;
-    visibility: visible;
   }
-  
-  /* Green flash effect */
-  #green-flash {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      45deg,
-      rgba(40, 167, 69, 0.3), /* Semi-transparent green base */
-      rgba(60, 179, 113, 0.3), /* Lighter green for variation */
-      rgba(34, 139, 34, 0.3) /* Darker green for variation */
-    );
-    z-index: 100; /* Above quiz content */
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(50);
     opacity: 0;
-    pointer-events: none; /* Prevent interaction */
-    animation: flashFade 0.4s ease-out;
   }
-  
-  /* Perlin noise-like texture (simulated with CSS gradient) */
-  #green-flash::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(
-      circle at 25% 25%,
-      rgba(0, 255, 0, 0.05) 0%,
-      rgba(0, 128, 0, 0.05) 50%,
-      rgba(0, 100, 0, 0.05) 100%
-    );
-    mix-blend-mode: overlay; /* Blend with the green gradient for noise effect */
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  header {
+      padding: 15px 0;
   }
-  
-  /* Fireworks effect */
-  .firework {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    background: rgba(144, 238, 144, 0.8); /* Lighter green for fireworks */
-    border-radius: 50%;
-    animation: explode 1s ease-out forwards;
+  .header-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
   }
-  
-  @keyframes flashFade {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
+  header h1 {
+      font-size: 20px;
   }
-  
-  @keyframes explode {
-    0% {
-      transform: scale(0);
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.8;
-    }
-    100% {
-      transform: scale(50);
-      opacity: 0;
-    }
+  header nav {
+      gap: 10px;
   }
-  
-  /* Responsive design */
-  @media (max-width: 600px) {
-    #quiz-container, #question-grid {
+  header nav a {
+      font-size: 14px;
+  }
+  .header-logo {
+      height: 30px;
+  }
+  #quiz-container, #question-grid, #content-container {
       width: 85%;
       padding: 15px;
-    }
-    #question-text {
+  }
+  #question-text, #content-container h2 {
       font-size: 16px;
-    }
-    button {
+  }
+  #content-container h3 {
+      font-size: 14px;
+  }
+  #content-container p, #content-container ul li {
+      font-size: 14px;
+  }
+  button {
       padding: 8px 15px;
-    }
-    .grid-container {
-      grid-template-columns: repeat(5, 1fr); /* Fewer columns on mobile for readability */
-      gap: 2px; /* Maintain tight spacing on mobile */
-    }
-    .grid-item {
+  }
+  .grid-container {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+  }
+  .grid-item {
       width: 25px;
       height: 25px;
-      font-size: 10px; /* Smaller font on mobile */
-    }
-    #explanation-tooltip {
+      font-size: 10px;
+  }
+  #explanation-tooltip {
       font-size: 12px;
       max-width: 250px;
       padding: 8px 12px;
-    }
-    #question-mark-btn {
+  }
+  #question-mark-btn {
       width: 20px;
       height: 20px;
       font-size: 14px;
-    }
   }
+}
