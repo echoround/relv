@@ -8,10 +8,11 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
 camera.position.z = 10; // Ensure model is in view
 
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true});
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 renderer.setSize(container.clientWidth, container.clientHeight);
-renderer.outputEncoding = THREE.sRGBEncoding; // Added: sRGB color encoding
-renderer.toneMapping = THREE.ACESFilmicToneMapping; // Added: ACES Filmic tone mapping
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.domElement.style.position = 'absolute';
 renderer.domElement.style.top = '0';
 renderer.domElement.style.left = '0';
@@ -90,6 +91,7 @@ loader.load(
         const box = new THREE.Box3().setFromObject(object);
         const center = box.getCenter(new THREE.Vector3());
         object.position.sub(center);
+        object.position.y += 1; // Added: Move model higher
         
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
