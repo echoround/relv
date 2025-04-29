@@ -10,12 +10,13 @@ camera.position.z = 10; // Ensure model is in view
 
 const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.outputEncoding = THREE.sRGBEncoding; // Added: sRGB color encoding
+renderer.toneMapping = THREE.ACESFilmicToneMapping; // Added: ACES Filmic tone mapping
 renderer.domElement.style.position = 'absolute';
 renderer.domElement.style.top = '0';
 renderer.domElement.style.left = '0';
 renderer.domElement.style.width = '100%';
 renderer.domElement.style.height = '100%';
-//renderer.domElement.style.border = '1px solid red'; // Debug: Visible canvas border
 container.appendChild(renderer.domElement);
 
 // Check WebGL support
@@ -38,6 +39,30 @@ const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 let modelObject = cube; // Default to cube
 scene.add(cube);
+
+// Set up OrbitControls
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; // Smooth rotation with inertia
+controls.dampingFactor = 0.05;
+controls.autoRotate = true; // Enable automatic spinning
+controls.autoRotateSpeed = 1.0; // Slow spin speed
+controls.enableZoom = false; // Disable zooming
+controls.enablePan = false; // Disable panning
+
+let autoRotateTimeout;
+
+// Stop auto-rotation when user starts dragging
+controls.addEventListener('start', () => {
+    clearTimeout(autoRotateTimeout);
+    controls.autoRotate = false;
+});
+
+// Resume auto-rotation after 5 seconds of inactivity
+controls.addEventListener('end', () => {
+    autoRotateTimeout = setTimeout(() => {
+        controls.autoRotate = true;
+    }, 5000); // 5000ms = 5 seconds
+});
 
 const loader = new THREE.GLTFLoader();
 loader.load(
@@ -102,7 +127,7 @@ loader.load(
 
 function animate() {
     requestAnimationFrame(animate);
-    modelObject.rotation.y += 0.01; // Slow rotation
+    controls.update(); // Update controls for manual and auto rotation
     renderer.render(scene, camera);
 }
 animate();
