@@ -8,7 +8,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
 camera.position.z = 10; // Ensure model is in view
 
-const renderer = new THREE.WebGLRenderer({ alpha: true });
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true});
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.outputEncoding = THREE.sRGBEncoding; // Added: sRGB color encoding
 renderer.toneMapping = THREE.ACESFilmicToneMapping; // Added: ACES Filmic tone mapping
