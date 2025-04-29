@@ -14,17 +14,57 @@ body {
   margin: 0;
   color: #e5e5e5;
   position: relative;
-  /* Removed overflow: hidden to allow scrolling */
+  overflow-y: auto; /* Show scrollbar only when needed */
+}
+
+/* Custom Scrollbar for WebKit browsers (Chrome, Edge, Safari) */
+body::-webkit-scrollbar {
+  width: 0; /* Completely hide scrollbar by default */
+  background: transparent; /* Ensure track is invisible */
+}
+
+body.scrolling::-webkit-scrollbar {
+  width: 10px; /* Show scrollbar during scrolling */
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent; /* Transparent track by default */
+}
+
+body.scrolling::-webkit-scrollbar-track {
+  background: #34495e; /* Match container background during scrolling */
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #a2d2ff; /* Light blue to match progress text */
+  border-radius: 10px;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 0.3s ease; /* Smooth fade effect */
+}
+
+body.scrolling::-webkit-scrollbar-thumb {
+  opacity: 1; /* Visible during scrolling */
+}
+
+/* Custom Scrollbar for Firefox */
+body {
+  scrollbar-width: none; /* Hidden by default */
+}
+
+body.scrolling {
+  scrollbar-width: thin; /* Visible during scrolling */
+  scrollbar-color: #a2d2ff #34495e; /* Thumb: light blue, Track: container background */
 }
 
 /* Header Styles */
 header {
-  background-color: #34495e; /* Match quiz container background */
+  background-color: #34495e;
   width: 100%;
   padding: 20px 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   position: relative;
-  z-index: 20; /* Above quiz content and effects */
+  z-index: 20;
 }
 
 .header-container {
@@ -49,35 +89,35 @@ header nav {
 }
 
 header nav a {
-  color: #a2d2ff; /* Light blue to match progress text */
+  color: #a2d2ff;
   text-decoration: none;
   font-size: 16px;
   transition: color 0.3s;
 }
 
 header nav a:hover {
-  color: #ffffff; /* White on hover for contrast */
+  color: #ffffff;
 }
 
 /* Optional logo styling */
 .header-logo {
-  height: 40px; /* Adjust based on logo size */
+  height: 40px;
   width: auto;
 }
 
 /* Content Container for kuidas.html */
 #content-container {
-  background-color: #34495e; /* Match quiz container background */
+  background-color: #34495e;
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   max-width: 800px;
   width: 90%;
-  margin-top: 40px; /* Match quiz container spacing */
+  margin-top: 40px;
   margin-bottom: 20px;
   position: relative;
   z-index: 10;
-  min-height: 100%; /* Ensure it takes at least full viewport height */
+  min-height: 100%;
   box-sizing: border-box;
 }
 
@@ -89,7 +129,7 @@ header nav a:hover {
 
 #content-container h3 {
   font-size: 18px;
-  color: #a2d2ff; /* Light blue for headings */
+  color: #a2d2ff;
   margin-top: 20px;
   margin-bottom: 10px;
 }
@@ -114,7 +154,7 @@ header nav a:hover {
 }
 
 #content-container a {
-  color: #3498db; /* Blue for links, matching next button */
+  color: #3498db;
   text-decoration: none;
 }
 
@@ -130,7 +170,7 @@ header nav a:hover {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   max-width: 800px;
   width: 90%;
-  margin-top: 40px; /* Increased margin for spacing */
+  margin-top: 40px;
   margin-bottom: 20px;
   position: relative;
   z-index: 10;
@@ -355,7 +395,6 @@ button {
   opacity: 0;
   pointer-events: none;
   animation: flashFade 0.4s ease-out;
-  /* Ensure green flash stays within viewport */
   overflow: hidden;
 }
 
@@ -383,9 +422,8 @@ button {
   background: rgba(144, 238, 144, 0.8);
   border-radius: 50%;
   animation: explode 1s ease-out forwards;
-  /* Ensure fireworks stay within viewport */
   contain: strict;
-  clip-path: inset(0 0 0 0); /* Prevent overflow outside viewport */
+  clip-path: inset(0 0 0 0);
 }
 
 @keyframes flashFade {
@@ -463,5 +501,9 @@ button {
       width: 20px;
       height: 20px;
       font-size: 14px;
+  }
+  /* Adjust scrollbar for mobile */
+  body.scrolling::-webkit-scrollbar {
+      width: 8px; /* Slimmer for mobile */
   }
 }
