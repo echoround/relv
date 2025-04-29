@@ -6,7 +6,7 @@ if (!container) {
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-camera.position.z = 5;
+camera.position.z = 10; // Ensure model is in view
 
 const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(container.clientWidth, container.clientHeight);
@@ -15,6 +15,7 @@ renderer.domElement.style.top = '0';
 renderer.domElement.style.left = '0';
 renderer.domElement.style.width = '100%';
 renderer.domElement.style.height = '100%';
+//renderer.domElement.style.border = '1px solid red'; // Debug: Visible canvas border
 container.appendChild(renderer.domElement);
 
 // Check WebGL support
@@ -25,39 +26,37 @@ if (!renderer.getContext()) {
 }
 
 // Add lights
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
 scene.add(ambientLight);
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-directionalLight.position.set(0, 1, 0);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+directionalLight.position.set(1, 1, 1).normalize();
 scene.add(directionalLight);
 
-// Fallback cube if model fails to load
+// Fallback cube
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 let modelObject = cube; // Default to cube
 scene.add(cube);
 
-const loader = new THREE.FBXLoader();
+const loader = new THREE.GLTFLoader();
 loader.load(
-    'gun.fbx',
-    (object) => {
-        console.log('FBX model loaded successfully:', object);
-        
-        // Replace PSD textures with PNG
+    'gun.glb',
+    (gltf) => {
+        console.log('GLTF model loaded successfully:', gltf);
+        const object = gltf.scene;
+        console.log('Model children:', object.children.length);
+        console.log('Model position:', object.position);
+        console.log('Model scale:', object.scale);
+
+        // Log meshes and materials
         object.traverse((child) => {
-            if (child.isMesh && child.material) {
-                if (child.material.map && child.material.map.name && child.material.map.name.includes('.psd')) {
-                    console.log('Replacing PSD texture:', child.material.map.name);
-                    const textureLoader = new THREE.TextureLoader();
-                    const newTexture = textureLoader.load(
-                        'Textures/PolygonWar_Texture_GoodVersion.png',
-                        () => console.log('New texture loaded:', 'Textures/PolygonWar_Texture_GoodVersion.png'),
-                        undefined,
-                        (error) => console.error('Error loading new texture:', error)
-                    );
-                    child.material.map = newTexture;
-                    child.material.needsUpdate = true;
+            if (child.isMesh) {
+                console.log('Mesh found:', child.name, 'Material:', child.material);
+                if (child.material.map) {
+                    console.log('Texture:', child.material.map.name, 'UUID:', child.material.map.uuid);
+                } else {
+                    console.log('No texture applied to material');
                 }
             }
         });
@@ -69,22 +68,34 @@ loader.load(
         
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 2 / maxDim;
+        const scale = 5 / maxDim; // Adjusted for visibility
         object.scale.set(scale, scale, scale);
-        
-        // Replace cube with model
-        scene.remove(cube);
-        scene.add(object);
-        modelObject = object;
-        
-        // Hide fallback message
-        document.getElementById('model-fallback').style.display = 'none';
+        console.log('Model bounding box size:', size);
+        console.log('Applied scale:', scale);
+
+        // Only remove cube if model has visible geometry
+        let hasGeometry = false;
+        object.traverse((child) => {
+            if (child.isMesh && child.geometry) {
+                hasGeometry = true;
+            }
+        });
+        if (hasGeometry) {
+            console.log('Model has geometry, removing fallback cube');
+            scene.remove(cube);
+            scene.add(object);
+            modelObject = object;
+            document.getElementById('model-fallback').style.display = 'none';
+        } else {
+            console.warn('Model has no visible geometry, keeping fallback cube');
+            document.getElementById('model-fallback').style.display = 'block';
+        }
     },
     (progress) => {
         console.log(`Loading progress: ${(progress.loaded / progress.total * 100).toFixed(2)}%`);
     },
     (error) => {
-        console.error('Error loading FBX model:', error);
+        console.error('Error loading GLTF model:', error);
         document.getElementById('model-fallback').style.display = 'block';
     }
 );
@@ -102,4 +113,5 @@ window.addEventListener('resize', () => {
     renderer.setSize(width, height);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
+    console.log('Resized canvas to:', width, 'x', height);
 });
