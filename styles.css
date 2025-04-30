@@ -118,6 +118,8 @@ header h1 {
   color: #ffffff;
   margin: 0;
   font-weight: bold;
+  border: 2px solid #a2d2ff; /* Added: Light blue border */
+  padding: 5px 10px; /* Added: Space inside border */
 }
 
 header nav {
