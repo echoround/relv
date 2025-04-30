@@ -21,10 +21,11 @@ body {
 #model-container {
   width: 100%;
   max-width: 800px; /* Match quiz and content containers */
-  height: calc(100vh - 50px); /* Reduced to account for intro text */
+  height: calc(110vh); /* Reduced to account for intro text */
   /* height: calc(100vh - 80px);  */
   position: absolute;
   margin: 0 auto; /* Center horizontally */
+  padding-top: 150px;
 }
 
 /* Custom Scrollbar for WebKit browsers (Chrome, Edge, Safari) */
@@ -97,6 +98,19 @@ header {
   font-size: 16px;
   line-height: 1.5;
   z-index: 10;
+}
+
+#intro-text ul {
+  list-style-type: disc;
+  list-style-position: inside; /* Bullets inline with text */
+  margin: 0;
+  padding: 0;
+  display: inline-block; /* Center the list block */
+  text-align: left; /* Align text naturally */
+}
+
+#intro-text ul li {
+  margin-bottom: 8px;
 }
 
 header h1 {
@@ -177,11 +191,19 @@ header nav a:hover {
 }
 
 #content-container a {
-  color: #3498db;
+  color: #5f8ba9;
   text-decoration: none;
 }
 
 #content-container a:hover {
+  text-decoration: underline;
+}
+
+#content-container a, header nav a, #intro-text a {
+  color: #a2d2ff; /* Or your preferred color, e.g., #FF0000 for red */
+  text-decoration: none;
+}
+#content-container a:hover, header nav a:hover, #intro-text a:hover {
   text-decoration: underline;
 }
 
