@@ -1,38 +1,97 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Relvaload.ee</title>
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-  <link rel="icon" href="favicon.ico"> <!-- Added: Favicon -->
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico">
 </head>
-<body>
-  <header>
+<body class="theme-hero">
+  <header class="site-header">
     <div class="header-container">
-      <a href="index.html"><h1>Relvaload.ee</h1></a>
-      <nav>
-        <a href="quiz.html">Teooria Test</a>
-        <a href="kuidas.html">Kuidas saada relvaluba?</a>
+      <a class="brand" href="index.html">
+        <span class="brand-mark"></span>
+        <span class="brand-text">Relvaload.ee</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html" class="nav-link is-active">Avaleht</a>
+        <a href="quiz.html" class="nav-link">Teooria test</a>
+        <a href="kuidas.html" class="nav-link">Kuidas saada relvaluba?</a>
       </nav>
+
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
-  <div id="intro-text">
-    <ul>
-      <li>Kontrolli teadmisi testiks<a href="quiz.html">: Teooria Test</a></li>
-      <li><a href="kuidas.html">Kuidas saada relvaluba?</a></li>
-    </ul>
-  </div>
-  <div id="model-container">
-    <div id="model-fallback" style="display: none; color: #e5e5e5; text-align: center; padding: 20px;">
-      Unable to load 3D model. Check the console for errors, ensure WebGL is enabled, and verify the GLB file is correctly placed.
+
+  <main class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="hero-kicker">Õpi targalt. Soorita kindlalt.</p>
+
+        <h1 class="hero-title">
+          Relvaloa<br />
+          ettevalmistus
+        </h1>
+
+        <p class="hero-subtitle">
+          Kaasaegne ja lihtne viis harjutada relvaseaduse teooriat: küsimused, selgitused ja selge progress.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="quiz.html">Alusta testi</a>
+          <a class="btn btn-ghost" href="kuidas.html">Vaata samme</a>
+        </div>
+
+        <div class="hero-pills" aria-label="Highlights">
+          <span class="pill">✅ Mobiilis mugav</span>
+          <span class="pill">✅ Kiire tagasiside</span>
+          <span class="pill">✅ Selgitused</span>
+        </div>
+      </div>
+
+      <div class="hero-side" aria-hidden="true">
+        <div class="glow-card">
+          <div class="glow-card-inner">
+            <div class="mini-stat">
+              <div class="mini-stat-label">Test</div>
+              <div class="mini-stat-value">10 küsimust</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-label">Lävend</div>
+              <div class="mini-stat-value">8 / 10</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-label">Aeg</div>
+              <div class="mini-stat-value">30 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="orb orb-a"></div>
+        <div class="orb orb-b"></div>
+        <div class="orb orb-c"></div>
+      </div>
     </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="model.js"></script>
+  </main>
+
   <script src="scroll.js"></script>
+  <script>
+    // Mobile menu toggle (no frameworks)
+    const toggle = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('.site-nav');
+
+    if (toggle && nav) {
+      toggle.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+  </script>
 </body>
 </html>
+
