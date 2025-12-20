@@ -1,56 +1,243 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Relvaload.ee</title>
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-  <link rel="icon" href="favicon.ico"> <!-- Added: Favicon -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relvaload.ee – Kuidas saada relvaluba?</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico">
+
+  <!-- Page palette (different from quiz) -->
+  <style>
+    body.theme-kuidas{
+      --accentA:#f59e0b; /* amber */
+      --accentB:#60a5fa; /* blue */
+      --accentC:#fb7185; /* rose */
+    }
+    .page-wrap{ max-width:1100px; margin:0 auto; padding: 0 18px 70px; }
+    .hero-kicker{ color: var(--accentB); }
+
+    .steps{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .step-card{
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+      overflow: hidden;
+    }
+    .step-inner{
+      display:grid;
+      grid-template-columns: 56px 1fr;
+      gap: 14px;
+      padding: 18px;
+      align-items:start;
+    }
+    .step-num{
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight: 900;
+      letter-spacing: .08em;
+      background: linear-gradient(135deg, rgba(245,158,11,.95), rgba(96,165,250,.85));
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 14px 40px rgba(245,158,11,0.16);
+    }
+    .step-title{
+      margin: 0 0 6px;
+      color: rgba(255,255,255,0.92);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .step-text{
+      margin: 0;
+      color: rgba(255,255,255,0.74);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .content-card{
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+      padding: 18px;
+      margin-top: 18px;
+    }
+  </style>
 </head>
-<body>
-  <header>
+
+<body class="theme-kuidas">
+  <header class="site-header">
     <div class="header-container">
-      <a href="index.html"><h1>Relvaload.ee</h1></a>
-      <nav>
-        <a href="quiz.html">Teooria Test</a>
-        <a href="kuidas.html">Kuidas saada relvaluba?</a>
+      <a class="brand" href="index.html">
+        <span class="brand-mark"></span>
+        <span class="brand-text">Relvaload.ee</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html" class="nav-link">Avaleht</a>
+        <a href="quiz.html" class="nav-link">Teooria test</a>
+        <a href="kuidas.html" class="nav-link is-active">Kuidas saada relvaluba?</a>
       </nav>
+
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
-  <div id="content-container">
-    <h2>Kuidas alustada relvaloa taotlemist Eestis?</h2>
-    <section>
-      <p>Relvaloa hankimise protseduur Eestis nõuab mitme sammu läbimist enne, kui saate taotluse esitada Politsei ja Piirivalveametile. Alljärgnevalt on toodud ülevaade sellest protsessist.</p>
-      
-      <h3>1: Esmaabikoolitus</h3>
-      <p>Eesti Relvaseaduse järgi peab relvaloa taotleja tõendama, et ta on edukalt läbinud 16-tunnise akrediteeritud esmaabikursuse. Selleks tuleb esitada vastav tunnistus.</p>
-      
-      <h3>3: Tervisetõendi saamine</h3>
-      <p>Eestis väljastab perearst relvaloa taotlejale tõendi, mis kinnitab, et tervislikud takistused relva omamiseks puuduvad. See tõend tuleb uuendada iga viie aasta tagant ja esitada relvaloa pikendamisel Politsei ja Piirivalveametile. Tõendi saamiseks peate läbima perearsti läbivaatuse ning vajadusel ka psühholoogi või psühhiaatri konsultatsiooni, kuhu perearst teid suunab. Psühholoogi või psühhiaatri vastuvõtule registreerite end ise – kontaktandmed on leitavad meie veebilehelt.</p>
-      
-      <h3>4: Taotluse esitamine Politsei ja Piirivalveametile</h3>
-      <p>Relvaloa taotlemine toimub veebipõhiselt iseteenindusportaali kaudu. Portaali kasutamiseks vajate kehtivat ID-kaarti või elamisluba ning autoriseerimiseks PIN-koodi, Mobiil-ID-d või Smart-ID kontot. Pärast sisselogimist tuleb täita taotlusvorm, lisada kõik vajalikud andmed ja dokumendid ning tasuda riigilõiv, mille suurus on 60 eurot.</p>
-      
-      <h3>5: Relva hoiutingimuste ülevaatus</h3>
-      <p>Pärast taotluse esitamist külastab Politsei ja Piirivalveamet teie poolt märgitud relva hoiukohta, et kontrollida selle vastavust nõuetele. Kohale saadetud ametnik koostab ülevaatuse akti, mis lisatakse teie toimikusse. Eesti relvaseaduse kohaselt peavad relvad ja laskemoon olema hoitud nii, et need oleksid turvalised ja kõrvalised isikud ei pääseks neile ligi. Kui teil on rohkem kui üks tulirelv, peab olema kasutusel relvakapp, mis on kindlalt kinnitatud põranda, seina või muu ehituskonstruktsiooni külge. Relvi tuleb hoida kas teie elukohas või mõnel muul aadressil, mis on eelnevalt kokku lepitud Politsei ja Piirivalveametiga.</p>
-      
-      <h3>6: Eksamiks valmistumine</h3>
-      <p>Eksamiks ettevalmistumiseks pakume koolitusprogrammi, mis hõlmab 10 tundi teooriat ja 3 tundi praktilist õpet lasketiirus. Koolituse jooksul saate omandada kõik teadmised ja oskused, mis on vajalikud eksami edukaks läbimiseks ning edaspidi relvade ohutuks käsitsemiseks ja omamiseks. Registreeruda saab meie veebilehel.</p>
-      
-      <h3>7: Eksam</h3>
-      <p>Eksam toimub eesti keeles ja jaguneb kaheks osaks:</p>
-      <ul>
-        <li><strong>Teooriaeksam:</strong> See on 30-minutiline test, mis koosneb 10 valikvastustega küsimusest. Edukaks sooritamiseks peate vastama õigesti vähemalt kaheksale küsimusele.</li>
-        <li><strong>Praktiline osa:</strong> Peate tundma tulirelva ehitust, selle olulisi komponente ja nende tööpõhimõtteid, laskemoona ning oskama relva ohutult käsitseda. Samuti tuleb täita eksamikomisjoni juhiseid. Laskekatse loetakse sooritatuks, kui tulistate ohutult kolm lasku märklehe suunas ja saavutate nõutud tabavuse.</li>
-      </ul>
-      
-      <h3>Korduseksam</h3>
-      <p>Kui eksam ebaõnnestub, saate seda korrata vastavalt eksamigraafikule. Kui praktiline osa ei õnnestu, on teil võimalus see kahe kuu jooksul pärast teooriaeksami sooritamist uuesti teha. Kui te seda aja jooksul ei läbi, tuleb ka teooriaeksam uuesti sooritada. Korduseksami eest tuleb tasuda riigilõiv.</p>
-      
-      <p>See protsess tagab, et relvaloa taotlejad vastavad kõigile seadusega kehtestatud nõuetele ning on valmis relvi ohutult käsitsema.</p>
+
+  <main class="page-wrap">
+    <section style="padding:52px 0 10px;">
+      <p class="hero-kicker">Teekond</p>
+      <h1 class="hero-title">Kuidas saada<br>relvaluba?</h1>
+      <p class="hero-subtitle">
+        Lühike ja selge ülevaade sammudest. All on samad punktid, aga modernses “stepper” vormis.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="quiz.html">Alusta testi</a>
+        <a class="btn btn-ghost" href="#steps">Vaata samme</a>
+      </div>
     </section>
-  </div>
+
+    <section class="content-card">
+      <h2 style="margin:0 0 10px; letter-spacing:.08em; text-transform:uppercase; font-weight:800;">
+        Ülevaade
+      </h2>
+      <p style="margin:0; color:rgba(255,255,255,.74); line-height:1.6;">
+        Relvaloa hankimise protseduur Eestis nõuab mitme sammu läbimist enne, kui saate taotluse esitada Politsei ja Piirivalveametile.
+        Alljärgnevalt on toodud ülevaade sellest protsessist.
+      </p>
+    </section>
+
+    <section id="steps" class="steps" aria-label="Steps">
+      <article class="step-card">
+        <div class="step-inner">
+          <div class="step-num">1</div>
+          <div>
+            <h3 class="step-title">Esmaabikoolitus</h3>
+            <p class="step-text">
+              Eesti Relvaseaduse järgi peab relvaloa taotleja tõendama, et ta on edukalt läbinud 16-tunnise akrediteeritud esmaabikursuse.
+              Selleks tuleb esitada vastav tunnistus.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-inner">
+          <div class="step-num">2</div>
+          <div>
+            <h3 class="step-title">Tervisetõend</h3>
+            <p class="step-text">
+              Eestis väljastab perearst relvaloa taotlejale tõendi, mis kinnitab, et tervislikud takistused relva omamiseks puuduvad.
+              Tõend tuleb uuendada iga viie aasta tagant ja esitada relvaloa pikendamisel Politsei ja Piirivalveametile. Tõendi saamiseks peate
+              läbima perearsti läbivaatuse ning vajadusel ka psühholoogi või psühhiaatri konsultatsiooni, kuhu perearst teid suunab.
+              Psühholoogi või psühhiaatri vastuvõtule registreerite end ise – kontaktandmed on leitavad meie veebilehelt.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-inner">
+          <div class="step-num">3</div>
+          <div>
+            <h3 class="step-title">Taotluse esitamine PPA-le</h3>
+            <p class="step-text">
+              Relvaloa taotlemine toimub veebipõhiselt iseteenindusportaali kaudu. Portaali kasutamiseks vajate kehtivat ID-kaarti või elamisluba
+              ning autoriseerimiseks PIN-koodi, Mobiil-ID-d või Smart-ID kontot. Pärast sisselogimist tuleb täita taotlusvorm, lisada kõik vajalikud
+              andmed ja dokumendid ning tasuda riigilõiv, mille suurus on 60 eurot.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-inner">
+          <div class="step-num">4</div>
+          <div>
+            <h3 class="step-title">Relva hoiutingimuste ülevaatus</h3>
+            <p class="step-text">
+              Pärast taotluse esitamist külastab Politsei ja Piirivalveamet teie poolt märgitud relva hoiukohta, et kontrollida selle vastavust nõuetele.
+              Kohale saadetud ametnik koostab ülevaatuse akti, mis lisatakse teie toimikusse. Relvad ja laskemoon peavad olema hoitud nii, et need oleksid
+              turvalised ja kõrvalised isikud ei pääseks neile ligi. Kui teil on rohkem kui üks tulirelv, peab olema kasutusel relvakapp, mis on kindlalt
+              kinnitatud põranda, seina või muu ehituskonstruktsiooni külge. Relvi tuleb hoida kas teie elukohas või mõnel muul aadressil, mis on eelnevalt
+              kokku lepitud Politsei ja Piirivalveametiga.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-inner">
+          <div class="step-num">5</div>
+          <div>
+            <h3 class="step-title">Eksamiks valmistumine</h3>
+            <p class="step-text">
+              Eksamiks ettevalmistumiseks pakume koolitusprogrammi, mis hõlmab 10 tundi teooriat ja 3 tundi praktilist õpet lasketiirus.
+              Koolituse jooksul saate omandada kõik teadmised ja oskused, mis on vajalikud eksami edukaks läbimiseks ning edaspidi relvade ohutuks
+              käsitsemiseks ja omamiseks. Registreeruda saab meie veebilehel.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-inner">
+          <div class="step-num">6</div>
+          <div>
+            <h3 class="step-title">Eksam</h3>
+            <p class="step-text">
+              Eksam toimub eesti keeles ja jaguneb kaheks osaks:
+            </p>
+            <ul style="margin:10px 0 0 18px; color:rgba(255,255,255,.74); line-height:1.6;">
+              <li>
+                <strong>Teooriaeksam:</strong> 30-minutiline test 10 valikvastustega küsimusega. Edukaks sooritamiseks peab õigesti vastama vähemalt 8 küsimusele.
+              </li>
+              <li style="margin-top:8px;">
+                <strong>Praktiline osa:</strong> relva ehitus ja ohutu käsitsemine, laskemoon, komisjoni juhised. Laskekatse loetakse sooritatuks, kui tulistate
+                ohutult kolm lasku märklehe suunas ja saavutate nõutud tabavuse.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-inner">
+          <div class="step-num">7</div>
+          <div>
+            <h3 class="step-title">Korduseksam</h3>
+            <p class="step-text">
+              Kui eksam ebaõnnestub, saate seda korrata vastavalt eksamigraafikule. Kui praktiline osa ei õnnestu, on teil võimalus see kahe kuu jooksul pärast
+              teooriaeksami sooritamist uuesti teha. Kui te seda aja jooksul ei läbi, tuleb ka teooriaeksam uuesti sooritada. Korduseksami eest tuleb tasuda riigilõiv.
+            </p>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('.site-nav');
+    if (toggle && nav) {
+      toggle.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+  </script>
+
   <script src="scroll.js"></script>
 </body>
 </html>
+
