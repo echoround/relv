@@ -325,18 +325,24 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
 
 @media (max-width: 720px){
   .site-nav{
-    display: none;
-    position: absolute;
-    right: 18px;
-    top: 70px;
-    flex-direction: column;
-    gap: 8px;
-    width: min(320px, calc(100vw - 36px));
-    padding: 10px;
-    border-radius: 16px;
-    background: rgba(0,0,0,0.55);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(255,255,255,0.10);
+      position: fixed;
+      left: 18px;
+      right: 18px;
+      top: 74px;
+      z-index: 999;
+
+      /* darker base so text underneath doesn't show through */
+      background: rgba(10, 9, 18, 0.92);
+
+      /* heavy blur ONLY behind the dropdown panel */
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 18px;
+      box-shadow: 0 26px 90px rgba(0,0,0,0.68);
+      overflow: hidden;
+      isolation: isolate;
   }
   .site-nav.is-open{ display: flex; }
   .nav-toggle{ display: inline-block; }
