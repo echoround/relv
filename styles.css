@@ -695,3 +695,49 @@ html { overflow-x: clip; }
     letter-spacing: 0.05em !important;
   }
 }
+
+
+/* =========================
+   MOBILE NAV: heavy blur scrim
+   Paste at END of styles.css
+========================= */
+
+@media (max-width: 720px){
+
+  /* When nav is open, blur/dim EVERYTHING behind it */
+  body.nav-open::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    z-index: 998;
+
+    /* dim + subtle hue wash */
+    background:
+      radial-gradient(circle at 18% 12%, rgba(139,92,246,0.26), transparent 62%),
+      radial-gradient(circle at 86% 24%, rgba(236,72,153,0.20), transparent 62%),
+      radial-gradient(circle at 40% 92%, rgba(34,211,238,0.14), transparent 64%),
+      rgba(0,0,0,0.46);
+
+    /* heavy blur of the page behind */
+    backdrop-filter: blur(28px) saturate(140%);
+    -webkit-backdrop-filter: blur(28px) saturate(140%);
+  }
+  /* backdrop-filter applies filters to what's behind the element :contentReference[oaicite:1]{index=1} */
+
+  /* Keep the menu above the scrim */
+  .site-nav{ z-index: 999; }
+
+  /* Stop the page scrolling behind the open menu */
+  body.nav-open{
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  /* Make the menu panel itself less transparent so text never “ghosts” through */
+  .site-nav{
+    background: rgba(10, 9, 18, 0.90);
+    border: 1px solid rgba(255,255,255,0.14);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+  }
+}
