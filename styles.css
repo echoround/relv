@@ -659,3 +659,39 @@ html { overflow-x: clip; }
                 0 0 26px color-mix(in srgb, var(--accentA) 28%, transparent);
   }
 }
+
+/* =========================
+   HOME MOBILE TITLE: no clipping
+   Paste at END of styles.css
+========================= */
+
+/* If anything sets nowrap somewhere, this cancels it */
+.hero-title,
+.hero h1{
+  white-space: normal;
+}
+/* white-space controls wrapping behavior :contentReference[oaicite:0]{index=0} */
+
+@media (max-width: 560px){
+  body.theme-hero .hero-title,
+  body.theme-hero .hero h1{
+    /* the actual fix: make the long word fit */
+    font-size: clamp(34px, 10.5vw, 52px) !important;
+    letter-spacing: 0.06em !important;
+
+    /* allow breaks inside long words when needed */
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+
+    line-height: 0.98 !important;
+    max-width: 100%;
+  }
+}
+/* overflow-wrap and word-break are designed for long-word overflow :contentReference[oaicite:1]{index=1} */
+
+@media (max-width: 380px){
+  body.theme-hero .hero-title,
+  body.theme-hero .hero h1{
+    letter-spacing: 0.05em !important;
+  }
+}
