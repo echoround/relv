@@ -344,3 +344,186 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   .hero{ padding: 42px 18px 42px; }
 }
 
+/* ================================
+   QUIZ POLISH (navigator + buttons)
+   Paste at the END of styles.css
+================================== */
+
+body.theme-quiz{
+  /* One place to control hover glow color for this page */
+  --accentGlow: rgba(6, 182, 212, 0.30);
+}
+
+/* More breathing room between question text and options */
+body.theme-quiz #question-text{
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+body.theme-quiz #options{
+  margin-top: 14px;
+}
+
+/* Make option “cards” feel consistent */
+body.theme-quiz .option{
+  background: rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 14px;
+  padding: 12px 12px;
+  margin-bottom: 10px;
+  transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease, background .14s ease;
+}
+
+body.theme-quiz .option:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.14);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.10), 0 0 22px var(--accentGlow);
+}
+
+/* Radios/checkboxes match page accent */
+body.theme-quiz .option input[type="radio"],
+body.theme-quiz .option input[type="checkbox"]{
+  accent-color: #06b6d4;
+}
+
+/* =========================
+   Button styling + glow hover
+========================= */
+
+body.theme-quiz button{
+  font-family: 'Montserrat', Arial, sans-serif;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease, opacity .16s ease;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+body.theme-quiz button:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.18);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.10), 0 0 26px var(--accentGlow);
+}
+
+body.theme-quiz button:active{
+  transform: translateY(0px);
+}
+
+body.theme-quiz button:focus-visible{
+  outline: 2px solid rgba(255,255,255,0.35);
+  outline-offset: 2px;
+}
+/* :focus-visible is the cleanest way to show focus for keyboard users without noisy click outlines. :contentReference[oaicite:2]{index=2} */
+
+body.theme-quiz #submit-btn{
+  width: 100%;
+  padding: 12px 18px;
+  border: 1px solid rgba(6,182,212,0.22);
+  background: linear-gradient(135deg, rgba(6,182,212,0.92), rgba(34,197,94,0.86));
+  box-shadow: 0 18px 50px rgba(6,182,212,0.16);
+}
+
+body.theme-quiz #navigation{
+  gap: 10px;
+}
+
+body.theme-quiz #prev-btn,
+body.theme-quiz #next-btn{
+  width: 100%;
+  padding: 12px 16px;
+}
+
+body.theme-quiz #prev-btn{
+  opacity: 0.85;
+}
+
+body.theme-quiz #next-btn{
+  border: 1px solid rgba(34,197,94,0.22);
+  background: linear-gradient(135deg, rgba(34,197,94,0.88), rgba(167,139,250,0.72));
+}
+
+/* =========================
+   Question navigator grid (REAL matrix)
+========================= */
+
+body.theme-quiz #question-grid{
+  padding: 16px;
+  /* keep it neat in a sidebar */
+  max-height: calc(100vh - 240px);
+  overflow: auto;
+}
+
+body.theme-quiz .grid-container{
+  display: grid;
+  /* auto-fill + minmax creates a dense, responsive matrix. :contentReference[oaicite:3]{index=3} */
+  grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+  gap: 10px;
+}
+
+body.theme-quiz .grid-item{
+  /* override pill button shape above */
+  border-radius: 14px;
+  padding: 0;
+  text-transform: none;
+  letter-spacing: 0.02em;
+
+  width: 100%;
+  aspect-ratio: 1 / 1; /* perfect square chips :contentReference[oaicite:4]{index=4} */
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.88);
+  font-size: 13px;
+}
+
+/* Status colors */
+body.theme-quiz .grid-item.unanswered{
+  background: rgba(255,255,255,0.05);
+}
+
+body.theme-quiz .grid-item.correct{
+  background: linear-gradient(180deg, rgba(28,152,98,0.36), rgba(28,152,98,0.18));
+  border-color: rgba(28,152,98,0.30);
+}
+
+body.theme-quiz .grid-item.incorrect{
+  background: linear-gradient(180deg, rgba(172,0,0,0.34), rgba(172,0,0,0.18));
+  border-color: rgba(172,0,0,0.30);
+}
+
+body.theme-quiz .grid-item.partial{
+  background: linear-gradient(180deg, rgba(234,193,80,0.38), rgba(234,193,80,0.18));
+  border-color: rgba(234,193,80,0.28);
+}
+
+/* Current question: subtle glow + slight accent tint */
+body.theme-quiz .grid-item.current{
+  border-color: rgba(255,255,255,0.22);
+  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.10), rgba(0,0,0,0.18));
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.10) inset, 0 0 28px var(--accentGlow);
+}
+
+/* Make navigator chips glow on hover too (stronger than default) */
+body.theme-quiz .grid-item:hover{
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 0 30px var(--accentGlow);
+}
+
+/* Mobile tweaks */
+@media (max-width: 720px){
+  body.theme-quiz #question-grid{
+    max-height: 320px; /* keep it from taking over the page */
+  }
+  body.theme-quiz .grid-container{
+    grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+    gap: 8px;
+  }
+}

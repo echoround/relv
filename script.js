@@ -211,73 +211,75 @@ document.getElementById('next-btn').addEventListener('click', () => {
     }
 });
 
-// Create the question grid
 function createQuestionGrid() {
     const gridDiv = document.getElementById('question-grid');
-    console.log('Creating grid for questions:', questions);
-    if (!gridDiv.querySelector('.grid-container')) { // Recreate only if not present
-        gridDiv.innerHTML = '<div class="grid-container"></div>';
-        const gridContainer = gridDiv.querySelector('.grid-container');
+    if (!gridDiv) return;
 
-        // Create a grid for all 71 questions (7x11 layout, limited to 71)
-        for (let i = 0; i < Math.min(71, questions.length); i++) {
-            const item = document.createElement('div');
-            item.className = 'grid-item unanswered';
-            item.textContent = i + 1;
-            item.addEventListener('click', () => {
-                if (i < questions.length) {
-                    currentIndex = i;
-                    displayQuestion();
-                }
-            });
-            gridContainer.appendChild(item);
-        }
-    } else {
-        console.log('Grid container already exists, updating instead');
-        updateQuestionGrid();
+    if (!gridDiv.querySelector('.grid-container')) {
+        gridDiv.innerHTML = '<div class="grid-container" aria-label="Question navigator"></div>';
     }
+
+    const gridContainer = gridDiv.querySelector('.grid-container');
+    gridContainer.innerHTML = '';
+
+    const total = Math.min(71, questions.length);
+
+    for (let i = 0; i < total; i++) {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'grid-item unanswered';
+        item.textContent = i + 1;
+        item.setAttribute('aria-label', `Go to question ${i + 1}`);
+
+        item.addEventListener('click', () => {
+            currentIndex = i;
+            displayQuestion();
+        });
+
+        gridContainer.appendChild(item);
+    }
+
+    updateQuestionGrid();
 }
 
-// Update the question grid based on user answers
 function updateQuestionGrid() {
-    if (!questions || questions.length === 0) {
-        console.error('No questions available to update grid');
-        return;
-    }
+    if (!questions || questions.length === 0) return;
+
     const grid = document.getElementById('question-grid');
     if (!grid) return;
 
-    // Update all grid items, limited to 71 questions
     const gridItems = grid.querySelectorAll('.grid-item');
-    for (let i = 0; i < Math.min(gridItems.length, 71); i++) { // Limit to 71 items for 7x11 grid
+    const total = Math.min(gridItems.length, 71);
+
+    for (let i = 0; i < total; i++) {
         const cell = gridItems[i];
+
+        // Current question highlight
+        cell.classList.toggle('current', i === currentIndex);
+
+        // Reset state classes (keep "current")
+        cell.classList.remove('correct', 'incorrect', 'partial', 'unanswered');
+
         if (userAnswers[i] && userAnswers[i].submitted) {
             const question = questions[i] || {};
             const correct = Array.isArray(question.correct) ? question.correct : [];
             const selected = userAnswers[i]?.selected?.sort() || [];
+
             if (arraysEqual(selected, correct)) {
-                cell.classList.remove('incorrect', 'partial', 'unanswered');
                 cell.classList.add('correct');
             } else if (question.multiple && selected.length > 0 && selected.some(opt => correct.includes(opt))) {
-                // Partial correct for multiple-choice (at least one correct answer selected, but not all)
-                cell.classList.remove('correct', 'incorrect', 'unanswered');
                 cell.classList.add('partial');
             } else if (selected.length > 0) {
-                // Incorrect if any options are selected but not fully correct
-                cell.classList.remove('correct', 'partial', 'unanswered');
                 cell.classList.add('incorrect');
             } else {
-                // Unanswered if no options selected
-                cell.classList.remove('correct', 'incorrect', 'partial');
                 cell.classList.add('unanswered');
             }
         } else {
-            // Unanswered if not submitted
-            cell.classList.remove('correct', 'incorrect', 'partial');
             cell.classList.add('unanswered');
         }
     }
 }
+
 
 // Show celebration effect for 100% correct answer
 function showCelebration() {
