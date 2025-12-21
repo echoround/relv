@@ -853,3 +853,134 @@ body.theme-hero .hero-title-long{
     z-index: 999 !important;
   }
 }
+
+
+
+
+
+
+/* =========================
+   SIMPLE MOBILE DROPDOWN (no blur, no body overlay)
+   Paste at END of styles.css
+========================= */
+
+@media (max-width: 720px){
+
+  /* Kill any previous full-screen overlay behavior if it still exists */
+  body.nav-open::before{
+    content: none !important;
+  }
+  body.nav-open{
+    overflow: auto !important;
+    touch-action: auto !important;
+  }
+
+  /* Mobile dropdown panel */
+  .site-nav{
+    display: none !important;
+    position: fixed !important;
+    left: 16px !important;
+    right: 16px !important;
+    top: 74px !important;
+    z-index: 999 !important;
+
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 12px !important;
+
+    /* Solid-ish modern gradient (readable, no “see-through text”) */
+    background:
+      radial-gradient(1200px 420px at 20% 10%, rgba(139,92,246,0.32), transparent 60%),
+      radial-gradient(900px 420px at 85% 35%, rgba(236,72,153,0.26), transparent 60%),
+      radial-gradient(900px 520px at 35% 110%, rgba(34,211,238,0.18), transparent 62%),
+      linear-gradient(180deg, rgba(14,12,26,0.98), rgba(7,7,12,0.98)) !important;
+
+    border-radius: 18px !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    box-shadow: 0 26px 90px rgba(0,0,0,0.72) !important;
+
+    /* IMPORTANT: remove blur so it never “blurs everything” */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    overflow: hidden !important;
+    isolation: isolate !important;
+  }
+
+  .site-nav.is-open{
+    display: flex !important;
+  }
+
+  /* Abstract shapes layer inside the panel (not transparent; just decorative) */
+  .site-nav::before{
+    content: "" !important;
+    position: absolute !important;
+    inset: -80px !important;
+    pointer-events: none !important;
+    opacity: 0.9 !important;
+
+    background:
+      radial-gradient(circle at 18% 22%, rgba(236,72,153,0.18), transparent 58%),
+      radial-gradient(circle at 82% 18%, rgba(139,92,246,0.22), transparent 58%),
+      radial-gradient(circle at 55% 92%, rgba(34,211,238,0.14), transparent 60%);
+    filter: blur(22px) !important;
+  }
+
+  /* Crisp top highlight line (feels “premium”) */
+  .site-nav::after{
+    content: "" !important;
+    position: absolute !important;
+    left: 12px !important;
+    right: 12px !important;
+    top: 10px !important;
+    height: 1px !important;
+    pointer-events: none !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent) !important;
+  }
+
+  /* Links as solid mini-cards */
+  .site-nav .nav-link{
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+
+    padding: 14px 12px !important;
+    border-radius: 16px !important;
+
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+
+    color: rgba(255,255,255,0.92) !important;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.55) !important;
+
+    transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease !important;
+  }
+
+  /* Glow on hover / press */
+  .site-nav .nav-link:hover,
+  .site-nav .nav-link:active{
+    transform: translateY(-1px) !important;
+    background: rgba(255,255,255,0.09) !important;
+    border-color: rgba(255,255,255,0.14) !important;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.10),
+      0 0 26px rgba(236,72,153,0.14) !important;
+  }
+
+  /* Active page highlight (subtle glow + tint) */
+  .site-nav .nav-link.is-active{
+    background: rgba(255,255,255,0.10) !important;
+    border-color: rgba(255,255,255,0.18) !important;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.10) inset,
+      0 0 28px rgba(139,92,246,0.18) !important;
+  }
+
+  /* Make burger button match the glow rule */
+  .nav-toggle:hover{
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 0 26px rgba(236,72,153,0.14);
+    transform: translateY(-1px);
+    transition: transform .16s ease, box-shadow .16s ease;
+  }
+}
