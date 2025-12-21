@@ -29,7 +29,7 @@ Promise.all([
         console.error('No explanations found in explanations.json');
     }
 
-    userAnswers = Array(questions.length).fill(null).map(() => ({ selected: [], submitted: false }));
+    userAnswers = Array(questions.length).fill(null).map(() => ({ selected: [], submitted: false, celebrated: false }));
     displayQuestion();
     createQuestionGrid();
 })
@@ -171,9 +171,15 @@ function displayFeedback(question) {
     }
 
     // Trigger celebration if 100% correct
-    if (arraysEqual(userAnswers[currentIndex]?.selected?.sort() || [], question.correct?.sort() || [])) {
-        showCelebration();
+    // Trigger celebration ONCE when the submitted answer is correct
+    const isCorrect =
+      arraysEqual(userAnswers[currentIndex]?.selected?.sort() || [], question.correct?.sort() || []);
+
+    if (userAnswers[currentIndex]?.submitted && isCorrect && !userAnswers[currentIndex].celebrated) {
+      userAnswers[currentIndex].celebrated = true;
+      showCelebration();
     }
+
 }
 
 // Handle submit button click
@@ -282,27 +288,209 @@ function updateQuestionGrid() {
 
 
 // Show celebration effect for 100% correct answer
-function showCelebration() {
-    // Green flash
-    const flash = document.createElement('div');
-    flash.id = 'green-flash';
-    document.body.appendChild(flash);
+let greenFx = null;
 
-    // Fireworks
-    for (let i = 0; i < 10; i++) { // 10 fireworks for a festive effect
-        const firework = document.createElement('div');
-        firework.className = 'firework';
-        firework.style.left = Math.random() * 100 + 'vw';
-        firework.style.top = Math.random() * 100 + 'vh';
-        document.body.appendChild(firework);
+function showCelebration() {
+  // Respect reduced motion (keeps it comfy on phones)
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  if (!greenFx) greenFx = new GreenFireworksFX();
+  greenFx.fire();
+}
+
+class GreenFireworksFX {
+  constructor() {
+    this.canvas = document.createElement('canvas');
+    this.canvas.id = 'fx-fireworks';
+    document.body.appendChild(this.canvas);
+
+    this.ctx = this.canvas.getContext('2d', { alpha: true });
+    this.dpr = Math.min(2, window.devicePixelRatio || 1);
+
+    this.w = 0;
+    this.h = 0;
+
+    this.particles = [];
+    this.scheduled = [];
+    this.running = false;
+    this.lastT = 0;
+    this.endT = 0;
+
+    this.resize = this.resize.bind(this);
+    this.loop = this.loop.bind(this);
+
+    this.resize();
+    window.addEventListener('resize', this.resize);
+    window.addEventListener('orientationchange', this.resize);
+  }
+
+  resize() {
+    this.w = Math.max(1, window.innerWidth);
+    this.h = Math.max(1, window.innerHeight);
+
+    this.canvas.width = Math.floor(this.w * this.dpr);
+    this.canvas.height = Math.floor(this.h * this.dpr);
+    this.canvas.style.width = this.w + 'px';
+    this.canvas.style.height = this.h + 'px';
+
+    this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+  }
+
+  fire() {
+    const now = performance.now();
+
+    // Extend / restart
+    this.running = true;
+    this.lastT = now;
+    this.endT = now + 1100;
+
+    // Schedule 4 bursts, mostly near the top half (over-the-top feel)
+    this.scheduled.length = 0;
+
+    const burstCount = 4;
+    for (let i = 0; i < burstCount; i++) {
+      const t = now + i * 120;
+      const x = this.w * (0.15 + Math.random() * 0.70);
+      const y = this.h * (0.14 + Math.random() * 0.26);
+      const scale = 0.9 + Math.random() * 0.45;
+      this.scheduled.push({ t, x, y, scale });
     }
 
-    // Remove flash and fireworks after animation
-    setTimeout(() => {
-        flash.remove();
-        document.querySelectorAll('.firework').forEach(fw => fw.remove());
-    }, 400); // Match the 0.4s fade-out duration
+    // Soft “energy sweep” burst near the center-top (shader-ish vibe)
+    this.scheduled.push({
+      t: now + 80,
+      x: this.w * (0.35 + Math.random() * 0.30),
+      y: this.h * 0.22,
+      scale: 1.15
+    });
+
+    requestAnimationFrame(this.loop);
+  }
+
+  burst(x, y, scale) {
+    // Palette: mostly greens (bright + deep), slight variance for richness
+    const baseHue = 105 + Math.random() * 45; // 105..150 (green range)
+
+    // Core “spark ring”
+    const count = Math.floor(64 * scale);
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = (180 + Math.random() * 420) * scale;
+
+      const hue = baseHue + (Math.random() * 12 - 6);
+      const sat = 70 + Math.random() * 30;
+      const light = 38 + Math.random() * 30;
+
+      this.particles.push({
+        x, y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp,
+        life: 0,
+        ttl: 0.65 + Math.random() * 0.55,
+        r: 1.0 + Math.random() * 2.2,
+        hue, sat, light,
+        tw: Math.random() * 10
+      });
+    }
+
+    // Extra “sparkles” for crispness
+    const sparkleCount = Math.floor(22 * scale);
+    for (let i = 0; i < sparkleCount; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = (90 + Math.random() * 260) * scale;
+
+      this.particles.push({
+        x, y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp,
+        life: 0,
+        ttl: 0.45 + Math.random() * 0.35,
+        r: 0.7 + Math.random() * 1.2,
+        hue: baseHue + (Math.random() * 18 - 9),
+        sat: 85 + Math.random() * 15,
+        light: 55 + Math.random() * 20,
+        tw: Math.random() * 12
+      });
+    }
+  }
+
+  loop(t) {
+    if (!this.running) return;
+
+    const dt = Math.min(0.034, (t - this.lastT) / 1000);
+    this.lastT = t;
+
+    const ctx = this.ctx;
+
+    // Fade previous frame toward transparency (no page-dimming)
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0,0,0,0.22)';
+    ctx.fillRect(0, 0, this.w, this.h);
+
+    // Spawn scheduled bursts
+    for (let i = this.scheduled.length - 1; i >= 0; i--) {
+      if (t >= this.scheduled[i].t) {
+        const b = this.scheduled[i];
+        this.burst(b.x, b.y, b.scale);
+        this.scheduled.splice(i, 1);
+      }
+    }
+
+    // Draw with additive blending for glow
+    ctx.globalCompositeOperation = 'lighter';
+
+    const gravity = 520;   // px/s^2
+    const drag = 0.985;    // velocity damping
+
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.life += dt;
+
+      if (p.life >= p.ttl) {
+        this.particles.splice(i, 1);
+        continue;
+      }
+
+      // Motion
+      p.vx *= Math.pow(drag, dt * 60);
+      p.vy *= Math.pow(drag, dt * 60);
+      p.vy += gravity * dt;
+
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+
+      // Alpha curve + subtle twinkle
+      const k = 1 - (p.life / p.ttl);
+      const twinkle = 0.75 + 0.25 * Math.sin((p.life * 18) + p.tw);
+      const a = Math.max(0, Math.min(1, k * 0.95 * twinkle));
+
+      // Draw glow + core
+      const outer = p.r * (3.2 + (1 - k) * 1.2);
+      const inner = p.r * 1.05;
+
+      ctx.beginPath();
+      ctx.fillStyle = `hsla(${p.hue}, ${p.sat}%, ${p.light}%, ${a * 0.22})`;
+      ctx.arc(p.x, p.y, outer, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = `hsla(${p.hue}, ${p.sat}%, ${Math.min(92, p.light + 22)}%, ${a})`;
+      ctx.arc(p.x, p.y, inner, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Stop when done
+    if (t > this.endT && this.particles.length === 0 && this.scheduled.length === 0) {
+      this.running = false;
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.clearRect(0, 0, this.w, this.h);
+      return;
+    }
+
+    requestAnimationFrame(this.loop);
+  }
 }
+
 
 // Helper function to compare arrays
 function arraysEqual(a, b) {

@@ -984,3 +984,17 @@ body.theme-hero .hero-title-long{
     transition: transform .16s ease, box-shadow .16s ease;
   }
 }
+
+
+
+/* =========================
+   QUIZ: Green fireworks overlay (canvas)
+========================= */
+#fx-fireworks {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;   /* never blocks clicks */
+  z-index: 2500;          /* above nav/menu */
+  opacity: 1;
+  filter: saturate(140%) contrast(110%);
+}
