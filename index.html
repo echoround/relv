@@ -8,6 +8,59 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg">
 </head>
+
+
+<script>
+  function fitHeroTitleLine() {
+    const el = document.querySelector('[data-autofit]');
+    if (!el) return;
+
+    // Reset any previous inline sizing
+    el.style.fontSize = '';
+    el.style.letterSpacing = '';
+
+    const computed = getComputedStyle(el);
+    const maxSize = parseFloat(computed.fontSize);
+    const minSize = 26; // lower bound so it doesn't get tiny
+    const baseTracking = 0.06; // em
+
+    // Apply baseline tracking first (affects measured width)
+    el.style.letterSpacing = baseTracking + 'em';
+
+    const parent = el.parentElement;
+    if (!parent) return;
+
+    // Small safety padding so it doesn't kiss the edges
+    const available = parent.clientWidth - 2;
+    const needed = el.scrollWidth; // overflow detection :contentReference[oaicite:5]{index=5}
+
+    if (needed <= available) return;
+
+    const ratio = available / needed;
+    const target = Math.max(minSize, Math.min(maxSize, maxSize * ratio));
+
+    el.style.fontSize = target.toFixed(2) + 'px';
+  }
+
+  const runFit = () => {
+    fitHeroTitleLine();
+    // Run again next frame in case layout shifts slightly
+    requestAnimationFrame(fitHeroTitleLine);
+  };
+
+  // Wait for fonts so widths are correct :contentReference[oaicite:6]{index=6}
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(runFit);
+  } else {
+    window.addEventListener('load', runFit);
+  }
+
+  window.addEventListener('resize', runFit);
+  window.addEventListener('orientationchange', runFit);
+</script>
+
+
+
 <body class="theme-hero">
   <header class="site-header">
     <div class="header-container">
@@ -34,12 +87,12 @@
         <p class="hero-kicker">Õpi targalt. Soorita kindlalt.</p>
 
         <h1 class="hero-title">
-          Relvaloa<br />
-          ettevalmistus
+          <span class="hero-title-line">Relvaloa</span>
+          <span class="hero-title-line hero-title-long" data-autofit>Ettevalmistus</span>
         </h1>
 
         <p class="hero-subtitle">
-          Kaasaegne ja lihtne viis harjutada relvaseaduse teooriat: küsimused, selgitused ja selge progress.
+          Lihtne viis harjutada relvaseaduse teooriat: küsimused, selgitused ja selge progress.
         </p>
 
         <div class="hero-actions">
@@ -49,7 +102,7 @@
 
         <div class="hero-pills" aria-label="Highlights">
           <span class="pill">✅ Mobiilis mugav</span>
-          <span class="pill">✅ Kiire tagasiside</span>
+          <span class="pill">✅ Küsimused eksamiks</span>
           <span class="pill">✅ Selgitused</span>
         </div>
       </div>

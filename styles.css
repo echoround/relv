@@ -782,3 +782,21 @@ html { overflow-x: clip; }
       radial-gradient(circle at 40% 92%, rgba(34,211,238,0.12), transparent 64%);
   }
 }
+
+/* HOME: title line control */
+.hero-title-line{ display:block; }
+
+body.theme-hero .hero-title-long{
+  white-space: nowrap;              /* keep on one line :contentReference[oaicite:1]{index=1} */
+  overflow-wrap: normal;            /* override earlier "anywhere" fixes */
+  word-break: normal;
+  letter-spacing: 0.10em;
+}
+
+@media (max-width: 560px){
+  body.theme-hero .hero-title-long{
+    /* base sizing (JS will fine-tune to never wrap) */
+    font-size: clamp(28px, 9.2vw, 56px); /* fluid typography :contentReference[oaicite:2]{index=2} */
+    letter-spacing: 0.06em;
+  }
+}
