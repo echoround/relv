@@ -741,3 +741,44 @@ html { overflow-x: clip; }
     -webkit-backdrop-filter: blur(18px) saturate(160%);
   }
 }
+
+
+
+
+
+@media (max-width: 720px){
+  .site-nav{
+    position: fixed;
+    left: 18px;
+    right: 18px;
+    top: 74px;
+    z-index: 999;
+
+    /* darker base so text underneath doesn't show through */
+    background: rgba(10, 9, 18, 0.92);
+
+    /* heavy blur ONLY behind the dropdown panel */
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 18px;
+    box-shadow: 0 26px 90px rgba(0,0,0,0.68);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* subtle hue inside the panel (optional, looks premium) */
+  .site-nav::before{
+    content:"";
+    position:absolute;
+    inset:-60px;
+    pointer-events:none;
+    opacity:0.9;
+    filter: blur(18px);
+    background:
+      radial-gradient(circle at 20% 20%, rgba(139,92,246,0.22), transparent 62%),
+      radial-gradient(circle at 85% 30%, rgba(236,72,153,0.18), transparent 62%),
+      radial-gradient(circle at 40% 92%, rgba(34,211,238,0.12), transparent 64%);
+  }
+}
