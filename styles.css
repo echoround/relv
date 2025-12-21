@@ -527,3 +527,51 @@ body.theme-quiz .grid-item:hover{
     gap: 8px;
   }
 }
+
+/* =========================
+   MOBILE OVERFLOW FIX (Home)
+   Paste at END of styles.css
+========================= */
+
+/* Prevent any stray absolute glows/orbs from creating horizontal scroll */
+html { overflow-x: clip; }
+@supports not (overflow: clip) {
+  html { overflow-x: hidden; }
+}
+/* overflow / overflow-x details: MDN :contentReference[oaicite:1]{index=1} */
+
+/* Make long uppercase words safe on small screens */
+.hero-title{
+  /* Allows breaking long words only when needed (best default) */
+  overflow-wrap: break-word; /* MDN :contentReference[oaicite:2]{index=2} */
+  hyphens: auto;             /* MDN :contentReference[oaicite:3]{index=3} */
+}
+
+/* Mobile tuning: reduce tracking + size so “ETTEVALMISTUS” never overflows */
+@media (max-width: 520px){
+  .hero-title{
+    font-size: clamp(38px, 11.5vw, 58px);
+    letter-spacing: 0.10em;
+    line-height: 0.98;
+  }
+
+  .hero-kicker{
+    letter-spacing: 0.18em;
+  }
+}
+
+/* Extra-tight phones: guarantee no overflow even with big tracking */
+@media (max-width: 380px){
+  .hero-title{
+    letter-spacing: 0.08em;
+    overflow-wrap: anywhere; /* strongest “never overflow” option :contentReference[oaicite:4]{index=4} */
+  }
+}
+
+/* Optional: keep hero glows from contributing to width on mobile */
+@media (max-width: 860px){
+  .hero-side{
+    overflow: hidden;
+    border-radius: var(--radius);
+  }
+}
