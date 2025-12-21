@@ -29,7 +29,15 @@ Promise.all([
         console.error('No explanations found in explanations.json');
     }
 
-    userAnswers = Array(questions.length).fill(null).map(() => ({ selected: [], submitted: false, celebrated: false }));
+    userAnswers = Array(questions.length).fill(null).map(() => ({
+      selected: [],
+      submitted: false,
+      explainOpen: false,
+      explainTouched: false,
+      celebrated: false
+    }));
+    setupExplanationUI();
+
     displayQuestion();
     createQuestionGrid();
 })
@@ -88,99 +96,109 @@ function displayQuestion() {
     updateQuestionGrid();
 }
 
-// Display feedback after submission and add question mark button
-function displayFeedback(question) {
-    if (!question) {
-        console.error('Question is undefined in displayFeedback');
-        return;
+function setupExplanationUI() {
+  const area = document.getElementById('explain-area');
+  const toggle = document.getElementById('explain-toggle');
+  const panel = document.getElementById('explain-panel');
+
+  if (!area || !toggle || !panel) return;
+
+  toggle.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    const next = !isOpen;
+
+    toggle.setAttribute('aria-expanded', String(next));
+    panel.hidden = !next;
+    area.classList.toggle('is-open', next);
+
+    if (userAnswers[currentIndex]) {
+      userAnswers[currentIndex].explainOpen = next;
+      userAnswers[currentIndex].explainTouched = true;
     }
-    const feedbackDiv = document.getElementById('feedback');
-    const feedbackMessage = document.getElementById('feedback-message');
-    feedbackMessage.innerHTML = '';
-    if (currentIndex >= 0 && currentIndex < questions.length && userAnswers[currentIndex]?.submitted) {
-        console.log('Feedback for question:', question);
-        const correct = Array.isArray(question.correct) ? question.correct : []; // Default to empty array if correct is missing
-        const selected = userAnswers[currentIndex]?.selected?.sort() || [];
-        const message = arraysEqual(selected, correct) ? 'Correct!' : 'Incorrect.';
-        feedbackMessage.textContent = message;
-
-        // Highlight correct and incorrect options
-        (question.options || []).forEach((option, index) => {
-            if (!option) return; // Skip invalid options
-            const optionDiv = document.querySelector(`#option-${index}`)?.parentElement;
-            if (optionDiv) {
-                if (correct.includes(index)) {
-                    optionDiv.classList.add('correct');
-                } else if (selected.includes(index)) {
-                    optionDiv.classList.add('incorrect');
-                }
-            }
-        });
-
-        // Show explanation from question or default message
-        const questionExplanation = question.explanation || 'No explanation provided.';
-        const explanation = document.createElement('p');
-        explanation.textContent = questionExplanation;
-        feedbackMessage.appendChild(explanation);
-
-        // Add question mark button for additional explanation from explanations.json
-        let questionMarkBtn = document.getElementById('question-mark-btn');
-        if (!questionMarkBtn) {
-            questionMarkBtn = document.createElement('button');
-            questionMarkBtn.id = 'question-mark-btn';
-            questionMarkBtn.textContent = '?';
-            feedbackDiv.appendChild(questionMarkBtn);
-        }
-        questionMarkBtn.style.display = 'inline-block'; // Show the button
-
-        // Create or update tooltip with explanation
-        let tooltip = document.getElementById('explanation-tooltip');
-        if (!tooltip) {
-            tooltip = document.createElement('div');
-            tooltip.id = 'explanation-tooltip';
-            document.body.appendChild(tooltip);
-        }
-
-        // Find explanation for this question, if it exists
-        const explanationText = explanations.find(exp => exp.id === question.id)?.text || 'No additional explanation available.';
-        tooltip.textContent = explanationText;
-
-        // Handle tooltip visibility on hover
-        questionMarkBtn.addEventListener('mouseover', () => {
-            // Position tooltip over the grid
-            const grid = document.getElementById('question-grid');
-            if (grid) {
-                const rect = grid.getBoundingClientRect();
-                tooltip.style.position = 'absolute';
-                tooltip.style.left = `${rect.left}px`;
-                tooltip.style.top = `${rect.top}px`;
-                tooltip.style.width = `${rect.width}px`;
-                tooltip.style.height = `${rect.height}px`;
-                tooltip.style.zIndex = '200'; // Above the grid and everything else
-                tooltip.style.display = 'block';
-            }
-        });
-        questionMarkBtn.addEventListener('mouseout', () => {
-            tooltip.style.display = 'none';
-        });
-    } else {
-        const questionMarkBtn = document.getElementById('question-mark-btn');
-        if (questionMarkBtn) questionMarkBtn.style.display = 'none';
-        const tooltip = document.getElementById('explanation-tooltip');
-        if (tooltip) tooltip.style.display = 'none';
-    }
-
-    // Trigger celebration if 100% correct
-    // Trigger celebration ONCE when the submitted answer is correct
-    const isCorrect =
-      arraysEqual(userAnswers[currentIndex]?.selected?.sort() || [], question.correct?.sort() || []);
-
-    if (userAnswers[currentIndex]?.submitted && isCorrect && !userAnswers[currentIndex].celebrated) {
-      userAnswers[currentIndex].celebrated = true;
-      showCelebration();
-    }
-
+  });
 }
+
+
+function displayFeedback(question) {
+  if (!question) return;
+
+  const feedbackDiv = document.getElementById('feedback');
+  const feedbackMessage = document.getElementById('feedback-message');
+
+  const explainArea = document.getElementById('explain-area');
+  const explainToggle = document.getElementById('explain-toggle');
+  const explainPanel = document.getElementById('explain-panel');
+  const explainText = document.getElementById('explain-text');
+
+  if (!feedbackDiv || !feedbackMessage) return;
+
+  // Remove old tooltip if it exists from previous versions
+  const oldTooltip = document.getElementById('explanation-tooltip');
+  if (oldTooltip) oldTooltip.remove();
+
+  const oldMark = document.getElementById('question-mark-btn');
+  if (oldMark) oldMark.remove();
+
+  feedbackMessage.innerHTML = '';
+
+  const ua = userAnswers[currentIndex];
+  if (!ua?.submitted) {
+    if (explainArea) explainArea.hidden = true;
+    if (explainPanel) explainPanel.hidden = true;
+    if (explainToggle) explainToggle.setAttribute('aria-expanded', 'false');
+    return;
+  }
+
+  const correct = Array.isArray(question.correct) ? question.correct : [];
+  const selected = ua.selected?.slice().sort() || [];
+
+  const isCorrect = arraysEqual(selected, correct);
+  feedbackMessage.textContent = isCorrect ? 'Correct!' : 'Incorrect.';
+
+  // Highlight correct and incorrect options
+  (question.options || []).forEach((option, index) => {
+    if (!option) return;
+    const optionDiv = document.querySelector(`#option-${index}`)?.parentElement;
+    if (!optionDiv) return;
+
+    optionDiv.classList.remove('correct', 'incorrect', 'partial');
+
+    if (correct.includes(index)) {
+      optionDiv.classList.add('correct');
+    } else if (selected.includes(index)) {
+      optionDiv.classList.add('incorrect');
+    }
+  });
+
+  // Build explanation text (prefer explanations.json; fall back to questions.json explanation)
+  const short = (question.explanation || '').trim();
+  const extra = (explanations.find(exp => String(exp.id) === String(question.id))?.text || '').trim();
+
+  let text = '';
+  if (extra && short && extra !== short) text = `${short}\n\n${extra}`;
+  else text = extra || short;
+
+  if (!explainArea || !explainToggle || !explainPanel || !explainText || !text) {
+    if (explainArea) explainArea.hidden = true;
+  } else {
+    explainText.textContent = text;
+    explainArea.hidden = false;
+
+    // Auto-open on incorrect the first time; remember user preference per question
+    if (!ua.explainTouched) ua.explainOpen = !isCorrect;
+
+    explainToggle.setAttribute('aria-expanded', String(ua.explainOpen));
+    explainPanel.hidden = !ua.explainOpen;
+    explainArea.classList.toggle('is-open', ua.explainOpen);
+  }
+
+  // Celebration once per correct submission
+  if (isCorrect && !ua.celebrated) {
+    ua.celebrated = true;
+    showCelebration();
+  }
+}
+
 
 // Handle submit button click
 document.getElementById('submit-btn').addEventListener('click', () => {

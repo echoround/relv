@@ -168,7 +168,23 @@
 
           <div id="feedback">
             <div id="feedback-message"></div>
+
+            <div id="explain-area" class="explain-area" hidden>
+              <button id="explain-toggle"
+                      class="explain-toggle"
+                      type="button"
+                      aria-expanded="false"
+                      aria-controls="explain-panel">
+                <span class="explain-icon">?</span>
+                <span class="explain-label">Explanation</span>
+              </button>
+
+              <div id="explain-panel" class="explain-panel" hidden>
+                <div id="explain-text" class="explain-text"></div>
+              </div>
+            </div>
           </div>
+
 
           <div id="navigation">
             <button id="prev-btn">Previous</button>
