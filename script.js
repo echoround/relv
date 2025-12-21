@@ -501,3 +501,39 @@ function arraysEqual(a, b) {
     }
     return true;
 }
+
+
+
+/* =========================
+   QUIZ: button spacing (desktop + mobile)
+========================= */
+
+body.theme-quiz #submit-btn{
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+/* Make gap actually work by making #navigation a flex container */
+body.theme-quiz #navigation{
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Side-by-side on desktop */
+body.theme-quiz #prev-btn,
+body.theme-quiz #next-btn{
+  flex: 1;
+  width: auto;
+}
+
+/* Stack on small screens (keeps buttons big) */
+@media (max-width: 720px){
+  body.theme-quiz #navigation{
+    flex-direction: column;
+  }
+  body.theme-quiz #prev-btn,
+  body.theme-quiz #next-btn{
+    width: 100%;
+  }
+}
