@@ -806,3 +806,50 @@ body.theme-hero .hero-title-long{
     letter-spacing: 0.06em;
   }
 }
+
+/* =========================
+   MOBILE NAV: blur ONLY the dropdown panel
+   Paste at END of styles.css
+========================= */
+
+@media (max-width: 720px){
+
+  /* 1) If you use a full-screen scrim (body::before), it must NOT blur */
+  body.nav-open::before{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    /* keep dim (optional) */
+    background: rgba(0,0,0,0.40) !important;
+  }
+
+  /* 2) If you added a real .nav-scrim element earlier, also make sure it never blurs */
+  .nav-scrim{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    /* keep dim (optional) */
+    background: rgba(0,0,0,0.40) !important;
+  }
+
+  /* 3) HEAVY blur lives ONLY here: the dropdown panel */
+  .site-nav{
+    /* ensure it’s not accidentally full-screen */
+    bottom: auto !important;
+    height: auto !important;
+
+    background: rgba(10, 9, 18, 0.92) !important;
+
+    backdrop-filter: blur(28px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+
+    border: 1px solid rgba(255,255,255,0.14) !important;
+    box-shadow: 0 26px 90px rgba(0,0,0,0.68) !important;
+
+    /* keep it usable if links grow */
+    max-height: min(520px, calc(100vh - 96px)) !important;
+    overflow: auto !important;
+
+    z-index: 999 !important;
+  }
+}
