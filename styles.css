@@ -575,3 +575,87 @@ html { overflow-x: clip; }
     border-radius: var(--radius);
   }
 }
+
+/* =========================
+   MOBILE NAV: frosted glass + hue
+   Paste at END of styles.css
+========================= */
+
+@media (max-width: 720px){
+  .site-nav{
+    /* stronger, non-washy panel */
+    display: none;                 /* stays closed by default */
+    position: fixed;               /* more stable than absolute on mobile */
+    left: 18px;
+    right: 18px;
+    top: 74px;
+
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.12);
+
+    background: rgba(10, 9, 18, 0.78); /* less transparent = more readable */
+
+    /* frosted glass */
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+
+    box-shadow: 0 26px 90px rgba(0,0,0,0.68);
+    overflow: hidden;
+    isolation: isolate; /* keeps ::before effects contained */
+    z-index: 999;
+  }
+
+  .site-nav.is-open{ display: flex; }
+
+  /* subtle colored hue wash (uses your --accentA/B/C per page) */
+  .site-nav::before{
+    content: "";
+    position: absolute;
+    inset: -60px;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 18% 18%, color-mix(in srgb, var(--accentA) 28%, transparent), transparent 60%),
+      radial-gradient(circle at 82% 30%, color-mix(in srgb, var(--accentB) 22%, transparent), transparent 60%),
+      radial-gradient(circle at 40% 92%, color-mix(in srgb, var(--accentC) 18%, transparent), transparent 62%);
+    filter: blur(18px);
+    opacity: 0.85;
+  }
+
+  /* links become “menu rows” */
+  .site-nav .nav-link{
+    position: relative;
+    display: block;
+    width: 100%;
+    text-align: center;
+
+    padding: 12px 12px;
+    border-radius: 14px;
+
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.90);
+
+    text-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease;
+  }
+
+  /* glow on hover/tap for everything clickable */
+  .site-nav .nav-link:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.14);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.10), 0 0 26px rgba(255,255,255,0.10);
+  }
+
+  /* active page: subtle tint + ring */
+  .site-nav .nav-link.is-active{
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.18);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.10) inset,
+                0 0 26px color-mix(in srgb, var(--accentA) 28%, transparent);
+  }
+}
