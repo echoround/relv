@@ -1148,3 +1148,118 @@ body.theme-quiz #next-btn{
     letter-spacing: 0.06em;
   }
 }
+
+
+
+/* =========================
+   QUIZ: Progress HUD (replaces "Fookus / Tempo / Soovitus")
+========================= */
+
+body.theme-quiz{
+  --color-correct: rgba(34, 197, 94, 0.92);
+  --color-incorrect: rgba(239, 68, 68, 0.92);
+  --color-partial: rgba(234, 193, 80, 0.92);
+}
+
+body.theme-quiz .quiz-hud{
+  display: grid;
+  gap: 14px;
+}
+
+body.theme-quiz .quiz-hud-top{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+body.theme-quiz .quiz-hud-count{
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.92);
+  white-space: nowrap;
+}
+
+body.theme-quiz .quiz-hud-bars{
+  display: grid;
+  gap: 12px;
+}
+
+body.theme-quiz .quiz-bar{
+  display: grid;
+  grid-template-columns: 86px 1fr 44px;
+  gap: 12px;
+  align-items: center;
+}
+
+body.theme-quiz .quiz-bar-label{
+  color: rgba(255,255,255,0.68);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+body.theme-quiz .quiz-bar-value{
+  text-align: right;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.86);
+}
+
+body.theme-quiz .quiz-bar-track{
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.28);
+  border: 1px solid rgba(255,255,255,0.10);
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25) inset;
+}
+
+body.theme-quiz .quiz-bar-fill{
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  position: relative;
+  transition: width .35s ease;
+}
+
+body.theme-quiz .quiz-bar-fill::after{
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -24px;
+  width: 64px;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.55;
+  filter: blur(6px);
+  background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.45), transparent 62%);
+}
+
+body.theme-quiz .quiz-bar-fill--ok{
+  background: linear-gradient(90deg, rgba(34,197,94,0.95), rgba(16,185,129,0.70));
+  box-shadow: 0 0 26px rgba(34,197,94,0.18);
+}
+
+body.theme-quiz .quiz-bar-fill--mid{
+  background: linear-gradient(90deg, rgba(234,193,80,0.95), rgba(250,204,21,0.65));
+  box-shadow: 0 0 26px rgba(234,193,80,0.14);
+}
+
+body.theme-quiz .quiz-bar-fill--bad{
+  background: linear-gradient(90deg, rgba(239,68,68,0.95), rgba(244,63,94,0.65));
+  box-shadow: 0 0 26px rgba(239,68,68,0.14);
+}
+
+/* Ensure the legend dots get real fill colors */
+body.theme-quiz .dot.ok{ background: var(--color-correct); }
+body.theme-quiz .dot.bad{ background: var(--color-incorrect); }
+body.theme-quiz .dot.mid{ background: var(--color-partial); }
+
+@media (max-width: 480px){
+  body.theme-quiz .quiz-bar{
+    grid-template-columns: 76px 1fr 40px;
+    gap: 10px;
+  }
+}

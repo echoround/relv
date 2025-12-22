@@ -302,7 +302,63 @@ function updateQuestionGrid() {
             cell.classList.add('unanswered');
         }
     }
+    updateProgressHUD();
 }
+
+
+
+function updateProgressHUD() {
+  const total = Math.min(71, questions.length);
+
+  const answeredEl = document.getElementById('hud-answered');
+  const totalEl = document.getElementById('hud-total');
+
+  const okFill = document.getElementById('hud-ok');
+  const midFill = document.getElementById('hud-partial');
+  const badFill = document.getElementById('hud-wrong');
+
+  const okVal = document.getElementById('hud-ok-val');
+  const midVal = document.getElementById('hud-partial-val');
+  const badVal = document.getElementById('hud-wrong-val');
+
+  if (!answeredEl || !totalEl || !okFill || !midFill || !badFill || !okVal || !midVal || !badVal) return;
+  if (total <= 0) return;
+
+  let ok = 0;
+  let mid = 0;
+  let bad = 0;
+  let answered = 0;
+
+  for (let i = 0; i < total; i++) {
+    const ua = userAnswers[i];
+    const q = questions[i];
+    if (!ua?.submitted || !q) continue;
+
+    const correct = Array.isArray(q.correct) ? q.correct : [];
+    const selected = (ua.selected || []).slice().sort();
+
+    // Submitted with no selection stays "Vastamata"
+    if (selected.length === 0) continue;
+
+    answered++;
+
+    if (arraysEqual(selected, correct)) ok++;
+    else if (q.multiple && selected.some(opt => correct.includes(opt))) mid++;
+    else bad++;
+  }
+
+  answeredEl.textContent = String(answered);
+  totalEl.textContent = String(total);
+
+  okVal.textContent = String(ok);
+  midVal.textContent = String(mid);
+  badVal.textContent = String(bad);
+
+  okFill.style.width = `${(ok / total) * 100}%`;
+  midFill.style.width = `${(mid / total) * 100}%`;
+  badFill.style.width = `${(bad / total) * 100}%`;
+}
+
 
 
 // Show celebration effect for 100% correct answer

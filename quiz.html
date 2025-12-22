@@ -145,26 +145,48 @@
         </div>
 
         <div class="glass-card" style="position:relative;">
-          <div class="card-pad">
-            <div class="mini-stat">
-              <div class="mini-stat-label">Fookus</div>
-              <div class="mini-stat-value">Täpsus</div>
-            </div>
-            <div class="mini-stat">
-              <div class="mini-stat-label">Tempo</div>
-              <div class="mini-stat-value">Stabiilne</div>
-            </div>
-            <div class="mini-stat">
-              <div class="mini-stat-label">Soovitus</div>
-              <div class="mini-stat-value">Korda valesid</div>
+            <div class="card-pad">
+              <div class="quiz-hud" aria-label="Progress">
+                <div class="quiz-hud-top">
+                  <div class="mini-stat-label">Vastatud</div>
+                  <div class="quiz-hud-count"><span id="hud-answered">0</span> / <span id="hud-total">71</span></div>
+                </div>
+
+                <div class="quiz-hud-bars" aria-label="Tulemuste jaotus">
+                  <div class="quiz-bar">
+                    <div class="quiz-bar-label">Õige</div>
+                    <div class="quiz-bar-track" aria-hidden="true">
+                      <div class="quiz-bar-fill quiz-bar-fill--ok" id="hud-ok"></div>
+                    </div>
+                    <div class="quiz-bar-value" id="hud-ok-val">0</div>
+                  </div>
+
+                  <div class="quiz-bar">
+                    <div class="quiz-bar-label">Osaline</div>
+                    <div class="quiz-bar-track" aria-hidden="true">
+                      <div class="quiz-bar-fill quiz-bar-fill--mid" id="hud-partial"></div>
+                    </div>
+                    <div class="quiz-bar-value" id="hud-partial-val">0</div>
+                  </div>
+
+                  <div class="quiz-bar">
+                    <div class="quiz-bar-label">Vale</div>
+                    <div class="quiz-bar-track" aria-hidden="true">
+                      <div class="quiz-bar-fill quiz-bar-fill--bad" id="hud-wrong"></div>
+                    </div>
+                    <div class="quiz-bar-value" id="hud-wrong-val">0</div>
+                  </div>
+                </div>
+
+                <div class="legend" aria-label="Legend">
+                  <span><span class="dot ok"></span>Õige</span>
+                  <span><span class="dot bad"></span>Vale</span>
+                  <span><span class="dot mid"></span>Osaline</span>
+                  <span><span class="dot none"></span>Vastamata</span>
+                </div>
+              </div>
             </div>
 
-            <div class="legend" aria-label="Legend">
-              <span><span class="dot ok"></span>Õige</span>
-              <span><span class="dot bad"></span>Vale</span>
-              <span><span class="dot mid"></span>Osaline</span>
-              <span><span class="dot none"></span>Vastamata</span>
-            </div>
           </div>
 
           <div class="orb a"></div>
