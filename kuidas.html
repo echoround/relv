@@ -12,87 +12,90 @@
   
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" href="favicon.ico">
+      <link rel="icon" href="favicon.ico">
+          
+          <!-- Page palette (different from quiz) -->
+          <style>
+              body.theme-kuidas{
+                  --accentA:#f59e0b; /* amber */
+                  --accentB:#60a5fa; /* blue */
+                  --accentC:#fb7185; /* rose */
+              }
+              .page-wrap{ max-width:1100px; margin:0 auto; padding: 0 18px 70px; }
+              .hero-kicker{ color: var(--accentB); }
+              
+              .steps{
+                  display:grid;
+                  grid-template-columns: 1fr;
+                  gap: 12px;
+                  margin-top: 18px;
+              }
+              .step-card{
+                  background: rgba(255,255,255,0.06);
+                  border: 1px solid rgba(255,255,255,0.10);
+                  border-radius: 18px;
+                  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+                  overflow: hidden;
+              }
+              .step-inner{
+                  display:grid;
+                  grid-template-columns: 56px 1fr;
+                  gap: 14px;
+                  padding: 18px;
+                  align-items:start;
+              }
+              .step-num{
+                  width: 46px; height: 46px;
+                  border-radius: 14px;
+                  display:flex; align-items:center; justify-content:center;
+                  font-weight: 900;
+                  letter-spacing: .08em;
+                  background: linear-gradient(135deg, rgba(245,158,11,.95), rgba(96,165,250,.85));
+                  border: 1px solid rgba(255,255,255,0.14);
+                  box-shadow: 0 14px 40px rgba(245,158,11,0.16);
+              }
+              .step-title{
+                  margin: 0 0 6px;
+                  color: rgba(255,255,255,0.92);
+                  font-size: 18px;
+                  font-weight: 800;
+                  letter-spacing: .06em;
+                  text-transform: uppercase;
+              }
+              .step-text{
+                  margin: 0;
+                  color: rgba(255,255,255,0.74);
+                  line-height: 1.6;
+                  font-size: 15px;
+              }
+              .content-card{
+                  background: rgba(255,255,255,0.06);
+                  border: 1px solid rgba(255,255,255,0.10);
+                  border-radius: 18px;
+                  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+                  padding: 18px;
+                  margin-top: 18px;
+              }
+          </style>
+          
+          <!-- Privacy-friendly analytics by Plausible -->
+          <script async src="https://plausible.io/js/pa-a6NEhSQ-ObCwewtlzhwai.js"></script>
+          <script>
+              window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+              plausible.init()
+          </script>
+          
+          <!-- Google tag (gtag.js) -->
+          <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17823746681"></script>
+          <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-17823746681');
+          </script>
+          
+          <script src="online.js"></script>
 
-  <!-- Page palette (different from quiz) -->
-  <style>
-    body.theme-kuidas{
-      --accentA:#f59e0b; /* amber */
-      --accentB:#60a5fa; /* blue */
-      --accentC:#fb7185; /* rose */
-    }
-    .page-wrap{ max-width:1100px; margin:0 auto; padding: 0 18px 70px; }
-    .hero-kicker{ color: var(--accentB); }
-
-    .steps{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 18px;
-    }
-    .step-card{
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 18px;
-      box-shadow: 0 18px 60px rgba(0,0,0,0.55);
-      overflow: hidden;
-    }
-    .step-inner{
-      display:grid;
-      grid-template-columns: 56px 1fr;
-      gap: 14px;
-      padding: 18px;
-      align-items:start;
-    }
-    .step-num{
-      width: 46px; height: 46px;
-      border-radius: 14px;
-      display:flex; align-items:center; justify-content:center;
-      font-weight: 900;
-      letter-spacing: .08em;
-      background: linear-gradient(135deg, rgba(245,158,11,.95), rgba(96,165,250,.85));
-      border: 1px solid rgba(255,255,255,0.14);
-      box-shadow: 0 14px 40px rgba(245,158,11,0.16);
-    }
-    .step-title{
-      margin: 0 0 6px;
-      color: rgba(255,255,255,0.92);
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-    .step-text{
-      margin: 0;
-      color: rgba(255,255,255,0.74);
-      line-height: 1.6;
-      font-size: 15px;
-    }
-    .content-card{
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 18px;
-      box-shadow: 0 18px 60px rgba(0,0,0,0.55);
-      padding: 18px;
-      margin-top: 18px;
-    }
-  </style>
-
-  <!-- Privacy-friendly analytics by Plausible -->
-  <script async src="https://plausible.io/js/pa-a6NEhSQ-ObCwewtlzhwai.js"></script>
-  <script>
-    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-    plausible.init()
-  </script>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17823746681"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'AW-17823746681');
-  </script>
 </head>
 
 <body class="theme-kuidas">
