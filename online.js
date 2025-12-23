@@ -1,26 +1,26 @@
 // Relvaload.ee — Online visitors widget (frontend)
-// Requires a backend endpoint (default: /api/online) that returns JSON with { siteOnline, pageOnline }.
+// Expects an endpoint (default: /api/online) returning JSON like { siteOnline, pageOnline } (or { online }).
 
 (() => {
   const DEFAULTS = {
-    endpoint: "/api/online", // change if your backend lives elsewhere
-    intervalMs: 15000,       // polling interval while tab is visible
-    timeoutMs: 4500,         // request timeout
-    mode: "site",            // "site" or "page"
+    endpoint: "/api/online",
+    intervalMs: 15000,
+    timeoutMs: 4500,
+    mode: "site",          // "site" or "page"
+    displayOffset: 11,     // show +11
   };
 
   const cfg = Object.assign({}, DEFAULTS, (window.RELVALOAD_ONLINE_CONFIG || {}));
+  const DISPLAY_OFFSET = Number.isFinite(Number(cfg.displayOffset)) ? Number(cfg.displayOffset) : 11;
 
   const STORAGE_VISITOR = "rv_vid";
   const STORAGE_TAB = "rv_tid";
-    
-    const DISPLAY_OFFSET = 11;
-
 
   const getOrCreateId = (storage, key, prefix) => {
     try {
       const existing = storage.getItem(key);
       if (existing) return existing;
+
       const bytes = new Uint8Array(16);
       (window.crypto || window.msCrypto).getRandomValues(bytes);
       const id = prefix + Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
@@ -37,6 +37,7 @@
   const tabId = getOrCreateId(window.sessionStorage, STORAGE_TAB, "t_");
 
   let $root, $count, $label;
+  let lastShown = null;
 
   const ensureWidget = () => {
     if ($root) return;
@@ -52,7 +53,7 @@
         <span class="online-dot" aria-hidden="true"></span>
         <span class="online-text">
           <span class="online-count">—</span>
-          <span class="online-label">külastajat</span>
+          <span class="online-label">külastajat online</span>
         </span>
       `;
       document.body.appendChild($root);
@@ -64,19 +65,28 @@
 
   const etLabel = (n) => (n === 1 ? "külastaja online" : "külastajat online");
 
-  const setCount = (n + DISPLAY_OFFSET) => {
+  const setCount = (raw) => {
     ensureWidget();
-    if (typeof n === "number" && Number.isFinite(n) && n >= 0) {
-      $count.textContent = String(n);
-      $label.textContent = etLabel(n);
 
-      $root.classList.remove("is-bump");
-      void $root.offsetWidth; // reflow
-      $root.classList.add("is-bump");
-    } else {
-      $count.textContent = "—";
-      $label.textContent = "külastajat online";
+    const base = Number(raw);
+    if (!Number.isFinite(base) || base < 0) {
+      if (lastShown === null) {
+        $count.textContent = "—";
+        $label.textContent = "külastajat online";
+      }
+      return;
     }
+
+    const shown = Math.max(0, Math.floor(base)) + DISPLAY_OFFSET;
+    lastShown = shown;
+
+    $count.textContent = String(shown);
+    $label.textContent = etLabel(shown);
+
+    // micro “bump”
+    $root.classList.remove("is-bump");
+    void $root.offsetWidth;
+    $root.classList.add("is-bump");
   };
 
   const setOnline = (isOnline) => {
@@ -116,17 +126,20 @@
     try {
       const res = await postJson(payload);
       if (!res.ok) throw new Error("Bad status");
+
       const data = await res.json();
 
-        const raw = cfg.mode === "page"
-          ? Number(data.pageOnline)
+      const raw =
+        cfg.mode === "page"
+          ? Number(data.pageOnline ?? data.online)
           : Number(data.siteOnline ?? data.online);
 
-        setCount(Math.max(0, raw + DISPLAY_OFFSET));
-
+      setCount(raw);
       setOnline(true);
     } catch {
+      // keep last count if we had one; just show "offline" state
       setOnline(false);
+      setCount(lastShown === null ? NaN : Math.max(0, lastShown - DISPLAY_OFFSET));
     }
   };
 
@@ -150,7 +163,6 @@
     ensureWidget();
     ping("init");
 
-    // Poll only when visible (battery/data friendly)
     const intervalId = setInterval(() => {
       if (!document.hidden) ping("tick");
     }, cfg.intervalMs);
