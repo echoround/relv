@@ -52,7 +52,7 @@
         <span class="online-dot" aria-hidden="true"></span>
         <span class="online-text">
           <span class="online-count">—</span>
-          <span class="online-label">külastajat online</span>
+          <span class="online-label">külastajat</span>
         </span>
       `;
       document.body.appendChild($root);
