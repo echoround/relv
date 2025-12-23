@@ -13,6 +13,9 @@
 
   const STORAGE_VISITOR = "rv_vid";
   const STORAGE_TAB = "rv_tid";
+    
+    const DISPLAY_OFFSET = 11;
+
 
   const getOrCreateId = (storage, key, prefix) => {
     try {
@@ -61,7 +64,7 @@
 
   const etLabel = (n) => (n === 1 ? "külastaja online" : "külastajat online");
 
-  const setCount = (n) => {
+  const setCount = (n + DISPLAY_OFFSET) => {
     ensureWidget();
     if (typeof n === "number" && Number.isFinite(n) && n >= 0) {
       $count.textContent = String(n);
@@ -115,11 +118,12 @@
       if (!res.ok) throw new Error("Bad status");
       const data = await res.json();
 
-      const n = cfg.mode === "page"
-        ? Number(data.pageOnline)
-        : Number(data.siteOnline ?? data.online);
+        const raw = cfg.mode === "page"
+          ? Number(data.pageOnline)
+          : Number(data.siteOnline ?? data.online);
 
-      setCount(n);
+        setCount(Math.max(0, raw + DISPLAY_OFFSET));
+
       setOnline(true);
     } catch {
       setOnline(false);
