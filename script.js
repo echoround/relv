@@ -2,8 +2,6 @@ let questions = [];
 let currentIndex = 0;
 let userAnswers = [];
 let explanations = [];
-let flipResizeTimer = null;
-let flipResizeBound = false;
 
 // Load questions and explanations from JSON files
 Promise.all([
@@ -365,37 +363,6 @@ function createQuestionCards() {
     });
 
     grid.appendChild(fragment);
-    syncFlipCardHeights();
-
-    if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(syncFlipCardHeights).catch(() => {});
-    }
-
-    if (!flipResizeBound) {
-        flipResizeBound = true;
-        window.addEventListener('resize', () => {
-            if (flipResizeTimer) clearTimeout(flipResizeTimer);
-            flipResizeTimer = setTimeout(syncFlipCardHeights, 120);
-        });
-    }
-}
-
-function syncFlipCardHeights() {
-    const cards = document.querySelectorAll('.flip-card');
-    if (!cards.length) return;
-
-    cards.forEach(card => {
-        card.style.height = 'auto';
-    });
-
-    let maxHeight = 0;
-    cards.forEach(card => {
-        maxHeight = Math.max(maxHeight, card.offsetHeight);
-    });
-
-    cards.forEach(card => {
-        card.style.height = `${maxHeight}px`;
-    });
 }
 
 function updateQuestionGrid() {
