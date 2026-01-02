@@ -585,13 +585,13 @@ body.theme-quiz .quiz-cards-subtitle{
 body.theme-quiz .flip-grid{
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 28px;
+  gap: 36px 32px;
   align-items: stretch;
 }
 
 body.theme-quiz .flip-card{
   perspective: 1200px;
-  min-height: 260px;
+  min-height: 300px;
   cursor: pointer;
   position: relative;
   z-index: 0;
@@ -614,7 +614,7 @@ body.theme-quiz .flip-card-face{
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(0,0,0,0.26);
-  box-shadow: 0 18px 52px rgba(0,0,0,0.46);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.40);
   padding: 16px;
   height: 100%;
   display: flex;
@@ -698,10 +698,10 @@ body.theme-quiz .flip-card:hover{
 @media (max-width: 720px){
   body.theme-quiz .flip-grid{
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
   }
   body.theme-quiz .flip-card{
-    min-height: 230px;
+    min-height: 260px;
   }
 }
 

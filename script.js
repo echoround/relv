@@ -2,6 +2,8 @@ let questions = [];
 let currentIndex = 0;
 let userAnswers = [];
 let explanations = [];
+let flipResizeTimer = null;
+let flipResizeBound = false;
 
 // Load questions and explanations from JSON files
 Promise.all([
@@ -363,6 +365,37 @@ function createQuestionCards() {
     });
 
     grid.appendChild(fragment);
+
+    syncFlipCardHeights();
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(syncFlipCardHeights).catch(() => {});
+    }
+
+    if (!flipResizeBound) {
+        flipResizeBound = true;
+        window.addEventListener('resize', () => {
+            if (flipResizeTimer) clearTimeout(flipResizeTimer);
+            flipResizeTimer = setTimeout(syncFlipCardHeights, 120);
+        });
+    }
+}
+
+function syncFlipCardHeights() {
+    const cards = document.querySelectorAll('.flip-card');
+    if (!cards.length) return;
+
+    cards.forEach(card => {
+        const front = card.querySelector('.flip-card-front');
+        const back = card.querySelector('.flip-card-back');
+        if (!front || !back) return;
+
+        card.style.height = 'auto';
+
+        const minHeight = parseFloat(getComputedStyle(card).minHeight) || 0;
+        const target = Math.max(front.scrollHeight, back.scrollHeight, minHeight);
+        card.style.height = `${Math.ceil(target)}px`;
+    });
 }
 
 function updateQuestionGrid() {
