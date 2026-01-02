@@ -554,7 +554,6 @@ body.theme-quiz .grid-item:hover{
 body.theme-quiz .quiz-cards-section{
   margin-top: 34px;
   padding-top: 6px;
-  --flip-card-height: clamp(220px, 26vw, 270px);
 }
 
 body.theme-quiz .quiz-cards-head{
@@ -585,15 +584,17 @@ body.theme-quiz .quiz-cards-subtitle{
 
 body.theme-quiz .flip-grid{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
   align-items: stretch;
 }
 
 body.theme-quiz .flip-card{
   perspective: 1200px;
-  height: var(--flip-card-height);
+  min-height: 260px;
   cursor: pointer;
+  position: relative;
+  z-index: 0;
 }
 
 body.theme-quiz .flip-card-inner{
@@ -619,8 +620,6 @@ body.theme-quiz .flip-card-face{
   display: flex;
   flex-direction: column;
   gap: 12px;
-  min-height: 0;
-  overflow: hidden;
 }
 
 body.theme-quiz .flip-card-front{
@@ -646,10 +645,6 @@ body.theme-quiz .flip-card-question{
   font-weight: 600;
   color: rgba(255,255,255,0.94);
   overflow-wrap: anywhere;
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-  padding-right: 4px;
 }
 
 body.theme-quiz .flip-card-answers{
@@ -658,10 +653,6 @@ body.theme-quiz .flip-card-answers{
   list-style-position: inside;
   display: grid;
   gap: 8px;
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-  padding-right: 4px;
 }
 
 body.theme-quiz .flip-card-answers li{
@@ -700,10 +691,17 @@ body.theme-quiz .flip-card:hover .flip-card-face{
   box-shadow: 0 18px 60px rgba(0,0,0,0.55), 0 0 24px var(--accentGlow);
 }
 
+body.theme-quiz .flip-card:hover{
+  z-index: 1;
+}
+
 @media (max-width: 720px){
   body.theme-quiz .flip-grid{
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 20px;
+  }
+  body.theme-quiz .flip-card{
+    min-height: 230px;
   }
 }
 
