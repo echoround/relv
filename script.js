@@ -40,6 +40,7 @@ Promise.all([
 
     displayQuestion();
     createQuestionGrid();
+    createQuestionCards();
 })
 .catch(error => {
     console.error('Error loading data:', error);
@@ -264,6 +265,100 @@ function createQuestionGrid() {
     }
 
     updateQuestionGrid();
+}
+
+function createQuestionCards() {
+    const grid = document.getElementById('all-questions-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+
+    const fragment = document.createDocumentFragment();
+
+    questions.forEach((question, index) => {
+        if (!question) return;
+
+        const card = document.createElement('article');
+        card.className = 'flip-card';
+
+        const inner = document.createElement('div');
+        inner.className = 'flip-card-inner';
+
+        const front = document.createElement('div');
+        front.className = 'flip-card-face flip-card-front';
+
+        const frontTop = document.createElement('div');
+        frontTop.className = 'flip-card-top';
+        const questionNumber = question.id != null ? question.id : index + 1;
+        frontTop.textContent = `Küsimus ${questionNumber}`;
+
+        const frontQuestion = document.createElement('div');
+        frontQuestion.className = 'flip-card-question';
+        frontQuestion.textContent = question.text || 'Küsimus puudub';
+
+        const frontBtn = document.createElement('button');
+        frontBtn.type = 'button';
+        frontBtn.className = 'flip-card-toggle';
+        frontBtn.textContent = 'Vaata vastuseid';
+
+        const backId = `flip-card-${index + 1}-back`;
+        frontBtn.setAttribute('aria-controls', backId);
+        frontBtn.setAttribute('aria-expanded', 'false');
+
+        front.append(frontTop, frontQuestion, frontBtn);
+
+        const back = document.createElement('div');
+        back.className = 'flip-card-face flip-card-back';
+        back.id = backId;
+
+        const backTop = document.createElement('div');
+        backTop.className = 'flip-card-top';
+        backTop.textContent = 'Vastused';
+
+        const answersList = document.createElement('ol');
+        answersList.className = 'flip-card-answers';
+
+        const options = Array.isArray(question.options) ? question.options : [];
+        const correct = Array.isArray(question.correct) ? question.correct : [];
+
+        if (options.length === 0) {
+            const empty = document.createElement('li');
+            empty.textContent = 'Vastused puuduvad';
+            answersList.appendChild(empty);
+        } else {
+            options.forEach((option, optIndex) => {
+                if (option === null || option === undefined) return;
+                const li = document.createElement('li');
+                li.textContent = option;
+                if (correct.includes(optIndex)) li.classList.add('is-correct');
+                answersList.appendChild(li);
+            });
+        }
+
+        const backBtn = document.createElement('button');
+        backBtn.type = 'button';
+        backBtn.className = 'flip-card-toggle flip-card-toggle--back';
+        backBtn.textContent = 'Tagasi küsimuse juurde';
+        backBtn.setAttribute('aria-expanded', 'false');
+
+        back.append(backTop, answersList, backBtn);
+
+        inner.append(front, back);
+        card.appendChild(inner);
+
+        const setFlipped = (next) => {
+            card.classList.toggle('is-flipped', next);
+            frontBtn.setAttribute('aria-expanded', String(next));
+            backBtn.setAttribute('aria-expanded', String(next));
+        };
+
+        frontBtn.addEventListener('click', () => setFlipped(true));
+        backBtn.addEventListener('click', () => setFlipped(false));
+
+        fragment.appendChild(card);
+    });
+
+    grid.appendChild(fragment);
 }
 
 function updateQuestionGrid() {
@@ -575,6 +670,3 @@ function arraysEqual(a, b) {
     }
     return true;
 }
-
-
-
