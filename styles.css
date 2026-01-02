@@ -388,6 +388,19 @@ body.theme-quiz .option:hover{
   box-shadow: 0 0 0 1px rgba(255,255,255,0.10), 0 0 22px var(--accentGlow);
 }
 
+/* Feedback colors after submit */
+body.theme-quiz .option.correct{
+  background: rgba(34,197,94,0.16);
+  border-color: var(--color-correct);
+  box-shadow: 0 0 0 1px rgba(34,197,94,0.18) inset, 0 0 18px rgba(34,197,94,0.25);
+}
+
+body.theme-quiz .option.incorrect{
+  background: rgba(239,68,68,0.16);
+  border-color: var(--color-incorrect);
+  box-shadow: 0 0 0 1px rgba(239,68,68,0.18) inset, 0 0 18px rgba(239,68,68,0.25);
+}
+
 /* Radios/checkboxes match page accent */
 body.theme-quiz .option input[type="radio"],
 body.theme-quiz .option input[type="checkbox"]{
