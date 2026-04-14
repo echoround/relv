@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relvaload.ee - Foorum</title>
+
+  <meta name="description" content="Relvaload.ee foorum: küsi, jaga kogemusi ja aruta relvaloa ettevalmistust teiste huvilistega." />
+  <meta name="robots" content="index, follow" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg">
+
+  <script async src="https://plausible.io/js/pa-a6NEhSQ-ObCwewtlzhwai.js"></script>
+  <script>
+    window.plausible = window.plausible || function(){(plausible.q = plausible.q || []).push(arguments);};
+    plausible.init = plausible.init || function(i){plausible.o = i || {};};
+    plausible.init();
+  </script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17823746681"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17823746681');
+  </script>
+
+  <script src="online.js"></script>
+</head>
+<body class="theme-forum">
+  <header class="site-header">
+    <div class="header-container">
+      <a class="brand" href="index.html">
+        <span class="brand-mark"></span>
+        <span class="brand-text">Relvaload.ee</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html" class="nav-link">Avaleht</a>
+        <a href="quiz.html" class="nav-link">Teooria test</a>
+        <a href="kuidas.html" class="nav-link">Kuidas saada relvaluba?</a>
+        <a href="foorum.html" class="nav-link is-active">Foorum</a>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="forum-page">
+    <section class="forum-hero">
+      <div>
+        <p class="hero-kicker">Arutelu</p>
+        <h1 class="hero-title">Relvaloa<br>foorum</h1>
+        <p class="hero-subtitle">
+          Küsi, jaga kogemusi ja loe teiste mõtteid. Kui kasutajanime ei lisa, postitad anonüümselt.
+        </p>
+      </div>
+    </section>
+
+    <section class="forum-layout">
+      <aside class="forum-panel forum-panel--form">
+        <div class="forum-panel-head">
+          <h2 class="forum-panel-title">Alusta uut teemat</h2>
+          <p class="forum-panel-copy">Sobib küsimuste, kogemuste ja eksamiks valmistumise arutelude jaoks.</p>
+        </div>
+
+        <form class="forum-form" data-forum-create-form>
+          <label class="forum-field">
+            <span>Pealkiri</span>
+            <input type="text" name="title" maxlength="140" placeholder="Nt kuidas valmistuda teooriaeksamiks?" required />
+          </label>
+
+          <label class="forum-field">
+            <span>Kasutajanimi</span>
+            <input type="text" name="displayName" maxlength="40" placeholder="Anonüümne" />
+          </label>
+
+          <label class="forum-field">
+            <span>Sisu</span>
+            <textarea name="body" rows="8" maxlength="5000" placeholder="Kirjuta oma küsimus või mõte siia..." required></textarea>
+          </label>
+
+          <input class="forum-honeypot" type="text" name="website" tabindex="-1" autocomplete="off" />
+          <input class="forum-honeypot" type="text" name="company" tabindex="-1" autocomplete="off" />
+
+          <p class="forum-form-note">Palun ära jaga tundlikke isikuandmeid ega relva hoiukoha täpseid detaile.</p>
+
+          <div class="forum-form-actions">
+            <button type="submit" class="btn btn-primary">Loo teema</button>
+          </div>
+        </form>
+
+        <p class="forum-status" data-forum-status hidden></p>
+      </aside>
+
+      <section class="forum-content">
+        <div class="forum-panel">
+          <div class="forum-panel-head">
+            <h2 class="forum-panel-title">Viimased teemad</h2>
+            <p class="forum-panel-copy">Vajuta teemale, et näha kommentaare ja vastata.</p>
+          </div>
+          <div class="forum-thread-list" data-forum-thread-list></div>
+        </div>
+
+        <div class="forum-panel">
+          <div data-forum-thread-detail></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('.site-nav');
+
+    if (toggle && nav) {
+      const closeNav = () => {
+        nav.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      };
+
+      toggle.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      nav.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', closeNav);
+      });
+    }
+  </script>
+
+  <script src="forum.js"></script>
+  <script src="scroll.js"></script>
+</body>
+</html>

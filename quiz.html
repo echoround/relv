@@ -146,6 +146,7 @@
         <a href="index.html" class="nav-link">Avaleht</a>
         <a href="quiz.html" class="nav-link is-active">Teooria test</a>
         <a href="kuidas.html" class="nav-link">Kuidas saada relvaluba?</a>
+        <a href="foorum.html" class="nav-link">Foorum</a>
       </nav>
 
       <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
@@ -206,6 +207,28 @@
                   <span><span class="dot mid"></span>Osaline</span>
                   <span><span class="dot none"></span>Vastamata</span>
                 </div>
+
+                <section class="mailing-widget mailing-widget--inline" data-mailing-widget="quiz" hidden>
+                  <div class="mailing-widget-kicker">Uudiskiri</div>
+                  <h2 class="mailing-widget-title">Liitu uudiskirjaga</h2>
+                  <p class="mailing-widget-copy">
+                    Saadame vaid olulisemaid uuendusi ja uusi materjale. Mitte midagi liigset.
+                  </p>
+
+                  <form class="mailing-widget-form" data-mailing-list-form data-source-page="quiz">
+                    <div class="mailing-widget-row mailing-widget-row--stack">
+                      <input class="mailing-widget-input" type="email" name="email" placeholder="Sinu e-post" required />
+                      <button class="mailing-widget-submit" type="submit">Liitu</button>
+                    </div>
+                    <input class="mailing-widget-honeypot" type="text" name="website" tabindex="-1" autocomplete="off" />
+                    <input class="mailing-widget-honeypot" type="text" name="company" tabindex="-1" autocomplete="off" />
+                    <p class="mailing-widget-feedback" data-mailing-feedback hidden></p>
+                  </form>
+
+                  <p class="mailing-widget-note">
+                    Sinu e-posti ei jagata ega kasutata rämpspostiks.
+                  </p>
+                </section>
               </div>
             </div>
 
@@ -300,6 +323,7 @@
   </script>
 
   <script src="script.js"></script>
+  <script src="mailing-list.js"></script>
   <script src="scroll.js"></script>
 </body>
 </html>

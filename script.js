@@ -493,6 +493,14 @@ function updateProgressHUD() {
   okFill.style.width = `${(ok / total) * 100}%`;
   midFill.style.width = `${(mid / total) * 100}%`;
   badFill.style.width = `${(bad / total) * 100}%`;
+
+  window.RELV_QUIZ_ANSWERED_COUNT = answered;
+  window.dispatchEvent(new CustomEvent('relv:quiz-answered-count', {
+    detail: {
+      answered,
+      total
+    }
+  }));
 }
 
 

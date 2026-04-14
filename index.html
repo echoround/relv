@@ -100,6 +100,7 @@
         <a href="index.html" class="nav-link is-active">Avaleht</a>
         <a href="quiz.html" class="nav-link">Teooria test</a>
         <a href="kuidas.html" class="nav-link">Kuidas saada relvaluba?</a>
+        <a href="foorum.html" class="nav-link">Foorum</a>
       </nav>
 
       <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
@@ -111,7 +112,7 @@
   <main class="hero">
     <div class="hero-inner">
       <div class="hero-copy">
-        <p class="hero-kicker">Õpi targalt. Soorita kindlalt.</p>
+        <p class="hero-kicker">TASUTA</p>
 
         <h1 class="hero-title">
           <span class="hero-title-line">Relvaloa</span>
@@ -159,7 +160,31 @@
     </div>
   </main>
 
+  <aside class="mailing-widget mailing-widget--floating" data-mailing-widget="home">
+    <div class="mailing-widget-kicker">Uudiskiri</div>
+    <h2 class="mailing-widget-title">Liitu uudiskirjaga</h2>
+    <p class="mailing-widget-copy">
+      Saadame aeg-ajalt olulisemaid uuendusi, uusi õppematerjale ja kasulikke viiteid relvaloa ettevalmistuseks.
+    </p>
+
+    <form class="mailing-widget-form" data-mailing-list-form data-source-page="home">
+      <label class="mailing-widget-label" for="mailing-email-home">E-post</label>
+      <div class="mailing-widget-row">
+        <input id="mailing-email-home" class="mailing-widget-input" type="email" name="email" placeholder="nimi@epost.ee" required />
+        <button class="mailing-widget-submit" type="submit">Liitu</button>
+      </div>
+      <input class="mailing-widget-honeypot" type="text" name="website" tabindex="-1" autocomplete="off" />
+      <input class="mailing-widget-honeypot" type="text" name="company" tabindex="-1" autocomplete="off" />
+      <p class="mailing-widget-feedback" data-mailing-feedback hidden></p>
+    </form>
+
+    <p class="mailing-widget-note">
+      Sinu e-posti ei jagata kolmandatele osapooltele ega kasutata rämpspostiks. Loobuda saad igal ajal.
+    </p>
+  </aside>
+
   <script src="scroll.js"></script>
+  <script src="mailing-list.js"></script>
   <script>
     // Mobile menu toggle (no frameworks)
     const toggle = document.querySelector('.nav-toggle');
