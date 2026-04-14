@@ -5,6 +5,34 @@ let explanations = [];
 let flipResizeTimer = null;
 let flipResizeBound = false;
 
+function shuffleQuestions(items) {
+  const shuffled = Array.isArray(items) ? items.slice() : [];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}
+
+function initializeQuizSession(questionItems) {
+  questions = shuffleQuestions(questionItems);
+  currentIndex = 0;
+  userAnswers = Array(questions.length).fill(null).map(() => ({
+    selected: [],
+    submitted: false,
+    explainOpen: false,
+    explainTouched: false,
+    celebrated: false
+  }));
+
+  setupExplanationUI();
+  displayQuestion();
+  createQuestionGrid();
+  createQuestionCards();
+}
+
 // Load questions and explanations from JSON files
 Promise.all([
     fetch('questions.json').then(response => {
@@ -17,12 +45,13 @@ Promise.all([
     })
 ])
 .then(([questionsData, explanationsData]) => {
-    questions = questionsData.questions || [];
+    const questionPool = questionsData.questions || [];
+
     explanations = explanationsData.explanations || [];
-    console.log('Questions loaded:', questions);
+    console.log('Questions loaded:', questionPool);
     console.log('Explanations loaded:', explanations);
 
-    if (questions.length === 0) {
+    if (questionPool.length === 0) {
         console.error('No questions found in questions.json');
         alert('No questions loaded. Please check questions.json and ensure it is properly formatted.');
         return;
@@ -31,18 +60,7 @@ Promise.all([
         console.error('No explanations found in explanations.json');
     }
 
-    userAnswers = Array(questions.length).fill(null).map(() => ({
-      selected: [],
-      submitted: false,
-      explainOpen: false,
-      explainTouched: false,
-      celebrated: false
-    }));
-    setupExplanationUI();
-
-    displayQuestion();
-    createQuestionGrid();
-    createQuestionCards();
+    initializeQuizSession(questionPool);
 })
 .catch(error => {
     console.error('Error loading data:', error);
@@ -105,6 +123,9 @@ function setupExplanationUI() {
   const panel = document.getElementById('explain-panel');
 
   if (!area || !toggle || !panel) return;
+  if (toggle.dataset.bound === 'true') return;
+
+  toggle.dataset.bound = 'true';
 
   toggle.addEventListener('click', () => {
     const isOpen = toggle.getAttribute('aria-expanded') === 'true';
@@ -236,6 +257,11 @@ document.getElementById('next-btn').addEventListener('click', () => {
         }
         alert(`Quiz completed! Your score: ${score} out of ${questions.length}`);
     }
+});
+
+window.addEventListener('pageshow', (event) => {
+    if (!event.persisted || questions.length === 0) return;
+    initializeQuizSession(questions);
 });
 
 function createQuestionGrid() {

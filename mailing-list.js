@@ -1,7 +1,10 @@
 (function mailingListBootstrap() {
-  const SUBSCRIBED_KEY = 'relv-mailing-list-subscribed';
-  const QUIZ_IGNORED_KEY = 'relv-mailing-list-quiz-ignored';
-  const QUIZ_ENGAGED_KEY = 'relv-mailing-list-quiz-engaged';
+  const state = {
+    subscribedThisView: false,
+    quizEngaged: false,
+    quizIgnored: false,
+    quizClosed: false
+  };
 
   function getApiUrl(path) {
     if (typeof window.relvApiUrl === 'function') {
@@ -10,15 +13,6 @@
 
     const base = String(window.RELV_CONFIG?.apiBase || '').replace(/\/$/, '');
     return base ? `${base}${path}` : '';
-  }
-
-  function isSubscribed() {
-    return window.localStorage.getItem(SUBSCRIBED_KEY) === 'true';
-  }
-
-  function markSubscribed() {
-    window.localStorage.setItem(SUBSCRIBED_KEY, 'true');
-    window.document.documentElement.dataset.mailingListSubscribed = 'true';
   }
 
   function setFeedback(widget, type, message) {
@@ -31,82 +25,115 @@
     feedback.classList.add(type === 'success' ? 'is-success' : 'is-error');
   }
 
-  function setWidgetSuccess(widget, message) {
-    setFeedback(widget, 'success', message);
-    widget.classList.add('is-success');
-
-    const form = widget.querySelector('[data-mailing-list-form]');
-    if (!form) return;
-
-    form.querySelectorAll('input, button').forEach((element) => {
-      element.disabled = true;
-    });
-  }
-
-  function revealQuizWidget() {
-    const widget = document.querySelector('[data-mailing-widget="quiz"]');
-    if (!widget) return;
-
-    widget.hidden = false;
-    widget.classList.add('is-visible');
-  }
-
-  function hideQuizWidget() {
-    const widget = document.querySelector('[data-mailing-widget="quiz"]');
+  function hideWidget(widget) {
     if (!widget) return;
 
     widget.hidden = true;
     widget.classList.remove('is-visible');
   }
 
-  function updateQuizWidget(answeredCount) {
-    const widget = document.querySelector('[data-mailing-widget="quiz"]');
+  function showWidget(widget) {
     if (!widget) return;
 
-    if (isSubscribed()) {
-      hideQuizWidget();
-      return;
-    }
+    widget.hidden = false;
+    widget.classList.add('is-visible');
+  }
 
-    const engaged = window.sessionStorage.getItem(QUIZ_ENGAGED_KEY) === 'true';
-    const ignored = window.sessionStorage.getItem(QUIZ_IGNORED_KEY) === 'true';
+  function dismissWidget(widget) {
+    if (!widget) return;
 
-    if (!engaged && answeredCount >= 7) {
-      window.sessionStorage.setItem(QUIZ_IGNORED_KEY, 'true');
-      hideQuizWidget();
-      return;
-    }
+    widget.dataset.dismissed = 'true';
+    hideWidget(widget);
+  }
 
-    if (ignored && !engaged) {
-      hideQuizWidget();
-      return;
-    }
+  function dismissAllWidgets() {
+    document.querySelectorAll('[data-mailing-widget]').forEach((widget) => {
+      dismissWidget(widget);
+    });
+  }
 
-    if (answeredCount >= 5) {
-      revealQuizWidget();
-      return;
-    }
-
-    hideQuizWidget();
+  function disableControls(form, disabled) {
+    form.querySelectorAll('input, button').forEach((element) => {
+      element.disabled = disabled;
+    });
   }
 
   function rememberQuizEngagement(widget) {
     if (widget.dataset.mailingWidget !== 'quiz') return;
-    window.sessionStorage.setItem(QUIZ_ENGAGED_KEY, 'true');
-    window.sessionStorage.removeItem(QUIZ_IGNORED_KEY);
+
+    state.quizEngaged = true;
+    state.quizIgnored = false;
   }
 
-  function hydrateSubscribedWidgets() {
-    if (!isSubscribed()) return;
+  function ensureCloseButton(widget) {
+    if (widget.querySelector('[data-mailing-dismiss]')) return;
 
-    document.querySelectorAll('[data-mailing-widget]').forEach((widget) => {
-      setWidgetSuccess(widget, 'Aitäh! Oled meie uudiskirjaga liitunud.');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'mailing-widget-close';
+    button.setAttribute('data-mailing-dismiss', '');
+    button.setAttribute('aria-label', 'Sulge uudiskirja vorm');
+    button.textContent = 'Sulge';
+
+    button.addEventListener('click', () => {
+      if (widget.dataset.mailingWidget === 'quiz') {
+        state.quizClosed = true;
+        state.quizIgnored = true;
+      }
+
+      dismissWidget(widget);
     });
 
-    hideQuizWidget();
+    widget.prepend(button);
+  }
+
+  function updateQuizWidget(answeredCount) {
+    const widget = document.querySelector('[data-mailing-widget="quiz"]');
+    if (!widget) return;
+
+    if (state.subscribedThisView || state.quizClosed) {
+      dismissWidget(widget);
+      return;
+    }
+
+    if (!state.quizEngaged && answeredCount >= 7) {
+      state.quizIgnored = true;
+      hideWidget(widget);
+      return;
+    }
+
+    if (state.quizIgnored && !state.quizEngaged) {
+      hideWidget(widget);
+      return;
+    }
+
+    if (answeredCount >= 5) {
+      showWidget(widget);
+      return;
+    }
+
+    hideWidget(widget);
+  }
+
+  function handleSuccess(widget, message) {
+    const form = widget.querySelector('[data-mailing-list-form]');
+
+    state.subscribedThisView = true;
+    widget.classList.add('is-success');
+    setFeedback(widget, 'success', message || 'Aitäh! Oled nüüd meililistis.');
+
+    if (form) {
+      disableControls(form, true);
+    }
+
+    window.setTimeout(() => {
+      dismissAllWidgets();
+    }, 1400);
   }
 
   function initWidget(widget) {
+    ensureCloseButton(widget);
+
     const form = widget.querySelector('[data-mailing-list-form]');
     if (!form) return;
 
@@ -162,19 +189,13 @@
           throw new Error(payload.error || 'Liitumine ebaõnnestus.');
         }
 
-        markSubscribed();
-        setWidgetSuccess(widget, payload.message || 'Aitäh! Oled nüüd meililistis.');
-
-        if (widget.dataset.mailingWidget === 'quiz') {
-          window.setTimeout(() => {
-            hideQuizWidget();
-          }, 1800);
-        }
+        handleSuccess(widget, payload.message || 'Aitäh! Oled nüüd meililistis.');
       } catch (error) {
         setFeedback(widget, 'error', error.message || 'Liitumine ebaõnnestus.');
       } finally {
         submitButton.dataset.loading = 'false';
-        if (!widget.classList.contains('is-success')) {
+
+        if (!state.subscribedThisView) {
           submitButton.disabled = false;
         }
       }
@@ -182,8 +203,10 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('[data-mailing-widget]').forEach(initWidget);
-    hydrateSubscribedWidgets();
+    const widgets = document.querySelectorAll('[data-mailing-widget]');
+    if (widgets.length === 0) return;
+
+    widgets.forEach(initWidget);
 
     if (document.querySelector('[data-mailing-widget="quiz"]')) {
       updateQuizWidget(Number(window.RELV_QUIZ_ANSWERED_COUNT || 0));

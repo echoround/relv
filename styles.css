@@ -1974,3 +1974,217 @@ body.theme-quiz .dot.mid{ background: var(--color-partial); }
     position: static;
   }
 }
+
+/* =========================
+   Outline Refresh
+========================= */
+
+body,
+body.theme-hero,
+body.theme-quiz,
+body.theme-kuidas,
+body.theme-forum{
+  background:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(180deg, #0b0b10 0%, #050507 100%) !important;
+  background-size: 26px 26px, 26px 26px, auto !important;
+  background-attachment: fixed, fixed, fixed !important;
+}
+
+.site-header,
+.site-nav,
+.glow-card,
+.glass-card,
+.step-card,
+.content-card,
+#quiz-container,
+#question-grid,
+#content-container,
+.theme-forum .forum-panel,
+.theme-forum .forum-comment,
+.theme-forum .forum-thread-card,
+body.theme-quiz .flip-card-face,
+.mailing-widget{
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.site-header{
+  background: rgba(7,7,10,0.94) !important;
+  border-bottom: 2px solid rgba(255,255,255,0.08) !important;
+}
+
+.site-nav{
+  background: transparent !important;
+}
+
+.brand-mark{
+  background: transparent !important;
+  border: 2px solid var(--accentB);
+  border-radius: 4px;
+  box-shadow: none !important;
+}
+
+.glow-card::before,
+.orb,
+.orb-a,
+.orb-b,
+.orb-c,
+.hero-side .orb,
+.page-hero .orb{
+  display: none !important;
+}
+
+.glow-card,
+.glass-card,
+.step-card,
+.content-card,
+#quiz-container,
+#question-grid,
+#content-container,
+.theme-forum .forum-panel,
+.theme-forum .forum-comment,
+.mailing-widget,
+body.theme-quiz .flip-card-face{
+  background: rgba(10,10,14,0.92) !important;
+  border: 2px solid rgba(255,255,255,0.12) !important;
+}
+
+.mini-stat,
+.step-num,
+body.theme-quiz .option,
+body.theme-quiz .grid-item,
+body.theme-quiz .flip-card-answers li,
+.theme-forum .forum-thread-card,
+.theme-forum .forum-field input,
+.theme-forum .forum-field textarea,
+.mailing-widget-input{
+  box-shadow: none !important;
+  border: 2px solid rgba(255,255,255,0.12) !important;
+}
+
+.theme-forum .forum-field input,
+.theme-forum .forum-field textarea,
+.mailing-widget-input{
+  background: rgba(255,255,255,0.03) !important;
+}
+
+.hero-title,
+.brand-text,
+.site-nav .nav-link,
+.btn{
+  text-shadow: none !important;
+}
+
+.btn-primary,
+body.theme-quiz #submit-btn,
+body.theme-quiz #next-btn,
+.step-num{
+  box-shadow: none !important;
+}
+
+.nav-link,
+.btn,
+.nav-toggle,
+.mailing-widget-submit,
+.mailing-widget-close,
+body.theme-quiz button,
+body.theme-quiz .option,
+body.theme-quiz .grid-item,
+body.theme-quiz .flip-card-face,
+.step-card,
+.theme-forum .forum-thread-card{
+  transition: background .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease !important;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible,
+.nav-link.is-active,
+.btn:hover,
+.btn:focus-visible,
+.btn:active,
+.nav-toggle:hover,
+.nav-toggle:focus-visible,
+.mailing-widget-submit:hover,
+.mailing-widget-submit:focus-visible,
+.mailing-widget-close:hover,
+.mailing-widget-close:focus-visible,
+.step-card:hover,
+.theme-forum .forum-thread-card:hover,
+.theme-forum .forum-thread-card[data-active="true"]{
+  box-shadow: 0 0 0 3px var(--accentB) !important;
+  border-color: var(--accentB) !important;
+  transform: none !important;
+}
+
+body.theme-quiz button:hover,
+body.theme-quiz button:focus-visible,
+body.theme-quiz .option:hover,
+body.theme-quiz .option:has(input:checked),
+body.theme-quiz .grid-item:hover,
+body.theme-quiz .grid-item.current,
+body.theme-quiz .flip-card:hover .flip-card-face,
+body.theme-quiz .flip-card:focus-within .flip-card-face{
+  box-shadow: 0 0 0 3px var(--accentA) !important;
+  border-color: var(--accentA) !important;
+  transform: none !important;
+}
+
+body.theme-quiz .option.correct,
+body.theme-quiz .grid-item.correct,
+body.theme-quiz .flip-card-answers li.is-correct{
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.92) !important;
+  border-color: rgba(34,197,94,0.92) !important;
+}
+
+body.theme-quiz .option.incorrect,
+body.theme-quiz .grid-item.incorrect{
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.92) !important;
+  border-color: rgba(239,68,68,0.92) !important;
+}
+
+body.theme-quiz .grid-item.partial{
+  box-shadow: 0 0 0 3px rgba(234,193,80,0.92) !important;
+  border-color: rgba(234,193,80,0.92) !important;
+}
+
+.theme-forum .forum-field input:focus,
+.theme-forum .forum-field textarea:focus,
+.mailing-widget-input:focus{
+  outline: none !important;
+  box-shadow: 0 0 0 3px var(--accentC) !important;
+  border-color: var(--accentC) !important;
+}
+
+.mailing-widget{
+  padding-right: 74px !important;
+}
+
+.mailing-widget-close{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.84);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+@media (max-width: 720px){
+  .site-nav{
+    background: rgba(10,10,14,0.96) !important;
+  }
+}
