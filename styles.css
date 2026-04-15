@@ -3039,28 +3039,23 @@ body.theme-quiz .flip-card-answers li,
   }
 
   .site-nav{
-    background: linear-gradient(180deg, rgba(58,66,76,0.97), rgba(34,40,47,0.985)) !important;
+    background: linear-gradient(180deg, rgb(58, 66, 76), rgb(34, 40, 47)) !important;
     border: 1px solid rgba(var(--section-accent-strong),0.24) !important;
     box-shadow: 0 28px 64px rgba(8,11,15,0.44) !important;
-    backdrop-filter: blur(12px) saturate(118%) !important;
-    -webkit-backdrop-filter: blur(12px) saturate(118%) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   .site-nav::before{
-    background:
-      radial-gradient(560px 280px at 18% 18%, rgba(var(--section-accent),0.18), transparent 62%),
-      radial-gradient(520px 260px at 82% 28%, rgba(var(--section-accent-alt),0.14), transparent 62%),
-      linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01)) !important;
-    opacity: 0.82 !important;
-    filter: blur(18px) !important;
+    content: none !important;
   }
 
   .site-nav::after{
-    background: linear-gradient(90deg, transparent, rgba(242,246,250,0.18), transparent) !important;
+    content: none !important;
   }
 
   .site-nav .nav-link{
-    background: rgba(238,243,247,0.07) !important;
+    background: rgb(73, 82, 94) !important;
     border-color: rgba(var(--section-accent),0.22) !important;
     box-shadow: none !important;
     text-shadow: none !important;
@@ -3068,7 +3063,7 @@ body.theme-quiz .flip-card-answers li,
 
   .site-nav .nav-link:hover,
   .site-nav .nav-link:active{
-    background: rgba(243,247,251,0.10) !important;
+    background: rgb(83, 93, 106) !important;
     border-color: rgba(var(--section-accent-strong),0.28) !important;
     box-shadow: 0 0 0 3px rgba(var(--section-accent),0.18) !important;
   }
@@ -3080,7 +3075,7 @@ body.theme-quiz .flip-card-answers li,
   }
 
   .site-nav .nav-link.is-active{
-    background: rgba(var(--section-accent),0.16) !important;
+    background: rgb(90, 100, 112) !important;
     border-color: rgba(var(--section-accent-strong),0.30) !important;
     box-shadow: 0 0 0 3px rgba(var(--section-accent),0.20) !important;
   }
