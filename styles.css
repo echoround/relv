@@ -2544,12 +2544,14 @@ body.theme-hero{
   --section-accent: 178, 188, 205;
   --section-accent-strong: 215, 222, 230;
   --section-accent-alt: 188, 180, 198;
+  --section-ink-strong: 34, 39, 46;
 }
 
 body.theme-quiz{
   --section-accent: 164, 187, 172;
   --section-accent-strong: 209, 224, 214;
   --section-accent-alt: 176, 193, 186;
+  --section-ink-strong: 34, 39, 46;
 }
 
 body.theme-kuidas{
@@ -2564,16 +2566,55 @@ body.theme-forum{
   --section-accent: 162, 180, 191;
   --section-accent-strong: 206, 220, 228;
   --section-accent-alt: 175, 191, 201;
+  --section-ink-strong: 34, 39, 46;
 }
 
+body.theme-hero .btn-primary,
+body.theme-hero .btn-primary:hover,
+body.theme-hero .btn-primary:focus-visible,
+body.theme-hero .btn-primary:active,
 body.theme-kuidas .btn-primary,
+body.theme-kuidas .btn-primary:hover,
+body.theme-kuidas .btn-primary:focus-visible,
+body.theme-kuidas .btn-primary:active,
+body.theme-forum .btn-primary,
+body.theme-forum .btn-primary:hover,
+body.theme-forum .btn-primary:focus-visible,
+body.theme-forum .btn-primary:active,
+body.theme-quiz .btn-primary,
+body.theme-quiz .btn-primary:hover,
+body.theme-quiz .btn-primary:focus-visible,
+body.theme-quiz .btn-primary:active,
+body.theme-quiz #submit-btn,
+body.theme-quiz #submit-btn:hover,
+body.theme-quiz #submit-btn:focus-visible,
+body.theme-quiz #submit-btn:active,
+body.theme-quiz #next-btn,
+body.theme-quiz #next-btn:hover,
+body.theme-quiz #next-btn:focus-visible,
+body.theme-quiz #next-btn:active,
 body.theme-kuidas .step-num{
   color: rgba(var(--section-ink-strong),0.94) !important;
 }
 
+body.theme-hero .btn-primary:hover,
+body.theme-hero .btn-primary:focus-visible,
+body.theme-hero .btn-primary:active,
 body.theme-kuidas .btn-primary:hover,
 body.theme-kuidas .btn-primary:focus-visible,
-body.theme-kuidas .btn-primary:active{
+body.theme-kuidas .btn-primary:active,
+body.theme-forum .btn-primary:hover,
+body.theme-forum .btn-primary:focus-visible,
+body.theme-forum .btn-primary:active,
+body.theme-quiz .btn-primary:hover,
+body.theme-quiz .btn-primary:focus-visible,
+body.theme-quiz .btn-primary:active,
+body.theme-quiz #submit-btn:hover,
+body.theme-quiz #submit-btn:focus-visible,
+body.theme-quiz #submit-btn:active,
+body.theme-quiz #next-btn:hover,
+body.theme-quiz #next-btn:focus-visible,
+body.theme-quiz #next-btn:active{
   color: rgba(var(--section-ink-strong),0.96) !important;
 }
 
