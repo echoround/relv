@@ -1228,7 +1228,7 @@ body.theme-hero .hero-title-long{
 
 
 /* =========================
-   QUIZ: Green fireworks overlay (canvas)
+   QUIZ: Celebration overlay (canvas)
 ========================= */
 #fx-fireworks {
   position: fixed;
@@ -1236,7 +1236,10 @@ body.theme-hero .hero-title-long{
   pointer-events: none;   /* never blocks clicks */
   z-index: 2500;          /* above nav/menu */
   opacity: 1;
-  filter: saturate(140%) contrast(110%);
+  mix-blend-mode: screen;
+  filter: saturate(158%) contrast(118%) brightness(1.04);
+  transform: translateZ(0);
+  will-change: opacity;
 }
 
 
