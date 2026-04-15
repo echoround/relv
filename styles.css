@@ -772,7 +772,7 @@ body.theme-quiz .flip-card:hover{
     gap: 24px;
   }
   body.theme-quiz .flip-card{
-    min-height: 260px;
+    min-height: 220px;
   }
 }
 

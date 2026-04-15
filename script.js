@@ -650,6 +650,10 @@ function syncFlipCardHeights() {
         card.style.height = 'auto';
     });
 
+    if (window.innerWidth <= 720) {
+        return;
+    }
+
     let maxHeight = 0;
 
     cards.forEach(card => {
