@@ -555,11 +555,24 @@
     const page = document.querySelector('.forum-page');
     if (!page) return;
 
+    const eventPathMatches = (event, selector) => {
+      if (typeof event.composedPath !== 'function') return false;
+
+      return event.composedPath().some((node) => {
+        return node instanceof Element && typeof node.matches === 'function' && node.matches(selector);
+      });
+    };
+
     page.addEventListener('click', (event) => {
       if (!state.activeSlug && !state.loadingDetail) return;
-      if (event.target.closest('.forum-thread-card')) return;
-      if (event.target.closest('[data-forum-thread-detail]')) return;
-      if (event.target.closest('.forum-panel--form')) return;
+
+      const clickedThreadCard = eventPathMatches(event, '.forum-thread-card') || event.target.closest('.forum-thread-card');
+      const clickedThreadDetail = eventPathMatches(event, '[data-forum-thread-detail]') || event.target.closest('[data-forum-thread-detail]');
+      const clickedFormPanel = eventPathMatches(event, '.forum-panel--form') || event.target.closest('.forum-panel--form');
+
+      if (clickedThreadCard) return;
+      if (clickedThreadDetail) return;
+      if (clickedFormPanel) return;
 
       clearStatus();
       clearThreadSelection();

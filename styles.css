@@ -1228,7 +1228,7 @@ body.theme-hero .hero-title-long{
 
 
 /* =========================
-   QUIZ: Celebration overlay (canvas)
+   QUIZ: Green fireworks overlay (canvas)
 ========================= */
 #fx-fireworks {
   position: fixed;
@@ -1236,10 +1236,63 @@ body.theme-hero .hero-title-long{
   pointer-events: none;   /* never blocks clicks */
   z-index: 2500;          /* above nav/menu */
   opacity: 1;
+  filter: saturate(140%) contrast(110%);
+}
+
+#fx-correct-flash {
+  position: fixed;
+  inset: -4%;
+  pointer-events: none;
+  z-index: 2490;
+  opacity: 0;
   mix-blend-mode: screen;
-  filter: saturate(158%) contrast(118%) brightness(1.04);
-  transform: translateZ(0);
-  will-change: opacity;
+  filter: saturate(118%) contrast(102%);
+  will-change: opacity, transform;
+  transform: scale(1.01);
+}
+
+#fx-correct-flash::before,
+#fx-correct-flash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+#fx-correct-flash::before {
+  background:
+    radial-gradient(42% 34% at 50% 48%, rgba(198,255,214,0.34), transparent 74%),
+    radial-gradient(20% 18% at 18% 26%, rgba(150,255,182,0.18), transparent 78%),
+    radial-gradient(18% 16% at 82% 30%, rgba(184,255,207,0.16), transparent 80%),
+    linear-gradient(180deg, rgba(188,255,206,0.16), rgba(124,232,165,0.07));
+  filter: blur(18px);
+}
+
+#fx-correct-flash::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+  opacity: 0.14;
+  mix-blend-mode: soft-light;
+}
+
+#fx-correct-flash.is-active {
+  animation: quiz-correct-flash 320ms cubic-bezier(0.18, 0.72, 0.28, 1);
+}
+
+@keyframes quiz-correct-flash {
+  0% {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+
+  22% {
+    opacity: 0.95;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.03);
+  }
 }
 
 

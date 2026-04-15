@@ -671,12 +671,38 @@ function updateProgressHUD() {
 
 
 
-// Show celebration effect for a fully correct answer
+// Show celebration effect for 100% correct answer
 let greenFx = null;
+let correctFlashEl = null;
+let correctFlashTimer = 0;
+
+function getCorrectFlashEl() {
+  if (!correctFlashEl) {
+    correctFlashEl = document.createElement('div');
+    correctFlashEl.id = 'fx-correct-flash';
+    document.body.appendChild(correctFlashEl);
+  }
+
+  return correctFlashEl;
+}
+
+function showCorrectAnswerFlash() {
+  const flashEl = getCorrectFlashEl();
+  flashEl.classList.remove('is-active');
+  void flashEl.offsetWidth;
+  flashEl.classList.add('is-active');
+
+  window.clearTimeout(correctFlashTimer);
+  correctFlashTimer = window.setTimeout(() => {
+    flashEl.classList.remove('is-active');
+  }, 340);
+}
 
 function showCelebration() {
   // Respect reduced motion (keeps it comfy on phones)
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  showCorrectAnswerFlash();
 
   if (!greenFx) greenFx = new GreenFireworksFX();
   greenFx.fire();
@@ -695,20 +721,10 @@ class GreenFireworksFX {
     this.h = 0;
 
     this.particles = [];
-    this.shells = [];
-    this.waves = [];
     this.scheduled = [];
     this.running = false;
     this.lastT = 0;
     this.endT = 0;
-    this.rafId = 0;
-    this.palette = [
-      { hue: 154, sat: 80, light: 64 },
-      { hue: 170, sat: 86, light: 66 },
-      { hue: 188, sat: 92, light: 70 },
-      { hue: 201, sat: 90, light: 74 },
-      { hue: 214, sat: 82, light: 80 }
-    ];
 
     this.resize = this.resize.bind(this);
     this.loop = this.loop.bind(this);
@@ -732,315 +748,81 @@ class GreenFireworksFX {
 
   fire() {
     const now = performance.now();
+    const shouldStartLoop = !this.running;
 
     this.running = true;
     this.lastT = now;
-    this.endT = now + 2200;
+    this.endT = now + 1100;
 
-    this.particles.length = 0;
-    this.shells.length = 0;
-    this.waves.length = 0;
+    // Schedule 4 bursts, mostly near the top half (over-the-top feel)
     this.scheduled.length = 0;
 
-    const shellCount = 5;
-    for (let i = 0; i < shellCount; i++) {
-      const t = now + i * 150;
-      const x = this.w * (0.14 + Math.random() * 0.72);
-      const targetX = x + (Math.random() * 160 - 80);
-      const targetY = this.h * (0.14 + Math.random() * 0.24);
-      const scale = 0.92 + Math.random() * 0.4;
-      const tone = this.palette[i % this.palette.length];
-      this.scheduled.push({ t, x, targetX, targetY, scale, hue: tone.hue });
+    const burstCount = 4;
+    for (let i = 0; i < burstCount; i++) {
+      const t = now + i * 120;
+      const x = this.w * (0.15 + Math.random() * 0.70);
+      const y = this.h * (0.14 + Math.random() * 0.26);
+      const scale = 0.9 + Math.random() * 0.45;
+      this.scheduled.push({ t, x, y, scale });
     }
 
+    // Soft “energy sweep” burst near the center-top (shader-ish vibe)
     this.scheduled.push({
-      t: now + 860,
-      x: this.w * 0.5,
-      targetX: this.w * (0.47 + Math.random() * 0.06),
-      targetY: this.h * 0.17,
-      scale: 1.28,
-      hue: 194
+      t: now + 80,
+      x: this.w * (0.35 + Math.random() * 0.30),
+      y: this.h * 0.22,
+      scale: 1.15
     });
 
-    if (!this.rafId) {
-      this.rafId = requestAnimationFrame(this.loop);
+    if (shouldStartLoop) {
+      requestAnimationFrame(this.loop);
     }
   }
 
-  launchShell(config) {
-    this.shells.push({
-      x: config.x,
-      y: this.h + 26,
-      vx: (config.targetX - config.x) * 0.75,
-      vy: -(860 + Math.random() * 160) * config.scale,
-      targetY: config.targetY,
-      scale: config.scale,
-      hue: config.hue,
-      life: 0,
-      ttl: 1.2,
-      trail: []
-    });
-  }
+  burst(x, y, scale) {
+    // Palette: mostly greens (bright + deep), slight variance for richness
+    const baseHue = 105 + Math.random() * 45; // 105..150 (green range)
 
-  makeParticle(x, y, angle, speed, overrides = {}) {
-    const tone = overrides.tone || this.palette[Math.floor(Math.random() * this.palette.length)];
-    return {
-      x,
-      y,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
-      life: 0,
-      ttl: overrides.ttl ?? (0.8 + Math.random() * 0.45),
-      size: overrides.size ?? (1 + Math.random() * 2.4),
-      hue: overrides.hue ?? tone.hue,
-      sat: overrides.sat ?? tone.sat,
-      light: overrides.light ?? tone.light,
-      tw: Math.random() * Math.PI * 2,
-      drag: overrides.drag ?? 0.985,
-      gravity: overrides.gravity ?? 380,
-      trail: [],
-      trailLength: overrides.trailLength ?? 8,
-      sparkle: overrides.sparkle ?? 0,
-      kind: overrides.kind || 'bloom'
-    };
-  }
+    // Core “spark ring”
+    const count = Math.floor(64 * scale);
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = (180 + Math.random() * 420) * scale;
 
-  burst(x, y, scale, forcedHue = null) {
-    const baseHue = forcedHue ?? this.palette[Math.floor(Math.random() * this.palette.length)].hue;
-    const tones = this.palette.map((tone, index) => {
-      if (index === 0) {
-        return { ...tone, hue: baseHue };
-      }
-      return tone;
-    });
+      const hue = baseHue + (Math.random() * 12 - 6);
+      const sat = 70 + Math.random() * 30;
+      const light = 38 + Math.random() * 30;
 
-    this.waves.push({
-      x,
-      y,
-      r: 18 * scale,
-      life: 0,
-      ttl: 0.72,
-      hue: baseHue
-    });
-
-    const ringCount = Math.floor(36 * scale);
-    for (let i = 0; i < ringCount; i++) {
-      const angle = (i / ringCount) * Math.PI * 2 + (Math.random() * 0.09 - 0.045);
-      const speed = (200 + Math.random() * 180) * scale;
-      this.particles.push(this.makeParticle(x, y, angle, speed, {
-        tone: tones[i % tones.length],
-        ttl: 0.95 + Math.random() * 0.3,
-        size: 1.2 + Math.random() * 1.8,
-        drag: 0.988,
-        gravity: 210,
-        trailLength: 9,
-        sparkle: 0.18,
-        kind: 'ring'
-      }));
+      this.particles.push({
+        x, y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp,
+        life: 0,
+        ttl: 0.65 + Math.random() * 0.55,
+        r: 1.0 + Math.random() * 2.2,
+        hue, sat, light,
+        tw: Math.random() * 10
+      });
     }
 
-    const bloomCount = Math.floor(82 * scale);
-    for (let i = 0; i < bloomCount; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = (80 + Math.random() * 320) * scale;
-      this.particles.push(this.makeParticle(x, y, angle, speed, {
-        tone: tones[Math.floor(Math.random() * tones.length)],
-        ttl: 1.05 + Math.random() * 0.45,
-        size: 1 + Math.random() * 2.6,
-        drag: 0.982,
-        gravity: 410,
-        trailLength: 11,
-        sparkle: 0.34,
-        kind: 'bloom'
-      }));
-    }
+    // Extra “sparkles” for crispness
+    const sparkleCount = Math.floor(22 * scale);
+    for (let i = 0; i < sparkleCount; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = (90 + Math.random() * 260) * scale;
 
-    const cometCount = Math.max(5, Math.floor(8 * scale));
-    for (let i = 0; i < cometCount; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = (250 + Math.random() * 260) * scale;
-      this.particles.push(this.makeParticle(x, y, angle, speed, {
-        tone: tones[(i + 1) % tones.length],
-        ttl: 1.18 + Math.random() * 0.35,
-        size: 2.1 + Math.random() * 1.7,
-        drag: 0.99,
-        gravity: 300,
-        trailLength: 14,
-        sparkle: 0.5,
-        kind: 'comet'
-      }));
-    }
-
-    const glitterCount = Math.floor(30 * scale);
-    for (let i = 0; i < glitterCount; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = (40 + Math.random() * 180) * scale;
-      this.particles.push(this.makeParticle(x, y, angle, speed, {
-        tone: tones[Math.floor(Math.random() * tones.length)],
-        ttl: 0.6 + Math.random() * 0.35,
-        size: 0.75 + Math.random() * 1.1,
-        drag: 0.976,
-        gravity: 160,
-        trailLength: 5,
-        sparkle: 0.72,
-        kind: 'glitter'
-      }));
-    }
-  }
-
-  drawTrail(path, width, hue, sat, light, alpha) {
-    const ctx = this.ctx;
-    if (path.length < 2) return;
-
-    ctx.beginPath();
-    ctx.moveTo(path[0].x, path[0].y);
-    for (let i = 1; i < path.length; i++) {
-      ctx.lineTo(path[i].x, path[i].y);
-    }
-    ctx.lineWidth = width;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = `hsla(${hue}, ${sat}%, ${light}%, ${alpha})`;
-    ctx.stroke();
-  }
-
-  drawSpark(x, y, size, hue, sat, light, alpha) {
-    const ctx = this.ctx;
-    ctx.beginPath();
-    ctx.moveTo(x - size, y);
-    ctx.lineTo(x + size, y);
-    ctx.moveTo(x, y - size);
-    ctx.lineTo(x, y + size);
-    ctx.lineWidth = Math.max(0.75, size * 0.32);
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = `hsla(${hue}, ${sat}%, ${Math.min(96, light + 18)}%, ${alpha})`;
-    ctx.stroke();
-  }
-
-  updateShells(dt) {
-    const gravity = 680;
-
-    for (let i = this.shells.length - 1; i >= 0; i--) {
-      const shell = this.shells[i];
-      shell.life += dt;
-      shell.vx *= Math.pow(0.992, dt * 60);
-      shell.vy += gravity * dt;
-
-      shell.x += shell.vx * dt;
-      shell.y += shell.vy * dt;
-
-      shell.trail.unshift({ x: shell.x, y: shell.y });
-      if (shell.trail.length > 14) shell.trail.pop();
-
-      const ascentAlpha = Math.max(0.2, 1 - (shell.life / shell.ttl));
-      this.drawTrail(shell.trail, 1.8 + shell.scale, shell.hue, 88, 74, 0.16 * ascentAlpha);
-
-      const glowRadius = 7 * shell.scale;
-      this.ctx.beginPath();
-      this.ctx.fillStyle = `hsla(${shell.hue}, 90%, 82%, 0.18)`;
-      this.ctx.arc(shell.x, shell.y, glowRadius, 0, Math.PI * 2);
-      this.ctx.fill();
-
-      this.ctx.beginPath();
-      this.ctx.fillStyle = `hsla(${shell.hue}, 95%, 92%, 0.95)`;
-      this.ctx.arc(shell.x, shell.y, 1.8 + shell.scale * 0.85, 0, Math.PI * 2);
-      this.ctx.fill();
-
-      if (shell.y <= shell.targetY || shell.vy >= -24) {
-        this.burst(shell.x, shell.y, shell.scale, shell.hue);
-        this.shells.splice(i, 1);
-      }
-    }
-  }
-
-  updateWaves(dt) {
-    for (let i = this.waves.length - 1; i >= 0; i--) {
-      const wave = this.waves[i];
-      wave.life += dt;
-
-      if (wave.life >= wave.ttl) {
-        this.waves.splice(i, 1);
-        continue;
-      }
-
-      const t = wave.life / wave.ttl;
-      const radius = wave.r + 120 * t;
-      const alpha = (1 - t) * 0.2;
-
-      this.ctx.beginPath();
-      this.ctx.lineWidth = 2.5 - (t * 1.5);
-      this.ctx.strokeStyle = `hsla(${wave.hue}, 88%, 76%, ${alpha})`;
-      this.ctx.arc(wave.x, wave.y, radius, 0, Math.PI * 2);
-      this.ctx.stroke();
-
-      this.ctx.beginPath();
-      this.ctx.fillStyle = `hsla(${wave.hue}, 88%, 72%, ${alpha * 0.28})`;
-      this.ctx.arc(wave.x, wave.y, radius * 0.34, 0, Math.PI * 2);
-      this.ctx.fill();
-    }
-  }
-
-  updateParticles(dt) {
-    for (let i = this.particles.length - 1; i >= 0; i--) {
-      const p = this.particles[i];
-      p.life += dt;
-
-      if (p.life >= p.ttl) {
-        this.particles.splice(i, 1);
-        continue;
-      }
-
-      p.vx *= Math.pow(p.drag, dt * 60);
-      p.vy *= Math.pow(p.drag, dt * 60);
-      p.vy += p.gravity * dt;
-
-      p.x += p.vx * dt;
-      p.y += p.vy * dt;
-
-      p.trail.unshift({ x: p.x, y: p.y });
-      if (p.trail.length > p.trailLength) p.trail.pop();
-
-      const lifeT = p.life / p.ttl;
-      const fade = Math.max(0, 1 - lifeT);
-      const twinkle = 0.76 + 0.24 * Math.sin((p.life * 20) + p.tw);
-      const alpha = fade * twinkle;
-
-      if (p.trail.length > 1) {
-        const trailAlpha = alpha * (p.kind === 'glitter' ? 0.08 : 0.16);
-        this.drawTrail(
-          p.trail,
-          Math.max(0.8, p.size * (p.kind === 'comet' ? 0.95 : 0.65)),
-          p.hue,
-          p.sat,
-          Math.min(92, p.light + 10),
-          trailAlpha
-        );
-      }
-
-      const outer = p.size * (3.1 + (1 - fade) * 1.6);
-      const inner = p.size * 1.05;
-
-      this.ctx.beginPath();
-      this.ctx.fillStyle = `hsla(${p.hue}, ${p.sat}%, ${p.light}%, ${alpha * 0.2})`;
-      this.ctx.arc(p.x, p.y, outer, 0, Math.PI * 2);
-      this.ctx.fill();
-
-      this.ctx.beginPath();
-      this.ctx.fillStyle = `hsla(${p.hue}, ${p.sat}%, ${Math.min(96, p.light + 18)}%, ${alpha})`;
-      this.ctx.arc(p.x, p.y, inner, 0, Math.PI * 2);
-      this.ctx.fill();
-
-      if (p.sparkle > 0.1 && alpha > 0.18) {
-        this.drawSpark(
-          p.x,
-          p.y,
-          p.size * (1.4 + p.sparkle),
-          p.hue,
-          p.sat,
-          p.light,
-          alpha * (0.16 + p.sparkle * 0.2)
-        );
-      }
+      this.particles.push({
+        x, y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp,
+        life: 0,
+        ttl: 0.45 + Math.random() * 0.35,
+        r: 0.7 + Math.random() * 1.2,
+        hue: baseHue + (Math.random() * 18 - 9),
+        sat: 85 + Math.random() * 15,
+        light: 55 + Math.random() * 20,
+        tw: Math.random() * 12
+      });
     }
   }
 
@@ -1052,42 +834,72 @@ class GreenFireworksFX {
 
     const ctx = this.ctx;
 
-    // Keep a soft motion trail without dimming the page.
+    // Fade previous frame toward transparency (no page-dimming)
     ctx.globalCompositeOperation = 'destination-out';
-    ctx.fillStyle = 'rgba(0,0,0,0.16)';
+    ctx.fillStyle = 'rgba(0,0,0,0.22)';
     ctx.fillRect(0, 0, this.w, this.h);
 
-    ctx.globalCompositeOperation = 'screen';
-    ctx.fillStyle = 'rgba(126, 211, 252, 0.018)';
-    ctx.fillRect(0, 0, this.w, this.h * 0.45);
-
+    // Spawn scheduled bursts
     for (let i = this.scheduled.length - 1; i >= 0; i--) {
       if (t >= this.scheduled[i].t) {
-        this.launchShell(this.scheduled[i]);
+        const b = this.scheduled[i];
+        this.burst(b.x, b.y, b.scale);
         this.scheduled.splice(i, 1);
       }
     }
 
+    // Draw with additive blending for glow
     ctx.globalCompositeOperation = 'lighter';
-    this.updateWaves(dt);
-    this.updateShells(dt);
-    this.updateParticles(dt);
 
-    if (
-      t > this.endT &&
-      this.particles.length === 0 &&
-      this.shells.length === 0 &&
-      this.waves.length === 0 &&
-      this.scheduled.length === 0
-    ) {
+    const gravity = 520;   // px/s^2
+    const drag = 0.985;    // velocity damping
+
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.life += dt;
+
+      if (p.life >= p.ttl) {
+        this.particles.splice(i, 1);
+        continue;
+      }
+
+      // Motion
+      p.vx *= Math.pow(drag, dt * 60);
+      p.vy *= Math.pow(drag, dt * 60);
+      p.vy += gravity * dt;
+
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+
+      // Alpha curve + subtle twinkle
+      const k = 1 - (p.life / p.ttl);
+      const twinkle = 0.75 + 0.25 * Math.sin((p.life * 18) + p.tw);
+      const a = Math.max(0, Math.min(1, k * 0.95 * twinkle));
+
+      // Draw glow + core
+      const outer = p.r * (3.2 + (1 - k) * 1.2);
+      const inner = p.r * 1.05;
+
+      ctx.beginPath();
+      ctx.fillStyle = `hsla(${p.hue}, ${p.sat}%, ${p.light}%, ${a * 0.22})`;
+      ctx.arc(p.x, p.y, outer, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = `hsla(${p.hue}, ${p.sat}%, ${Math.min(92, p.light + 22)}%, ${a})`;
+      ctx.arc(p.x, p.y, inner, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Stop when done
+    if (t > this.endT && this.particles.length === 0 && this.scheduled.length === 0) {
       this.running = false;
-      this.rafId = 0;
       ctx.globalCompositeOperation = 'source-over';
       ctx.clearRect(0, 0, this.w, this.h);
       return;
     }
 
-    this.rafId = requestAnimationFrame(this.loop);
+    requestAnimationFrame(this.loop);
   }
 }
 
