@@ -214,12 +214,33 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
 }
 
 .pill{
-  padding: 10px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
   border-radius: 999px;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.10);
   color: rgba(255,255,255,0.78);
   font-size: 13px;
+  line-height: 1;
+}
+
+.pill-icon{
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: #22c55e;
+  stroke-width: 2.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 10px rgba(34,197,94,0.28));
+}
+
+.pill-label{
+  display: inline-block;
+  line-height: 1.15;
 }
 
 .hero-side{
