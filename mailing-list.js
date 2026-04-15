@@ -65,6 +65,10 @@
     return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
   }
 
+  function isMobileViewport() {
+    return typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 720px)').matches;
+  }
+
   function runPointerCycle(pointer) {
     if (!pointer) return;
 
@@ -82,6 +86,11 @@
   function playPointerAnimation(widget) {
     const pointer = widget.querySelector('[data-mailing-pointer]');
     if (!pointer) return;
+
+    if (isMobileViewport()) {
+      hidePointer(widget);
+      return;
+    }
 
     const baseCycles = getPositiveNumber(widget.dataset.mailingPointerCycles, DEFAULT_POINTER_CYCLES);
     const followupCycles = getPositiveNumber(widget.dataset.mailingPointerFollowupCycles, widget.dataset.mailingWidget === 'quiz' ? 1 : DEFAULT_POINTER_FOLLOWUP_CYCLES);

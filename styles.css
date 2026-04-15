@@ -2622,6 +2622,10 @@ body.theme-quiz .flip-card-answers li,
 }
 
 @media (max-width: 720px){
+  .mailing-widget-pointer{
+    display: none !important;
+  }
+
   .site-nav{
     background: linear-gradient(180deg, rgba(58,66,76,0.97), rgba(34,40,47,0.985)) !important;
     border: 1px solid rgba(var(--section-accent-strong),0.24) !important;
