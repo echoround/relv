@@ -95,6 +95,7 @@
     const baseCycles = getPositiveNumber(widget.dataset.mailingPointerCycles, DEFAULT_POINTER_CYCLES);
     const followupCycles = getPositiveNumber(widget.dataset.mailingPointerFollowupCycles, widget.dataset.mailingWidget === 'quiz' ? 1 : DEFAULT_POINTER_FOLLOWUP_CYCLES);
     const followupDelayMs = getPositiveNumber(widget.dataset.mailingPointerFollowupDelayMs, POINTER_FOLLOWUP_DELAY_MS);
+    const repeatDelayMs = getPositiveNumber(widget.dataset.mailingPointerRepeatDelayMs, 0);
 
     clearPointerTimers(pointer);
     pointer.classList.remove('is-animating', 'is-visible');
@@ -111,6 +112,8 @@
       pointer.hidden = true;
     });
 
+    let finalHideAt = initialHideAt;
+
     if (followupCycles > 0) {
       const followupStartAt = initialHideAt + followupDelayMs;
 
@@ -119,10 +122,18 @@
         queuePointerStep(pointer, cycleAt, () => runPointerCycle(pointer));
       }
 
-      const finalHideAt = Math.max(0, followupStartAt + (followupCycles - 1) * (POINTER_CYCLE_MS + POINTER_CYCLE_GAP_MS)) + POINTER_CYCLE_MS;
+      finalHideAt = Math.max(0, followupStartAt + (followupCycles - 1) * (POINTER_CYCLE_MS + POINTER_CYCLE_GAP_MS)) + POINTER_CYCLE_MS;
       queuePointerStep(pointer, finalHideAt, () => {
         pointer.classList.remove('is-visible');
         pointer.hidden = true;
+      });
+    }
+
+    if (repeatDelayMs > 0) {
+      const repeatAt = finalHideAt + repeatDelayMs;
+      queuePointerStep(pointer, repeatAt, () => {
+        if (widget.hidden || widget.dataset.dismissed === 'true' || !widget.classList.contains('is-visible')) return;
+        playPointerAnimation(widget);
       });
     }
   }
