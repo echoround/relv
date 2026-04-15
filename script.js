@@ -75,22 +75,7 @@ function syncOptionSelectionState(container) {
         if (!optionInput) return;
 
         optionEl.classList.toggle('is-selected', optionInput.checked);
-        optionEl.setAttribute('aria-checked', String(optionInput.checked));
     });
-}
-
-function activateOption(container, input, multiple) {
-    if (!container || !input || input.disabled) return;
-
-    if (multiple) {
-        input.checked = !input.checked;
-    } else {
-        container.querySelectorAll('input[name="option"]').forEach((candidate) => {
-            candidate.checked = candidate === input;
-        });
-    }
-
-    syncOptionSelectionState(container);
 }
 
 // Display the current question
@@ -123,34 +108,23 @@ function displayQuestion() {
         input.value = index;
         input.id = `option-${index}`;
         input.disabled = userAnswers[currentIndex]?.submitted || false;
-        input.tabIndex = -1;
-        input.setAttribute('aria-hidden', 'true');
         if (userAnswers[currentIndex]?.selected?.includes(index)) {
             input.checked = true;
         }
         const label = document.createElement('label');
-        label.textContent = option;
-        const div = document.createElement('div');
-        div.className = 'option';
-        div.setAttribute('role', multiple ? 'checkbox' : 'radio');
-        div.setAttribute('tabindex', input.disabled ? '-1' : '0');
-        div.setAttribute('aria-label', option);
-        div.setAttribute('aria-checked', String(input.checked));
+        label.className = 'option';
 
-        div.addEventListener('click', (event) => {
-            event.preventDefault();
-            activateOption(optionsDiv, input, multiple);
+        const text = document.createElement('span');
+        text.className = 'option-text';
+        text.textContent = option;
+
+        input.addEventListener('change', () => {
+            syncOptionSelectionState(optionsDiv);
         });
 
-        div.addEventListener('keydown', (event) => {
-            if (event.key !== 'Enter' && event.key !== ' ') return;
-            event.preventDefault();
-            activateOption(optionsDiv, input, multiple);
-        });
-
-        div.appendChild(input);
-        div.appendChild(label);
-        optionsDiv.appendChild(div);
+        label.appendChild(input);
+        label.appendChild(text);
+        optionsDiv.appendChild(label);
     });
 
     syncOptionSelectionState(optionsDiv);

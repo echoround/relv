@@ -1,4 +1,8 @@
 (function mailingListBootstrap() {
+  const POINTER_CYCLE_MS = 1600;
+  const POINTER_CYCLE_GAP_MS = 2000;
+  const POINTER_FOLLOWUP_DELAY_MS = 10000;
+
   const state = {
     subscribedThisView: false,
     quizEngaged: false,
@@ -25,29 +29,83 @@
     feedback.classList.add(type === 'success' ? 'is-success' : 'is-error');
   }
 
-  function playPointerAnimation(widget) {
-    const pointer = widget.querySelector('[data-mailing-pointer]');
+  function getPointer(widget) {
+    return widget?.querySelector('[data-mailing-pointer]') || null;
+  }
+
+  function clearPointerTimers(pointer) {
+    if (!pointer || !Array.isArray(pointer._mailingTimers)) return;
+
+    pointer._mailingTimers.forEach((timerId) => {
+      window.clearTimeout(timerId);
+    });
+
+    pointer._mailingTimers = [];
+  }
+
+  function hidePointer(widget) {
+    const pointer = getPointer(widget);
     if (!pointer) return;
 
-    const cycles = Math.max(1, Number(widget.dataset.mailingArrowCycles || 1));
+    clearPointerTimers(pointer);
+    pointer.classList.remove('is-animating', 'is-visible');
+    pointer.hidden = true;
+  }
 
-    if (pointer._mailingAnimationTimer) {
-      window.clearTimeout(pointer._mailingAnimationTimer);
-    }
+  function queuePointerStep(pointer, delayMs, callback) {
+    const timerId = window.setTimeout(callback, delayMs);
+    pointer._mailingTimers = pointer._mailingTimers || [];
+    pointer._mailingTimers.push(timerId);
+  }
 
-    pointer.style.setProperty('--mailing-pointer-cycles', String(cycles));
+  function runPointerCycle(pointer) {
+    if (!pointer) return;
+
+    pointer.hidden = false;
+    pointer.classList.add('is-visible');
     pointer.classList.remove('is-animating');
     void pointer.offsetWidth;
     pointer.classList.add('is-animating');
 
-    pointer._mailingAnimationTimer = window.setTimeout(() => {
+    queuePointerStep(pointer, POINTER_CYCLE_MS, () => {
       pointer.classList.remove('is-animating');
-    }, cycles * 1800);
+    });
+  }
+
+  function playPointerAnimation(widget) {
+    const pointer = widget.querySelector('[data-mailing-pointer]');
+    if (!pointer) return;
+
+    const secondCycleAt = POINTER_CYCLE_MS + POINTER_CYCLE_GAP_MS;
+    const initialHideAt = secondCycleAt + POINTER_CYCLE_MS;
+
+    clearPointerTimers(pointer);
+    pointer.classList.remove('is-animating', 'is-visible');
+    pointer.hidden = true;
+
+    queuePointerStep(pointer, 0, () => runPointerCycle(pointer));
+    queuePointerStep(pointer, secondCycleAt, () => runPointerCycle(pointer));
+    queuePointerStep(pointer, initialHideAt, () => {
+      pointer.classList.remove('is-visible');
+      pointer.hidden = true;
+    });
+
+    if (widget.dataset.mailingWidget === 'quiz') {
+      const followupCycleAt = initialHideAt + POINTER_FOLLOWUP_DELAY_MS;
+      const finalHideAt = followupCycleAt + POINTER_CYCLE_MS;
+
+      queuePointerStep(pointer, followupCycleAt, () => runPointerCycle(pointer));
+      queuePointerStep(pointer, finalHideAt, () => {
+        pointer.classList.remove('is-visible');
+        pointer.hidden = true;
+      });
+    }
   }
 
   function hideWidget(widget) {
     if (!widget) return;
 
+    hidePointer(widget);
     widget.hidden = true;
     widget.classList.remove('is-visible');
   }
