@@ -1930,6 +1930,7 @@ body.theme-quiz .dot.mid{ background: var(--color-partial); }
 .theme-forum .forum-detail-toggle{
   appearance: none;
   width: 100%;
+  box-sizing: border-box;
   display: grid;
   gap: 8px;
   text-align: left;
