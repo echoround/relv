@@ -60,7 +60,7 @@
     if (!list) return;
 
     if (state.threads.length === 0) {
-      list.innerHTML = '<p class="forum-empty">Teemasid veel ei ole. Alusta esimesena.</p>';
+      list.innerHTML = '';
       return;
     }
 
