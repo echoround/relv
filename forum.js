@@ -3,7 +3,10 @@
     threads: [],
     activeSlug: '',
     activeThread: null,
-    loadingDetail: false
+    loadingDetail: false,
+    detailExpanded: false,
+    commentFormOpen: false,
+    replyTargetId: ''
   };
 
   function getApiUrl(path) {
@@ -55,137 +58,81 @@
     element.classList.remove('is-error', 'is-success');
   }
 
-  function renderThreadList() {
-    const list = document.querySelector('[data-forum-thread-list]');
-    if (!list) return;
+  function setDetailExpanded(expanded) {
+    state.detailExpanded = Boolean(expanded);
 
-    if (state.threads.length === 0) {
-      list.innerHTML = '';
-      return;
+    if (!state.detailExpanded) {
+      state.commentFormOpen = false;
+      state.replyTargetId = '';
     }
+  }
 
-    list.innerHTML = '';
+  function toggleDetailExpanded() {
+    setDetailExpanded(!state.detailExpanded);
+    renderThreadDetail();
+  }
 
-    state.threads.forEach((thread) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'forum-thread-card';
-      button.dataset.active = String(thread.slug === state.activeSlug);
+  function toggleCommentComposer(parentCommentId = '') {
+    const targetId = String(parentCommentId || '');
+    const shouldClose = state.commentFormOpen && state.replyTargetId === targetId;
 
-      const title = document.createElement('div');
-      title.className = 'forum-thread-card-title';
-      title.textContent = thread.title;
+    setDetailExpanded(true);
+    state.commentFormOpen = !shouldClose;
+    state.replyTargetId = shouldClose ? '' : targetId;
+    renderThreadDetail();
 
-      const meta = document.createElement('div');
-      meta.className = 'forum-thread-card-meta';
-      meta.textContent = `${thread.displayName} • ${thread.commentsCount} kommentaari • ${formatDate(thread.lastActivityAt)}`;
-
-      const preview = document.createElement('div');
-      preview.className = 'forum-thread-card-preview';
-      preview.textContent = excerpt(thread.body);
-
-      button.append(title, meta, preview);
-      button.addEventListener('click', () => {
-        selectThread(thread.slug);
+    if (!shouldClose) {
+      requestAnimationFrame(() => {
+        document.querySelector('[data-forum-comment-body]')?.focus();
       });
+    }
+  }
 
-      list.appendChild(button);
+  function appendMultilineContent(container, paragraphClassName, value) {
+    const paragraphs = String(value || '')
+      .split('\n')
+      .map((entry) => entry.trim())
+      .filter(Boolean);
+
+    const lines = paragraphs.length ? paragraphs : [String(value || '').trim()].filter(Boolean);
+
+    lines.forEach((line) => {
+      const paragraph = document.createElement('p');
+      paragraph.className = paragraphClassName;
+      paragraph.textContent = line;
+      container.appendChild(paragraph);
     });
   }
 
-  function renderThreadDetail() {
-    const detail = document.querySelector('[data-forum-thread-detail]');
-    if (!detail) return;
-
-    if (state.loadingDetail) {
-      detail.innerHTML = '<p class="forum-empty">Laen teemat...</p>';
-      return;
-    }
-
-    if (!state.activeThread) {
-      detail.innerHTML = '<p class="forum-empty">Vali vasakult teema või loo uus arutelu.</p>';
-      return;
-    }
-
-    const thread = state.activeThread;
-    detail.innerHTML = '';
-
-    const header = document.createElement('div');
-    header.className = 'forum-detail-header';
-
-    const title = document.createElement('h2');
-    title.className = 'forum-detail-title';
-    title.textContent = thread.title;
-
-    const meta = document.createElement('p');
-    meta.className = 'forum-detail-meta';
-    meta.textContent = `${thread.displayName} • ${formatDate(thread.createdAt)}`;
-
-    header.append(title, meta);
-
-    const body = document.createElement('div');
-    body.className = 'forum-detail-body';
-    thread.body.split('\n').filter(Boolean).forEach((paragraphText) => {
-      const paragraph = document.createElement('p');
-      paragraph.textContent = paragraphText;
-      body.appendChild(paragraph);
-    });
-
-    const commentsWrap = document.createElement('div');
-    commentsWrap.className = 'forum-comments';
-
-    const commentsHeading = document.createElement('h3');
-    commentsHeading.className = 'forum-comments-title';
-    commentsHeading.textContent = `Kommentaarid (${thread.comments.length})`;
-    commentsWrap.appendChild(commentsHeading);
-
-    if (thread.comments.length === 0) {
-      const empty = document.createElement('p');
-      empty.className = 'forum-empty';
-      empty.textContent = 'Kommentaare veel ei ole.';
-      commentsWrap.appendChild(empty);
-    } else {
-      const list = document.createElement('div');
-      list.className = 'forum-comment-list';
-
-      thread.comments.forEach((comment) => {
-        const item = document.createElement('article');
-        item.className = 'forum-comment';
-
-        const itemMeta = document.createElement('div');
-        itemMeta.className = 'forum-comment-meta';
-        itemMeta.textContent = `${comment.displayName} • ${formatDate(comment.createdAt)}`;
-
-        const itemBody = document.createElement('p');
-        itemBody.className = 'forum-comment-body';
-        itemBody.textContent = comment.body;
-
-        item.append(itemMeta, itemBody);
-        list.appendChild(item);
-      });
-
-      commentsWrap.appendChild(list);
-    }
+  function createCommentForm(thread, parentComment = null) {
+    const wrapper = document.createElement('div');
+    wrapper.className = parentComment ? 'forum-comment-reply-wrap' : 'forum-comment-form-wrap';
 
     const form = document.createElement('form');
     form.className = 'forum-comment-form';
     form.innerHTML = `
       <div class="forum-form-head">
-        <h3 class="forum-form-title">Lisa kommentaar</h3>
-        <p class="forum-form-note">Kui nime ei lisa, kuvatakse sind anonüümsena.</p>
+        <h3 class="forum-form-title">${parentComment ? 'Vasta kommentaarile' : 'Lisa kommentaar'}</h3>
+        <p class="forum-form-note">${
+          parentComment
+            ? `Vastus lisatakse kasutajale ${parentComment.displayName}.`
+            : 'Kui nime ei lisa, kuvatakse sind anonüümsena.'
+        }</p>
       </div>
       <label class="forum-field">
         <span>Kasutajanimi</span>
         <input type="text" name="displayName" maxlength="40" placeholder="Anonüümne" />
       </label>
       <label class="forum-field">
-        <span>Kommentaar</span>
-        <textarea name="body" rows="4" maxlength="2500" placeholder="Kirjuta oma kommentaar siia..." required></textarea>
+        <span>${parentComment ? 'Vastus' : 'Kommentaar'}</span>
+        <textarea name="body" rows="4" maxlength="2500" placeholder="${
+          parentComment ? 'Kirjuta vastus siia...' : 'Kirjuta oma kommentaar siia...'
+        }" required data-forum-comment-body></textarea>
       </label>
       <input class="forum-honeypot" type="text" name="website" tabindex="-1" autocomplete="off" />
       <input class="forum-honeypot" type="text" name="company" tabindex="-1" autocomplete="off" />
       <div class="forum-form-actions">
-        <button type="submit" class="btn btn-primary">Saada kommentaar</button>
+        <button type="submit" class="btn btn-primary">${parentComment ? 'Saada vastus' : 'Saada kommentaar'}</button>
       </div>
     `;
 
@@ -211,6 +158,7 @@
           },
           body: JSON.stringify({
             threadSlug: thread.slug,
+            parentCommentId: parentComment?.id || '',
             displayName: formData.get('displayName'),
             body: formData.get('body'),
             website: formData.get('website'),
@@ -224,8 +172,11 @@
         }
 
         form.reset();
-        setStatus('Kommentaar lisatud.', 'success');
-        await loadThread(thread.slug, false);
+        setStatus(parentComment ? 'Vastus lisatud.' : 'Kommentaar lisatud.', 'success');
+        setDetailExpanded(true);
+        state.commentFormOpen = false;
+        state.replyTargetId = '';
+        await loadThread(thread.slug, false, true);
       } catch (error) {
         setStatus(error.message || 'Kommentaari saatmine ebaõnnestus.', 'error');
       } finally {
@@ -233,14 +184,210 @@
       }
     });
 
-    detail.append(header, body, commentsWrap, form);
+    wrapper.appendChild(form);
+    return wrapper;
   }
 
-  async function loadThread(slug, updateHash = true) {
+  function renderCommentNode(thread, comment) {
+    const item = document.createElement('article');
+    item.className = 'forum-comment';
+
+    const itemMeta = document.createElement('div');
+    itemMeta.className = 'forum-comment-meta';
+    itemMeta.textContent = `${comment.displayName} • ${formatDate(comment.createdAt)}`;
+
+    const itemBody = document.createElement('div');
+    itemBody.className = 'forum-comment-body';
+    appendMultilineContent(itemBody, 'forum-comment-body-paragraph', comment.body);
+
+    const itemActions = document.createElement('div');
+    itemActions.className = 'forum-comment-actions';
+
+    const replyButton = document.createElement('button');
+    replyButton.type = 'button';
+    replyButton.className = 'forum-inline-action';
+    replyButton.setAttribute('aria-expanded', String(state.commentFormOpen && state.replyTargetId === comment.id));
+    replyButton.textContent = state.commentFormOpen && state.replyTargetId === comment.id ? 'Sulge vastus' : 'Vasta';
+    replyButton.addEventListener('click', () => {
+      toggleCommentComposer(comment.id);
+    });
+
+    itemActions.appendChild(replyButton);
+    item.append(itemMeta, itemBody, itemActions);
+
+    if (state.commentFormOpen && state.replyTargetId === comment.id) {
+      item.appendChild(createCommentForm(thread, comment));
+    }
+
+    if (Array.isArray(comment.replies) && comment.replies.length > 0) {
+      const children = document.createElement('div');
+      children.className = 'forum-comment-children';
+
+      comment.replies.forEach((reply) => {
+        children.appendChild(renderCommentNode(thread, reply));
+      });
+
+      item.appendChild(children);
+    }
+
+    return item;
+  }
+
+  function renderThreadList() {
+    const list = document.querySelector('[data-forum-thread-list]');
+    if (!list) return;
+
+    if (state.threads.length === 0) {
+      list.innerHTML = '';
+      return;
+    }
+
+    list.innerHTML = '';
+
+    state.threads.forEach((thread) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'forum-thread-card';
+      button.dataset.active = String(thread.slug === state.activeSlug);
+
+      const title = document.createElement('span');
+      title.className = 'forum-thread-card-title';
+      title.textContent = thread.title;
+
+      const meta = document.createElement('span');
+      meta.className = 'forum-thread-card-meta';
+      meta.textContent = `${thread.displayName} • ${thread.commentsCount} kommentaari • ${formatDate(thread.lastActivityAt)}`;
+
+      const preview = document.createElement('span');
+      preview.className = 'forum-thread-card-preview';
+      preview.textContent = excerpt(thread.body);
+
+      button.append(title, meta, preview);
+      button.addEventListener('click', () => {
+        if (thread.slug === state.activeSlug && state.activeThread) {
+          toggleDetailExpanded();
+          return;
+        }
+
+        selectThread(thread.slug);
+      });
+
+      list.appendChild(button);
+    });
+  }
+
+  function renderThreadDetail() {
+    const detail = document.querySelector('[data-forum-thread-detail]');
+    if (!detail) return;
+
+    if (state.loadingDetail) {
+      detail.innerHTML = '<p class="forum-empty">Laen teemat...</p>';
+      return;
+    }
+
+    if (!state.activeThread) {
+      detail.innerHTML = '<p class="forum-empty">Vali vasakult teema või loo uus arutelu.</p>';
+      return;
+    }
+
+    const thread = state.activeThread;
+    detail.innerHTML = '';
+
+    const shell = document.createElement('section');
+    shell.className = 'forum-detail-shell';
+
+    const header = document.createElement('div');
+    header.className = 'forum-detail-toggle';
+    header.setAttribute('role', 'button');
+    header.setAttribute('tabindex', '0');
+    header.setAttribute('aria-expanded', String(state.detailExpanded));
+    header.addEventListener('click', toggleDetailExpanded);
+    header.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      toggleDetailExpanded();
+    });
+
+    const title = document.createElement('h2');
+    title.className = 'forum-detail-title';
+    title.textContent = thread.title;
+
+    const meta = document.createElement('p');
+    meta.className = 'forum-detail-meta';
+    meta.textContent = `${thread.displayName} • ${formatDate(thread.createdAt)} • ${thread.commentsCount} kommentaari`;
+
+    const toggleState = document.createElement('span');
+    toggleState.className = 'forum-detail-toggle-state';
+    toggleState.textContent = state.detailExpanded ? 'Vajuta, et minimeerida' : 'Vajuta, et avada';
+
+    header.append(title, meta, toggleState);
+
+    const actions = document.createElement('div');
+    actions.className = 'forum-detail-actions';
+
+    const commentToggle = document.createElement('button');
+    commentToggle.type = 'button';
+    commentToggle.className = 'forum-inline-action forum-inline-action--accent';
+    commentToggle.setAttribute('aria-expanded', String(state.commentFormOpen && !state.replyTargetId));
+    commentToggle.textContent = state.commentFormOpen && !state.replyTargetId ? 'Sulge kommentaar' : 'Kommenteeri';
+    commentToggle.addEventListener('click', () => {
+      toggleCommentComposer('');
+    });
+
+    actions.appendChild(commentToggle);
+
+    const detailPanel = document.createElement('div');
+    detailPanel.className = 'forum-detail-panel';
+    detailPanel.hidden = !state.detailExpanded;
+
+    const body = document.createElement('div');
+    body.className = 'forum-detail-body';
+    appendMultilineContent(body, 'forum-detail-body-paragraph', thread.body);
+
+    detailPanel.appendChild(body);
+
+    if (state.commentFormOpen && !state.replyTargetId) {
+      detailPanel.appendChild(createCommentForm(thread));
+    }
+
+    const commentsWrap = document.createElement('div');
+    commentsWrap.className = 'forum-comments';
+
+    const commentsHeading = document.createElement('h3');
+    commentsHeading.className = 'forum-comments-title';
+    commentsHeading.textContent = `Kommentaarid (${thread.commentsCount})`;
+    commentsWrap.appendChild(commentsHeading);
+
+    if (thread.commentsCount === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'forum-empty';
+      empty.textContent = 'Kommentaare veel ei ole.';
+      commentsWrap.appendChild(empty);
+    } else {
+      const list = document.createElement('div');
+      list.className = 'forum-comment-list';
+
+      thread.comments.forEach((comment) => {
+        list.appendChild(renderCommentNode(thread, comment));
+      });
+
+      commentsWrap.appendChild(list);
+    }
+
+    detailPanel.appendChild(commentsWrap);
+    shell.append(header, actions, detailPanel);
+    detail.appendChild(shell);
+  }
+
+  async function loadThread(slug, updateHash = true, preserveUi = false) {
     const endpoint = getApiUrl(`/forum/threads/${encodeURIComponent(slug)}`);
     if (!endpoint) {
       setStatus('Foorum ei ole hetkel saadaval.', 'error');
       return;
+    }
+
+    if (!preserveUi) {
+      setDetailExpanded(false);
     }
 
     state.loadingDetail = true;

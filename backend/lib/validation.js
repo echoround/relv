@@ -85,6 +85,7 @@ function validateCommentInput(input) {
   const body = normalizeMultiline(stripSoftSpam(input.body));
   const displayName = sanitizeDisplayName(input.displayName);
   const threadSlug = collapseWhitespace(input.threadSlug);
+  const parentCommentId = collapseWhitespace(input.parentCommentId).slice(0, 80);
 
   if (!threadSlug) {
     throw new Error('Kommentaari lisamiseks puudub teema.');
@@ -100,6 +101,7 @@ function validateCommentInput(input) {
 
   return {
     threadSlug,
+    parentCommentId,
     body,
     displayName
   };

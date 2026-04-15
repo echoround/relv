@@ -48,6 +48,11 @@ async function ensureDb() {
       `;
 
       await sql`
+        ALTER TABLE forum_comments
+        ADD COLUMN IF NOT EXISTS parent_comment_id TEXT REFERENCES forum_comments(id) ON DELETE CASCADE
+      `;
+
+      await sql`
         CREATE TABLE IF NOT EXISTS mailing_list_subscribers (
           id TEXT PRIMARY KEY,
           email TEXT UNIQUE NOT NULL,
@@ -61,6 +66,7 @@ async function ensureDb() {
 
       await sql`CREATE INDEX IF NOT EXISTS forum_threads_last_activity_idx ON forum_threads (last_activity_at DESC)`;
       await sql`CREATE INDEX IF NOT EXISTS forum_comments_thread_created_idx ON forum_comments (thread_id, created_at ASC)`;
+      await sql`CREATE INDEX IF NOT EXISTS forum_comments_parent_created_idx ON forum_comments (parent_comment_id, created_at ASC)`;
       await sql`CREATE INDEX IF NOT EXISTS forum_threads_ip_hash_idx ON forum_threads (ip_hash, created_at DESC)`;
       await sql`CREATE INDEX IF NOT EXISTS forum_comments_ip_hash_idx ON forum_comments (ip_hash, created_at DESC)`;
       await sql`CREATE INDEX IF NOT EXISTS mailing_list_ip_hash_idx ON mailing_list_subscribers (ip_hash, created_at DESC)`;
@@ -90,6 +96,31 @@ async function listThreads(limit = 25) {
   `;
 }
 
+function buildCommentTree(comments) {
+  const commentsById = new Map();
+  const roots = [];
+
+  comments.forEach((comment) => {
+    commentsById.set(comment.id, {
+      ...comment,
+      replies: []
+    });
+  });
+
+  comments.forEach((comment) => {
+    const node = commentsById.get(comment.id);
+
+    if (node.parentCommentId && commentsById.has(node.parentCommentId)) {
+      commentsById.get(node.parentCommentId).replies.push(node);
+      return;
+    }
+
+    roots.push(node);
+  });
+
+  return roots;
+}
+
 async function getThreadBySlug(slug) {
   await ensureDb();
 
@@ -117,6 +148,7 @@ async function getThreadBySlug(slug) {
       id,
       body,
       display_name AS "displayName",
+      parent_comment_id AS "parentCommentId",
       created_at AS "createdAt",
       updated_at AS "updatedAt"
     FROM forum_comments
@@ -126,7 +158,7 @@ async function getThreadBySlug(slug) {
 
   return {
     ...thread,
-    comments
+    comments: buildCommentTree(comments)
   };
 }
 
@@ -184,7 +216,7 @@ async function createThread({ title, body, displayName, slugBase, ipHash, userAg
   return getThreadBySlug(slug);
 }
 
-async function addComment({ threadSlug, body, displayName, ipHash, userAgent }) {
+async function addComment({ threadSlug, parentCommentId, body, displayName, ipHash, userAgent }) {
   await ensureDb();
 
   const threadRows = await sql`
@@ -199,12 +231,30 @@ async function addComment({ threadSlug, body, displayName, ipHash, userAgent }) 
     throw new Error('Teemat ei leitud.');
   }
 
+  let parentComment = null;
+
+  if (parentCommentId) {
+    const parentRows = await sql`
+      SELECT id, thread_id
+      FROM forum_comments
+      WHERE id = ${parentCommentId} AND is_hidden = FALSE
+      LIMIT 1
+    `;
+
+    parentComment = parentRows[0] || null;
+
+    if (!parentComment || parentComment.thread_id !== thread.id) {
+      throw new Error('Kommentaarile vastamine ebaõnnestus.');
+    }
+  }
+
   const id = crypto.randomUUID();
 
   await sql`
     INSERT INTO forum_comments (
       id,
       thread_id,
+      parent_comment_id,
       body,
       display_name,
       ip_hash,
@@ -213,6 +263,7 @@ async function addComment({ threadSlug, body, displayName, ipHash, userAgent }) 
     VALUES (
       ${id},
       ${thread.id},
+      ${parentComment ? parentComment.id : null},
       ${body},
       ${displayName},
       ${ipHash},
