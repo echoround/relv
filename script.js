@@ -2,6 +2,8 @@ let questions = [];
 let currentIndex = 0;
 let userAnswers = [];
 let explanations = [];
+let explanationsById = new Map();
+let explanationsLoadPromise = null;
 let flipResizeTimer = null;
 let flipResizeBound = false;
 
@@ -33,38 +35,66 @@ function initializeQuizSession(questionItems) {
   createQuestionCards();
 }
 
-// Load questions and explanations from JSON files
-Promise.all([
-    fetch('questions.json').then(response => {
+function setExplanations(explanationItems) {
+    explanations = Array.isArray(explanationItems) ? explanationItems : [];
+    explanationsById = new Map(
+        explanations
+            .filter(item => item && item.id != null)
+            .map(item => [String(item.id), String(item.text || '').trim()])
+    );
+}
+
+function getExplanationText(questionId) {
+    return explanationsById.get(String(questionId)) || '';
+}
+
+function ensureExplanationsLoaded() {
+    if (explanationsById.size > 0) {
+        return Promise.resolve(explanations);
+    }
+
+    if (explanationsLoadPromise) {
+        return explanationsLoadPromise;
+    }
+
+    explanationsLoadPromise = fetch('explanations.json')
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to load explanations.json');
+            return response.json();
+        })
+        .then(explanationsData => {
+            setExplanations(explanationsData.explanations || []);
+            return explanations;
+        })
+        .catch(error => {
+            console.error('Error loading explanations:', error);
+            explanationsLoadPromise = null;
+            return [];
+        });
+
+    return explanationsLoadPromise;
+}
+
+// Load quiz questions up front; load explanations only when needed.
+fetch('questions.json')
+    .then(response => {
         if (!response.ok) throw new Error('Failed to load questions.json');
         return response.json();
-    }),
-    fetch('explanations.json').then(response => {
-        if (!response.ok) throw new Error('Failed to load explanations.json');
-        return response.json();
     })
-])
-.then(([questionsData, explanationsData]) => {
+    .then((questionsData) => {
     const questionPool = questionsData.questions || [];
-
-    explanations = explanationsData.explanations || [];
-    console.log('Questions loaded:', questionPool);
-    console.log('Explanations loaded:', explanations);
 
     if (questionPool.length === 0) {
         console.error('No questions found in questions.json');
         alert('No questions loaded. Please check questions.json and ensure it is properly formatted.');
         return;
     }
-    if (explanations.length === 0) {
-        console.error('No explanations found in explanations.json');
-    }
 
     initializeQuizSession(questionPool);
 })
 .catch(error => {
-    console.error('Error loading data:', error);
-    alert(`Failed to load questions or explanations: ${error.message}`);
+    console.error('Error loading quiz questions:', error);
+    alert(`Failed to load questions: ${error.message}`);
 });
 
 function syncOptionSelectionState(container) {
@@ -87,7 +117,6 @@ function displayQuestion() {
     }
 
     const question = questions[currentIndex];
-    console.log('Displaying question:', question);
     document.getElementById('progress').textContent = `Question ${currentIndex + 1} of ${questions.length}`;
     document.getElementById('question-text').textContent = question.text || 'Question text not available';
     const optionsDiv = document.getElementById('options');
@@ -215,7 +244,16 @@ function displayFeedback(question) {
 
   // Build explanation text (prefer explanations.json; fall back to questions.json explanation)
   const short = (question.explanation || '').trim();
-  const extra = (explanations.find(exp => String(exp.id) === String(question.id))?.text || '').trim();
+  const extra = getExplanationText(question.id);
+
+  if (ua?.submitted && explanationsById.size === 0) {
+    ensureExplanationsLoaded().then(() => {
+      const currentQuestion = questions[currentIndex];
+      if (!currentQuestion || String(currentQuestion.id) !== String(question.id)) return;
+      if (!userAnswers[currentIndex]?.submitted) return;
+      displayFeedback(currentQuestion);
+    });
+  }
 
   let text = '';
   if (extra && short && extra !== short) text = `${short}\n\n${extra}`;
