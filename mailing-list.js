@@ -287,7 +287,17 @@
     button.setAttribute('aria-label', 'Sulge uudiskirja vorm');
     button.textContent = 'Sulge';
 
-    button.addEventListener('click', () => {
+    const isolateDismissInteraction = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+
+    button.addEventListener('pointerdown', isolateDismissInteraction);
+    button.addEventListener('touchstart', isolateDismissInteraction, { passive: false });
+
+    button.addEventListener('click', (event) => {
+      isolateDismissInteraction(event);
+
       if (widget.dataset.mailingWidget === 'quiz') {
         state.quizClosed = true;
         state.quizIgnored = true;
