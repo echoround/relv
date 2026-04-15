@@ -2451,12 +2451,37 @@ body.theme-kuidas{
   --section-accent: 182, 178, 165;
   --section-accent-strong: 219, 214, 201;
   --section-accent-alt: 163, 179, 194;
+  --section-ink-strong: 34, 39, 46;
+  --section-link: 235, 241, 248;
 }
 
 body.theme-forum{
   --section-accent: 162, 180, 191;
   --section-accent-strong: 206, 220, 228;
   --section-accent-alt: 175, 191, 201;
+}
+
+body.theme-kuidas .btn-primary,
+body.theme-kuidas .step-num{
+  color: rgba(var(--section-ink-strong),0.94) !important;
+}
+
+body.theme-kuidas .btn-primary:hover,
+body.theme-kuidas .btn-primary:focus-visible,
+body.theme-kuidas .btn-primary:active{
+  color: rgba(var(--section-ink-strong),0.96) !important;
+}
+
+body.theme-kuidas .page-wrap a:not(.btn):not(.nav-link):not(.brand){
+  color: rgba(var(--section-link),0.96);
+  text-decoration-color: rgba(var(--section-accent-strong),0.78);
+  text-underline-offset: 0.16em;
+}
+
+body.theme-kuidas .page-wrap a:not(.btn):not(.nav-link):not(.brand):hover,
+body.theme-kuidas .page-wrap a:not(.btn):not(.nav-link):not(.brand):focus-visible{
+  color: rgba(255,255,255,0.98);
+  text-decoration-color: rgba(255,255,255,0.88);
 }
 
 .site-nav .nav-link{
