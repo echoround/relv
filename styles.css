@@ -353,7 +353,7 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
       z-index: 999;
 
       /* darker base so text underneath doesn't show through */
-      background: rgba(10, 9, 18, 0.92);
+      background: rgb(10, 9, 18);
 
       /* heavy blur ONLY behind the dropdown panel */
       backdrop-filter: blur(28px) saturate(160%);
@@ -1120,11 +1120,12 @@ body.theme-hero .hero-title-long{
     padding: 12px !important;
 
     /* Solid-ish modern gradient (readable, no “see-through text”) */
-    background:
+    background-color: rgb(9, 8, 17) !important;
+    background-image:
       radial-gradient(1200px 420px at 20% 10%, rgba(139,92,246,0.32), transparent 60%),
       radial-gradient(900px 420px at 85% 35%, rgba(236,72,153,0.26), transparent 60%),
       radial-gradient(900px 520px at 35% 110%, rgba(34,211,238,0.18), transparent 62%),
-      linear-gradient(180deg, rgba(14,12,26,0.98), rgba(7,7,12,0.98)) !important;
+      linear-gradient(180deg, rgb(14, 12, 26), rgb(7, 7, 12)) !important;
 
     border-radius: 18px !important;
     border: 1px solid rgba(255,255,255,0.12) !important;
