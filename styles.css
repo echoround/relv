@@ -382,6 +382,14 @@ body.theme-quiz{
 }
 
 /* More breathing room between question text and options */
+body.theme-quiz #progress{
+  margin-bottom: 12px;
+  color: rgba(125, 211, 252, 0.92);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 body.theme-quiz #question-text{
   margin-bottom: 18px;
   padding-bottom: 14px;

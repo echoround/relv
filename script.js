@@ -198,7 +198,7 @@ function displayQuestion() {
     }
 
     const question = questions[currentIndex];
-    document.getElementById('progress').textContent = `Question ${currentIndex + 1} of ${questions.length}`;
+    document.getElementById('progress').textContent = `${currentIndex + 1} / ${questions.length}`;
     document.getElementById('question-text').textContent = question.text || 'Question text not available';
     const optionsDiv = document.getElementById('options');
     optionsDiv.innerHTML = '';
