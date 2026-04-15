@@ -67,6 +67,32 @@ Promise.all([
     alert(`Failed to load questions or explanations: ${error.message}`);
 });
 
+function syncOptionSelectionState(container) {
+    if (!container) return;
+
+    container.querySelectorAll('.option').forEach((optionEl) => {
+        const optionInput = optionEl.querySelector('input[name="option"]');
+        if (!optionInput) return;
+
+        optionEl.classList.toggle('is-selected', optionInput.checked);
+        optionEl.setAttribute('aria-checked', String(optionInput.checked));
+    });
+}
+
+function activateOption(container, input, multiple) {
+    if (!container || !input || input.disabled) return;
+
+    if (multiple) {
+        input.checked = !input.checked;
+    } else {
+        container.querySelectorAll('input[name="option"]').forEach((candidate) => {
+            candidate.checked = candidate === input;
+        });
+    }
+
+    syncOptionSelectionState(container);
+}
+
 // Display the current question
 function displayQuestion() {
     if (currentIndex < 0 || currentIndex >= questions.length || !questions[currentIndex]) {
@@ -97,18 +123,37 @@ function displayQuestion() {
         input.value = index;
         input.id = `option-${index}`;
         input.disabled = userAnswers[currentIndex]?.submitted || false;
+        input.tabIndex = -1;
+        input.setAttribute('aria-hidden', 'true');
         if (userAnswers[currentIndex]?.selected?.includes(index)) {
             input.checked = true;
         }
         const label = document.createElement('label');
-        label.htmlFor = `option-${index}`;
         label.textContent = option;
         const div = document.createElement('div');
         div.className = 'option';
+        div.setAttribute('role', multiple ? 'checkbox' : 'radio');
+        div.setAttribute('tabindex', input.disabled ? '-1' : '0');
+        div.setAttribute('aria-label', option);
+        div.setAttribute('aria-checked', String(input.checked));
+
+        div.addEventListener('click', (event) => {
+            event.preventDefault();
+            activateOption(optionsDiv, input, multiple);
+        });
+
+        div.addEventListener('keydown', (event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            activateOption(optionsDiv, input, multiple);
+        });
+
         div.appendChild(input);
         div.appendChild(label);
         optionsDiv.appendChild(div);
     });
+
+    syncOptionSelectionState(optionsDiv);
 
     // Show/hide submit button based on submission status
     const submitBtn = document.getElementById('submit-btn');
