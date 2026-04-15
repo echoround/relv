@@ -3137,6 +3137,27 @@ body.theme-quiz .flip-card-answers li,
   }
 }
 
+@keyframes mailingWidgetMobileSheen{
+  0%{
+    opacity: 0;
+    transform: translateX(-135%);
+  }
+  24%{
+    opacity: 0;
+  }
+  38%{
+    opacity: 0.12;
+  }
+  56%{
+    opacity: 0;
+    transform: translateX(145%);
+  }
+  100%{
+    opacity: 0;
+    transform: translateX(145%);
+  }
+}
+
 @media (max-width: 720px){
   .mailing-widget[data-mailing-widget="home"]{
     left: 12px !important;
@@ -3156,13 +3177,15 @@ body.theme-quiz .flip-card-answers li,
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    min-width: 40px;
-    height: 40px;
-    min-height: 40px;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
     padding: 0;
     font-size: 0;
     line-height: 1;
+    z-index: 3;
+    touch-action: manipulation;
   }
 
   .mailing-widget[data-mailing-widget="home"] .mailing-widget-close::before{
@@ -3189,6 +3212,16 @@ body.theme-quiz .flip-card-answers li,
     box-shadow: 0 16px 34px rgba(11, 15, 20, 0.30) !important;
   }
 
+  .mailing-widget[data-mailing-widget="home"][data-mobile-collapsed="true"]::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(104deg, transparent 18%, rgba(255,255,255,0.08) 48%, transparent 74%);
+    transform: translateX(-135%);
+    animation: mailingWidgetMobileSheen 6.6s ease-in-out infinite;
+  }
+
   .mailing-widget[data-mailing-widget="home"][data-mobile-collapsed="true"] .mailing-widget-kicker,
   .mailing-widget[data-mailing-widget="home"][data-mobile-collapsed="true"] .mailing-widget-copy,
   .mailing-widget[data-mailing-widget="home"][data-mobile-collapsed="true"] .mailing-widget-form,
@@ -3207,6 +3240,9 @@ body.theme-quiz .flip-card-answers li,
     letter-spacing: 0.035em;
     color: rgba(247, 250, 252, 0.96);
     text-shadow: none;
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
   }
 
   .mailing-widget[data-mailing-widget="home"][data-mobile-collapsed="true"] .mailing-widget-close{
@@ -3231,6 +3267,10 @@ body.theme-quiz .flip-card-answers li,
 
 @media (prefers-reduced-motion: reduce){
   .mailing-widget[data-mailing-widget="home"].is-visible{
+    animation: none !important;
+  }
+
+  .mailing-widget[data-mailing-widget="home"][data-mobile-collapsed="true"]::after{
     animation: none !important;
   }
 }
