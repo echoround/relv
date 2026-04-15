@@ -2,6 +2,8 @@
   const POINTER_CYCLE_MS = 1600;
   const POINTER_CYCLE_GAP_MS = 2000;
   const POINTER_FOLLOWUP_DELAY_MS = 10000;
+  const DEFAULT_POINTER_CYCLES = 2;
+  const DEFAULT_POINTER_FOLLOWUP_CYCLES = 0;
 
   const state = {
     subscribedThisView: false,
@@ -58,6 +60,11 @@
     pointer._mailingTimers.push(timerId);
   }
 
+  function getPositiveNumber(value, fallback) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+  }
+
   function runPointerCycle(pointer) {
     if (!pointer) return;
 
@@ -76,25 +83,34 @@
     const pointer = widget.querySelector('[data-mailing-pointer]');
     if (!pointer) return;
 
-    const secondCycleAt = POINTER_CYCLE_MS + POINTER_CYCLE_GAP_MS;
-    const initialHideAt = secondCycleAt + POINTER_CYCLE_MS;
+    const baseCycles = getPositiveNumber(widget.dataset.mailingPointerCycles, DEFAULT_POINTER_CYCLES);
+    const followupCycles = getPositiveNumber(widget.dataset.mailingPointerFollowupCycles, widget.dataset.mailingWidget === 'quiz' ? 1 : DEFAULT_POINTER_FOLLOWUP_CYCLES);
+    const followupDelayMs = getPositiveNumber(widget.dataset.mailingPointerFollowupDelayMs, POINTER_FOLLOWUP_DELAY_MS);
 
     clearPointerTimers(pointer);
     pointer.classList.remove('is-animating', 'is-visible');
     pointer.hidden = true;
 
-    queuePointerStep(pointer, 0, () => runPointerCycle(pointer));
-    queuePointerStep(pointer, secondCycleAt, () => runPointerCycle(pointer));
+    for (let cycleIndex = 0; cycleIndex < baseCycles; cycleIndex += 1) {
+      const cycleAt = cycleIndex * (POINTER_CYCLE_MS + POINTER_CYCLE_GAP_MS);
+      queuePointerStep(pointer, cycleAt, () => runPointerCycle(pointer));
+    }
+
+    const initialHideAt = Math.max(0, (baseCycles - 1) * (POINTER_CYCLE_MS + POINTER_CYCLE_GAP_MS)) + POINTER_CYCLE_MS;
     queuePointerStep(pointer, initialHideAt, () => {
       pointer.classList.remove('is-visible');
       pointer.hidden = true;
     });
 
-    if (widget.dataset.mailingWidget === 'quiz') {
-      const followupCycleAt = initialHideAt + POINTER_FOLLOWUP_DELAY_MS;
-      const finalHideAt = followupCycleAt + POINTER_CYCLE_MS;
+    if (followupCycles > 0) {
+      const followupStartAt = initialHideAt + followupDelayMs;
 
-      queuePointerStep(pointer, followupCycleAt, () => runPointerCycle(pointer));
+      for (let cycleIndex = 0; cycleIndex < followupCycles; cycleIndex += 1) {
+        const cycleAt = followupStartAt + cycleIndex * (POINTER_CYCLE_MS + POINTER_CYCLE_GAP_MS);
+        queuePointerStep(pointer, cycleAt, () => runPointerCycle(pointer));
+      }
+
+      const finalHideAt = Math.max(0, followupStartAt + (followupCycles - 1) * (POINTER_CYCLE_MS + POINTER_CYCLE_GAP_MS)) + POINTER_CYCLE_MS;
       queuePointerStep(pointer, finalHideAt, () => {
         pointer.classList.remove('is-visible');
         pointer.hidden = true;
