@@ -287,21 +287,12 @@ function displayFeedback(question) {
 
   const feedbackDiv = document.getElementById('feedback');
   const feedbackMessage = document.getElementById('feedback-message');
-  let feedbackReview = document.getElementById('feedback-review');
-
   const explainArea = document.getElementById('explain-area');
   const explainToggle = document.getElementById('explain-toggle');
   const explainPanel = document.getElementById('explain-panel');
   const explainText = document.getElementById('explain-text');
 
   if (!feedbackDiv || !feedbackMessage) return;
-
-  if (!feedbackReview) {
-    feedbackReview = document.createElement('div');
-    feedbackReview.id = 'feedback-review';
-    feedbackReview.className = 'feedback-review';
-    feedbackMessage.insertAdjacentElement('afterend', feedbackReview);
-  }
 
   // Remove old tooltip if it exists from previous versions
   const oldTooltip = document.getElementById('explanation-tooltip');
@@ -312,8 +303,6 @@ function displayFeedback(question) {
 
   feedbackMessage.innerHTML = '';
   feedbackMessage.classList.remove('is-correct', 'is-partial', 'is-incorrect');
-  feedbackReview.innerHTML = '';
-  feedbackReview.hidden = true;
 
   const ua = userAnswers[currentIndex];
   if (!ua?.submitted) {
@@ -429,28 +418,6 @@ function displayFeedback(question) {
       }
     }
   });
-
-  const reviewChips = [];
-  if (selectedCorrectCount > 0) {
-    reviewChips.push({ label: 'Correct choice', className: 'feedback-review-chip--correct-picked' });
-  }
-  if (missedCorrectCount > 0) {
-    reviewChips.push({ label: 'Correct answer', className: 'feedback-review-chip--correct-missed' });
-  }
-  if (incorrectSelectedCount > 0) {
-    reviewChips.push({ label: 'Incorrect choice', className: 'feedback-review-chip--incorrect-picked' });
-  }
-
-  if (reviewChips.length > 0) {
-    feedbackReview.hidden = false;
-
-    reviewChips.forEach((chip) => {
-      const chipEl = document.createElement('span');
-      chipEl.className = `feedback-review-chip ${chip.className}`;
-      chipEl.textContent = chip.label;
-      feedbackReview.appendChild(chipEl);
-    });
-  }
 
   // Build explanation text (prefer explanations.json; fall back to questions.json explanation)
   const short = (question.explanation || '').trim();
