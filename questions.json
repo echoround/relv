@@ -59,7 +59,7 @@
           "Peab kaasas olema isikut tõendav dokument",
           "Püstoli padrunipesas võib olla padrun",
           "Revolvri padrunipesas võib olla padrun",
-          "Peab kaasas olema isikut tõendav dokument"
+          "Peab kaasas olema relvaluba"
         ],
         "correct": [0, 2],
         "multiple": true,
