@@ -10,7 +10,7 @@
       },
       {
         "id": 3,
-        "text": "Relvakapp kuni 8 relva hoidmiseks peab vastama rangetele nõuetele, nagu vähemalt 3 mm paksune terasplekk, turvalukk ja eraldi lukustatavad laegad laskemoona, sütikute ja püssirohu hoidmiseks, et tagada turvalisus ja vastavus seadustele."
+        "text": "Relvakapp kuni 8 relva hoidmiseks peab vastama rangetele nõuetele, nagu vähemalt 3 mm paksune terasplekk, turvalukk ja eraldi lukustatavad laekad laskemoona, sütikute ja püssirohu hoidmiseks, et tagada turvalisus ja vastavus seadustele."
       },
       {
         "id": 4,
@@ -54,7 +54,7 @@
       },
       {
         "id": 14,
-        "text": "Püssirohu ja sütikute hoidmine peab olema eraldi tehasepakendis või metallpurkides, vähemalt 1 m kaugusel küttearvest, et minimeerida tuleohtu."
+        "text": "Püssirohu ja sütikute hoidmine peab olema eraldi tehasepakendis või metallpurkides, vähemalt 1 m kaugusel kütteseadmest, et minimeerida tuleohtu."
       },
       {
         "id": 15,
@@ -66,7 +66,7 @@
       },
       {
         "id": 17,
-        "text": "Tulireva laskekõlbmatuks muutmine tähendab mehhaanilist töötlemist, näiteks padrunipesa kinnikevitamist või lasu sooritamise võime täielikku kaotamist, et tagada relva ohutus ja seaduslikkus."
+        "text": "Tulirelva laskekõlbmatuks muutmine tähendab mehaanilist töötlemist, näiteks padrunipesa kinnikeevitamist või lasu sooritamise võime täielikku kaotamist, et tagada relva ohutus ja seaduslikkus."
       },
       {
         "id": 18,
@@ -74,7 +74,7 @@
       },
       {
         "id": 19,
-        "text": "Relvakapp ei nõua eraldiseisvat laegast ühe tulireva ja selle laskemoona korral, kuna väiksema koguse puhul piisab lihtsamatest turvameetmetest."
+        "text": "Relvakapp ei nõua eraldiseisvat laegast ühe tulirelva ja selle laskemoona korral, kuna väiksema koguse puhul piisab lihtsamatest turvameetmetest."
       },
       {
         "id": 20,
@@ -106,7 +106,7 @@
       },
       {
         "id": 27,
-        "text": "Kohalik relvaed võib teostada ainult lubadega isikud ja pakitud relvade korral, et tagada ohutus ja vastavus seadustele."
+        "text": "Kohalikku relvavedu võivad teostada ainult lubadega isikud ning relva ja laskemoona tuleb vedada valmistajapakendis või pakituna viisil, mis ei võimalda nende kohest kasutuselevõttu, et tagada ohutus ja vastavus seadustele."
       },
       {
         "id": 28,
@@ -114,11 +114,11 @@
       },
       {
         "id": 29,
-        "text": "Tulirelva osad hõlmavad relva lukukoda, raua, padrunisalvet ja lisaseadmeid nagu lasersihik, mis on relva funktsionaalsed komponendid."
+        "text": "Tulirelva osad hõlmavad relva lukukoda, relvarauda, padrunisalve ja lisaseadmeid nagu lasersihik, mis on relva funktsionaalsed komponendid."
       },
       {
         "id": 30,
-        "text": "Relvapi nõuded tulireva hoidmiseks erinevad relvade arvu järgi, 9 ja enam tulirelva puhul kehtivad ranged nõuded, et tagada turvalisus."
+        "text": "Relvakapi nõuded tulirelva hoidmiseks erinevad relvade arvu järgi ning 9 ja enama tulirelva puhul kehtivad rangemad nõuded, et tagada turvalisus."
       },
       {
         "id": 31,
@@ -134,7 +134,7 @@
       },
       {
         "id": 34,
-        "text": "Relvaluba, millele on kantud relv, lubab soetada ainult selle laskemoona, et piirata relva kasutust ja ohutust."
+        "text": "Relvaluba, millele on kantud vaid relvaliik, annab õiguse soetada seaduslikult kasutusse võetud relva laskemoona, et piirata relva kasutust ja tagada ohutus."
       },
       {
         "id": 35,
@@ -158,7 +158,7 @@
       },
       {
         "id": 40,
-        "text": "Relva võib parandada ainult vastavate oskustega isikud või relvaomanik ise, et tagada ohutus ja seaduslikkus."
+        "text": "Relva võib parandada vastavat tegevusluba omav isik või relvaomanik ise, et tagada ohutus ja seaduslikkus."
       },
       {
         "id": 41,
@@ -178,7 +178,7 @@
       },
       {
         "id": 45,
-        "text": "Tulirelva osad hõlmavad kaitseriivi, öösihi, adaptereid ja trummeleid, mis on relva funktsionaalsed komponendid, kuid mitte padruneid ega liigseid salve."
+        "text": "Tulirelva osad hõlmavad kaitseriivi, öösihikut, adapterit ja trumlit, mis on relva funktsionaalsed komponendid, kuid mitte padruneid ega liigseid salve."
       },
       {
         "id": 46,
@@ -206,7 +206,7 @@
       },
       {
         "id": 52,
-        "text": "Kodusel teel valmisatud padruneid ei tohi võõrandada, kuna need ei vasta seaduslikele tootmisnõuetele ja võivad olla ohtlikud."
+        "text": "Kodusel teel valmistatud padruneid ei tohi võõrandada, kuna need ei vasta seaduslikele tootmisnõuetele ja võivad olla ohtlikud."
       },
       {
         "id": 53,
@@ -218,7 +218,7 @@
       },
       {
         "id": 55,
-        "text": "Lasketirus laenutatud relva võib kasutada ainult samas lasketirus lubadega isikute poolt, et tagada ohutus ja vastavus reeglitele."
+        "text": "Lasketiirus laenutatud relva võib kasutada ainult samas lasketiirus lubadega isikute poolt, et tagada ohutus ja vastavus reeglitele."
       },
       {
         "id": 56,
@@ -262,7 +262,7 @@
       },
       {
         "id": 67,
-        "text": "Relvaomanik peab koostööle ametnikega, et tagada relvade ohutu ja seaduslik hoidmine ja kasutamine."
+        "text": "Relvaomanik peab tegema ametnikega koostööd, et tagada relvade ohutu ja seaduslik hoidmine ning kasutamine."
       },
       {
         "id": 68,
