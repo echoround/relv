@@ -3204,13 +3204,16 @@ body.theme-quiz .flip-card-answers li,
   }
 
   .mailing-widget[data-mailing-widget="home"] .mailing-widget-close::before{
-    content: "";
-    width: 16px;
-    height: 16px;
-    display: block;
-    background:
-      center / 16px 16px no-repeat
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 4l8 8M12 4 4 12' stroke='%23F3F6FA' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+    content: "X";
+    width: auto;
+    height: auto;
+    display: inline-block;
+    background: none;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: none;
+    color: rgba(243, 246, 250, 0.92);
   }
 
   .mailing-widget[data-mailing-widget="home"][data-mobile-collapsed="true"]{
@@ -3291,6 +3294,10 @@ body.theme-quiz .flip-card-answers li,
     top: 12px;
     right: 12px;
     transform: none;
+  }
+
+  .mailing-widget[data-mailing-widget="home"]{
+    display: none !important;
   }
 }
 

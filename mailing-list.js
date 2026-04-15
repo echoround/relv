@@ -434,9 +434,8 @@
     const homeWidget = document.querySelector('[data-mailing-widget="home"]');
     if (homeWidget) {
       if (isMobileViewport()) {
-        setHomeMobileCollapsed(homeWidget, true);
+        homeWidget.dataset.dismissed = 'true';
         hideWidget(homeWidget);
-        waitForHomeMobileInteraction(homeWidget);
       } else {
         setHomeMobileCollapsed(homeWidget, false);
         window.requestAnimationFrame(() => {
