@@ -3,11 +3,21 @@
     threads: [],
     activeSlug: '',
     activeThread: null,
+    loadingThreads: false,
     loadingDetail: false,
     detailExpanded: false,
     commentFormOpen: false,
     replyTargetId: ''
   };
+
+  function getLoadingMarkup(message) {
+    return `
+      <div class="forum-loading" role="status" aria-live="polite">
+        <span class="forum-loading-spinner" aria-hidden="true"></span>
+        <span class="forum-loading-label">${message}</span>
+      </div>
+    `;
+  }
 
   function getApiUrl(path) {
     if (typeof window.relvApiUrl === 'function') {
@@ -237,6 +247,11 @@
     const list = document.querySelector('[data-forum-thread-list]');
     if (!list) return;
 
+    if (state.loadingThreads) {
+      list.innerHTML = getLoadingMarkup('Laen teemasid...');
+      return;
+    }
+
     if (state.threads.length === 0) {
       list.innerHTML = '';
       return;
@@ -280,8 +295,13 @@
     const detail = document.querySelector('[data-forum-thread-detail]');
     if (!detail) return;
 
+    if (state.loadingThreads && !state.activeThread) {
+      detail.innerHTML = getLoadingMarkup('Laen teemasid...');
+      return;
+    }
+
     if (state.loadingDetail) {
-      detail.innerHTML = '<p class="forum-empty">Laen teemat...</p>';
+      detail.innerHTML = getLoadingMarkup('Laen teemat...');
       return;
     }
 
@@ -429,6 +449,10 @@
       return;
     }
 
+    state.loadingThreads = true;
+    renderThreadList();
+    renderThreadDetail();
+
     try {
       const response = await fetch(endpoint);
       const payload = await response.json().catch(() => ({}));
@@ -438,6 +462,7 @@
       }
 
       state.threads = payload.threads || [];
+      state.loadingThreads = false;
       renderThreadList();
 
       const hashSlug = window.location.hash.replace(/^#/, '').trim();
@@ -450,6 +475,10 @@
       }
     } catch (error) {
       setStatus(error.message || 'Teemade laadimine ebaõnnestus.', 'error');
+    } finally {
+      state.loadingThreads = false;
+      renderThreadList();
+      renderThreadDetail();
     }
   }
 
