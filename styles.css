@@ -1938,8 +1938,8 @@ body.theme-quiz .dot.mid{ background: var(--color-partial); }
   border: 1px solid rgba(255,255,255,0.10);
   background: rgba(0,0,0,0.18);
   color: inherit;
-  cursor: pointer;
-  transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+  cursor: default;
+  transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
 }
 
 .theme-forum .forum-detail-toggle:focus-visible{
@@ -1948,10 +1948,9 @@ body.theme-quiz .dot.mid{ background: var(--color-partial); }
 }
 
 .theme-forum .forum-detail-toggle:hover{
-  transform: translateY(-1px);
-  border-color: rgba(255,255,255,0.16);
-  background: rgba(255,255,255,0.06);
-  box-shadow: 0 0 24px rgba(34,211,238,0.12);
+  border-color: rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.18);
+  box-shadow: none;
 }
 
 .theme-forum .forum-detail-toggle-state{

@@ -3,6 +3,7 @@
     threads: [],
     activeSlug: '',
     activeThread: null,
+    threadRequestId: 0,
     loadingThreads: false,
     loadingDetail: false,
     detailExpanded: false,
@@ -77,8 +78,18 @@
     }
   }
 
-  function toggleDetailExpanded() {
-    setDetailExpanded(!state.detailExpanded);
+  function clearThreadSelection(updateHash = true) {
+    state.threadRequestId += 1;
+    state.activeSlug = '';
+    state.activeThread = null;
+    state.loadingDetail = false;
+    setDetailExpanded(false);
+
+    if (updateHash && typeof window !== 'undefined' && window.history?.replaceState) {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    }
+
+    renderThreadList();
     renderThreadDetail();
   }
 
@@ -279,8 +290,8 @@
 
       button.append(title, meta, preview);
       button.addEventListener('click', () => {
-        if (thread.slug === state.activeSlug && state.activeThread) {
-          toggleDetailExpanded();
+        if (thread.slug === state.activeSlug && (state.activeThread || state.loadingDetail)) {
+          clearThreadSelection();
           return;
         }
 
@@ -295,8 +306,15 @@
     const detail = document.querySelector('[data-forum-thread-detail]');
     if (!detail) return;
 
-    if (state.loadingThreads && !state.activeThread) {
-      detail.innerHTML = getLoadingMarkup('Laen teemasid...');
+    const panel = detail.closest('.forum-panel');
+    const showPanel = state.loadingDetail || Boolean(state.activeThread);
+
+    if (panel) {
+      panel.hidden = !showPanel;
+    }
+
+    if (!showPanel) {
+      detail.innerHTML = '';
       return;
     }
 
@@ -306,7 +324,7 @@
     }
 
     if (!state.activeThread) {
-      detail.innerHTML = '<p class="forum-empty">Vali vasakult teema või loo uus arutelu.</p>';
+      detail.innerHTML = '';
       return;
     }
 
@@ -318,15 +336,6 @@
 
     const header = document.createElement('div');
     header.className = 'forum-detail-toggle';
-    header.setAttribute('role', 'button');
-    header.setAttribute('tabindex', '0');
-    header.setAttribute('aria-expanded', String(state.detailExpanded));
-    header.addEventListener('click', toggleDetailExpanded);
-    header.addEventListener('keydown', (event) => {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
-      event.preventDefault();
-      toggleDetailExpanded();
-    });
 
     const title = document.createElement('h2');
     title.className = 'forum-detail-title';
@@ -336,11 +345,7 @@
     meta.className = 'forum-detail-meta';
     meta.textContent = `${thread.displayName} • ${formatDate(thread.createdAt)} • ${thread.commentsCount} kommentaari`;
 
-    const toggleState = document.createElement('span');
-    toggleState.className = 'forum-detail-toggle-state';
-    toggleState.textContent = state.detailExpanded ? 'Vajuta, et minimeerida' : 'Vajuta, et avada';
-
-    header.append(title, meta, toggleState);
+    header.append(title, meta);
 
     const actions = document.createElement('div');
     actions.className = 'forum-detail-actions';
@@ -358,7 +363,6 @@
 
     const detailPanel = document.createElement('div');
     detailPanel.className = 'forum-detail-panel';
-    detailPanel.hidden = !state.detailExpanded;
 
     const body = document.createElement('div');
     body.className = 'forum-detail-body';
@@ -400,18 +404,28 @@
   }
 
   async function loadThread(slug, updateHash = true, preserveUi = false) {
+    if (!slug) {
+      clearThreadSelection(updateHash);
+      return;
+    }
+
     const endpoint = getApiUrl(`/forum/threads/${encodeURIComponent(slug)}`);
     if (!endpoint) {
       setStatus('Foorum ei ole hetkel saadaval.', 'error');
       return;
     }
 
+    const requestId = ++state.threadRequestId;
+
     if (!preserveUi) {
-      setDetailExpanded(false);
+      state.commentFormOpen = false;
+      state.replyTargetId = '';
     }
 
+    setDetailExpanded(true);
     state.loadingDetail = true;
     state.activeSlug = slug;
+    state.activeThread = null;
     renderThreadList();
     renderThreadDetail();
 
@@ -419,18 +433,27 @@
       const response = await fetch(endpoint);
       const payload = await response.json().catch(() => ({}));
 
+      if (requestId !== state.threadRequestId) return;
+
       if (!response.ok || !payload.ok) {
         throw new Error(payload.error || 'Teema laadimine ebaõnnestus.');
       }
 
       state.activeThread = payload.thread;
+      setDetailExpanded(true);
+
       if (updateHash) {
         window.location.hash = `#${payload.thread.slug}`;
       }
     } catch (error) {
+      if (requestId !== state.threadRequestId) return;
+
+      state.activeSlug = '';
       state.activeThread = null;
       setStatus(error.message || 'Teema laadimine ebaõnnestus.', 'error');
     } finally {
+      if (requestId !== state.threadRequestId) return;
+
       state.loadingDetail = false;
       renderThreadList();
       renderThreadDetail();
@@ -462,16 +485,12 @@
       }
 
       state.threads = payload.threads || [];
-      state.loadingThreads = false;
-      renderThreadList();
-
       const hashSlug = window.location.hash.replace(/^#/, '').trim();
-      const initialSlug = hashSlug || state.threads[0]?.slug || '';
 
-      if (initialSlug) {
-        await loadThread(initialSlug, false);
+      if (hashSlug) {
+        await loadThread(hashSlug, false);
       } else {
-        renderThreadDetail();
+        clearThreadSelection(false);
       }
     } catch (error) {
       setStatus(error.message || 'Teemade laadimine ebaõnnestus.', 'error');
@@ -532,16 +551,38 @@
     });
   }
 
+  function initThreadDismiss() {
+    const page = document.querySelector('.forum-page');
+    if (!page) return;
+
+    page.addEventListener('click', (event) => {
+      if (!state.activeSlug && !state.loadingDetail) return;
+      if (event.target.closest('.forum-thread-card')) return;
+      if (event.target.closest('[data-forum-thread-detail]')) return;
+      if (event.target.closest('.forum-panel--form')) return;
+
+      clearStatus();
+      clearThreadSelection();
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     if (!document.body.classList.contains('theme-forum')) return;
 
     initCreateThreadForm();
+    initThreadDismiss();
     renderThreadDetail();
     loadThreads();
 
     window.addEventListener('hashchange', () => {
       const slug = window.location.hash.replace(/^#/, '').trim();
-      if (slug && slug !== state.activeSlug) {
+
+      if (!slug) {
+        clearThreadSelection(false);
+        return;
+      }
+
+      if (slug !== state.activeSlug) {
         loadThread(slug, false);
       }
     });
