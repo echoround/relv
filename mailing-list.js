@@ -25,6 +25,26 @@
     feedback.classList.add(type === 'success' ? 'is-success' : 'is-error');
   }
 
+  function playPointerAnimation(widget) {
+    const pointer = widget.querySelector('[data-mailing-pointer]');
+    if (!pointer) return;
+
+    const cycles = Math.max(1, Number(widget.dataset.mailingArrowCycles || 1));
+
+    if (pointer._mailingAnimationTimer) {
+      window.clearTimeout(pointer._mailingAnimationTimer);
+    }
+
+    pointer.style.setProperty('--mailing-pointer-cycles', String(cycles));
+    pointer.classList.remove('is-animating');
+    void pointer.offsetWidth;
+    pointer.classList.add('is-animating');
+
+    pointer._mailingAnimationTimer = window.setTimeout(() => {
+      pointer.classList.remove('is-animating');
+    }, cycles * 1800);
+  }
+
   function hideWidget(widget) {
     if (!widget) return;
 
@@ -35,8 +55,13 @@
   function showWidget(widget) {
     if (!widget) return;
 
+    const wasHidden = widget.hidden || !widget.classList.contains('is-visible');
     widget.hidden = false;
     widget.classList.add('is-visible');
+
+    if (wasHidden) {
+      playPointerAnimation(widget);
+    }
   }
 
   function dismissWidget(widget) {
@@ -207,6 +232,13 @@
     if (widgets.length === 0) return;
 
     widgets.forEach(initWidget);
+
+    const homeWidget = document.querySelector('[data-mailing-widget="home"]');
+    if (homeWidget) {
+      window.requestAnimationFrame(() => {
+        showWidget(homeWidget);
+      });
+    }
 
     if (document.querySelector('[data-mailing-widget="quiz"]')) {
       updateQuizWidget(Number(window.RELV_QUIZ_ANSWERED_COUNT || 0));

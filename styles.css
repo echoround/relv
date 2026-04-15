@@ -2242,3 +2242,222 @@ body.theme-quiz .option,
     background: rgba(67,74,84,0.82) !important;
   }
 }
+
+/* =========================
+   Pastel Section Tuning
+========================= */
+
+body.theme-hero{
+  --section-accent: 178, 188, 205;
+  --section-accent-strong: 215, 222, 230;
+  --section-accent-alt: 188, 180, 198;
+}
+
+body.theme-quiz{
+  --section-accent: 164, 187, 172;
+  --section-accent-strong: 209, 224, 214;
+  --section-accent-alt: 176, 193, 186;
+}
+
+body.theme-kuidas{
+  --section-accent: 182, 178, 165;
+  --section-accent-strong: 219, 214, 201;
+  --section-accent-alt: 163, 179, 194;
+}
+
+body.theme-forum{
+  --section-accent: 162, 180, 191;
+  --section-accent-strong: 206, 220, 228;
+  --section-accent-alt: 175, 191, 201;
+}
+
+body.theme-hero,
+body.theme-quiz,
+body.theme-kuidas,
+body.theme-forum{
+  background:
+    radial-gradient(1200px 820px at 12% 0%, rgba(var(--section-accent),0.15), transparent 58%),
+    radial-gradient(940px 720px at 88% 14%, rgba(var(--section-accent-alt),0.11), transparent 54%),
+    linear-gradient(180deg, #454c55 0%, #30363f 26%, #21262e 60%, #14181e 100%) !important;
+}
+
+.site-header{
+  background: rgba(34,39,46,0.8) !important;
+}
+
+.glow-card,
+.glass-card,
+.step-card,
+.content-card,
+#quiz-container,
+#question-grid,
+#content-container,
+.theme-forum .forum-panel,
+.theme-forum .forum-comment,
+.theme-forum .forum-thread-card,
+.mailing-widget,
+body.theme-quiz .flip-card-face{
+  background: linear-gradient(180deg, rgba(245,248,252,0.08), rgba(224,230,237,0.05)) !important;
+  border-color: rgba(244,247,250,0.14) !important;
+  box-shadow: 0 16px 38px rgba(14,18,24,0.26) !important;
+}
+
+.btn-primary,
+body.theme-quiz #submit-btn,
+body.theme-quiz #next-btn,
+.step-num{
+  background: linear-gradient(135deg, rgba(var(--section-accent-strong),0.92), rgba(var(--section-accent),0.86)) !important;
+  border-color: rgba(var(--section-accent-strong),0.28) !important;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible,
+.nav-link.is-active,
+.btn:hover,
+.btn:focus-visible,
+.btn:active,
+.nav-toggle:hover,
+.nav-toggle:focus-visible,
+.mailing-widget-submit:hover,
+.mailing-widget-submit:focus-visible,
+.mailing-widget-close:hover,
+.mailing-widget-close:focus-visible,
+.step-card:hover,
+.theme-forum .forum-thread-card:hover,
+.theme-forum .forum-thread-card[data-active="true"]{
+  box-shadow: 0 0 0 3px rgba(var(--section-accent),0.34), 0 14px 30px rgba(18,22,28,0.16) !important;
+  border-color: rgba(var(--section-accent-strong),0.34) !important;
+}
+
+body.theme-quiz button:hover,
+body.theme-quiz button:focus-visible,
+body.theme-quiz .option:hover,
+body.theme-quiz .option:has(input:checked),
+body.theme-quiz .grid-item:hover,
+body.theme-quiz .grid-item.current{
+  box-shadow: 0 0 0 3px rgba(var(--section-accent),0.36), 0 12px 26px rgba(18,22,28,0.14) !important;
+  border-color: rgba(var(--section-accent-strong),0.36) !important;
+}
+
+.theme-forum .forum-field input:focus,
+.theme-forum .forum-field textarea:focus,
+.mailing-widget-input:focus{
+  box-shadow: 0 0 0 3px rgba(var(--section-accent),0.38) !important;
+  border-color: rgba(var(--section-accent-strong),0.34) !important;
+}
+
+.mailing-widget{
+  overflow: visible;
+}
+
+.mailing-widget-pointer{
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  border: 1px solid rgba(244,247,250,0.2);
+  background: linear-gradient(180deg, rgba(248,250,253,0.16), rgba(230,236,242,0.08));
+  color: rgba(245,248,252,0.86);
+  font-size: 30px;
+  line-height: 1;
+  box-shadow: 0 14px 26px rgba(15,19,24,0.2);
+  backdrop-filter: blur(15px) saturate(130%);
+  -webkit-backdrop-filter: blur(15px) saturate(130%);
+  pointer-events: none;
+  opacity: 0.76;
+}
+
+.mailing-widget-pointer.is-animating{
+  animation-duration: 1.8s;
+  animation-iteration-count: var(--mailing-pointer-cycles, 1);
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+.mailing-widget--floating .mailing-widget-pointer{
+  left: -54px;
+  top: 28px;
+}
+
+.mailing-widget--floating .mailing-widget-pointer.is-animating{
+  animation-name: mailingPointerSideCue;
+}
+
+.mailing-widget--inline .mailing-widget-pointer{
+  right: 16px;
+  top: -40px;
+}
+
+.mailing-widget--inline .mailing-widget-pointer.is-animating{
+  animation-name: mailingPointerDiagonalCue;
+}
+
+.mailing-widget[data-mailing-widget="quiz"]{
+  margin-top: 20px;
+  padding: 18px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, rgba(213,234,219,0.24), rgba(235,243,236,0.14)) !important;
+  border: 2px solid rgba(158,197,168,0.78) !important;
+  box-shadow: 0 0 0 3px rgba(135,181,147,0.28), 0 18px 34px rgba(27,40,31,0.18) !important;
+}
+
+.mailing-widget[data-mailing-widget="quiz"] .mailing-widget-kicker{
+  color: rgba(104,146,116,0.96) !important;
+}
+
+.mailing-widget[data-mailing-widget="quiz"] .mailing-widget-input{
+  background: rgba(250,253,250,0.12) !important;
+  border-color: rgba(205,226,210,0.42) !important;
+}
+
+.mailing-widget[data-mailing-widget="quiz"] .mailing-widget-submit{
+  background: linear-gradient(135deg, rgba(169,205,177,0.96), rgba(116,154,126,0.92)) !important;
+  border-color: rgba(217,232,220,0.42) !important;
+}
+
+.mailing-widget[data-mailing-widget="home"] .mailing-widget-pointer{
+  color: rgba(var(--section-accent-strong),0.92);
+}
+
+.mailing-widget[data-mailing-widget="quiz"] .mailing-widget-pointer{
+  border-color: rgba(214,231,218,0.3);
+  background: linear-gradient(180deg, rgba(242,248,243,0.22), rgba(223,236,226,0.14));
+  color: rgba(116,154,126,0.94);
+}
+
+@keyframes mailingPointerSideCue{
+  0%, 100% { transform: translate3d(0,0,0) rotate(0deg); opacity: 0.72; }
+  10% { transform: translate3d(8px,-3px,0) rotate(10deg); opacity: 0.98; }
+  20% { transform: translate3d(-2px,1px,0) rotate(-4deg); }
+  30% { transform: translate3d(8px,-3px,0) rotate(10deg); }
+  40% { transform: translate3d(-2px,1px,0) rotate(-4deg); }
+  50% { transform: translate3d(8px,-3px,0) rotate(10deg); }
+  60%, 100% { transform: translate3d(0,0,0) rotate(0deg); opacity: 0.72; }
+}
+
+@keyframes mailingPointerDiagonalCue{
+  0%, 100% { transform: translate3d(0,0,0) rotate(0deg); opacity: 0.72; }
+  10% { transform: translate3d(-8px,8px,0) rotate(-10deg); opacity: 0.98; }
+  20% { transform: translate3d(2px,-2px,0) rotate(4deg); }
+  30% { transform: translate3d(-8px,8px,0) rotate(-10deg); }
+  40% { transform: translate3d(2px,-2px,0) rotate(4deg); }
+  50% { transform: translate3d(-8px,8px,0) rotate(-10deg); }
+  60%, 100% { transform: translate3d(0,0,0) rotate(0deg); opacity: 0.72; }
+}
+
+@media (max-width: 720px){
+  .mailing-widget--floating .mailing-widget-pointer{
+    left: auto;
+    right: 16px;
+    top: -38px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .mailing-widget-pointer.is-animating{
+    animation: none !important;
+  }
+}
