@@ -400,6 +400,70 @@ body.theme-quiz #options{
   margin-top: 14px;
 }
 
+body.theme-quiz #feedback{
+  margin-top: 10px;
+}
+
+body.theme-quiz #feedback-message{
+  color: rgba(244, 247, 251, 0.92);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+body.theme-quiz #feedback-message.is-correct{
+  color: rgba(187, 247, 208, 0.98);
+}
+
+body.theme-quiz #feedback-message.is-partial{
+  color: rgba(253, 230, 138, 0.98);
+}
+
+body.theme-quiz #feedback-message.is-incorrect{
+  color: rgba(254, 202, 202, 0.98);
+}
+
+body.theme-quiz .feedback-review{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+body.theme-quiz .feedback-review[hidden]{
+  display: none !important;
+}
+
+body.theme-quiz .feedback-review-chip{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+body.theme-quiz .feedback-review-chip--correct-picked{
+  background: rgba(34,197,94,0.16);
+  border-color: rgba(34,197,94,0.34);
+  color: rgba(220,252,231,0.98);
+}
+
+body.theme-quiz .feedback-review-chip--correct-missed{
+  background: rgba(125,211,252,0.15);
+  border-color: rgba(125,211,252,0.32);
+  color: rgba(224,242,254,0.98);
+}
+
+body.theme-quiz .feedback-review-chip--incorrect-picked{
+  background: rgba(239,68,68,0.16);
+  border-color: rgba(239,68,68,0.34);
+  color: rgba(254,226,226,0.98);
+}
+
 /* Make option “cards” feel consistent */
 body.theme-quiz .option{
   background: rgba(0,0,0,0.18);
@@ -415,19 +479,6 @@ body.theme-quiz .option:hover{
   background: rgba(255,255,255,0.06);
   border-color: rgba(255,255,255,0.14);
   box-shadow: 0 0 0 1px rgba(255,255,255,0.10), 0 0 22px var(--accentGlow);
-}
-
-/* Feedback colors after submit */
-body.theme-quiz .option.correct{
-  background: rgba(34,197,94,0.16);
-  border-color: var(--color-correct);
-  box-shadow: 0 0 0 1px rgba(34,197,94,0.18) inset, 0 0 18px rgba(34,197,94,0.25);
-}
-
-body.theme-quiz .option.incorrect{
-  background: rgba(239,68,68,0.16);
-  border-color: var(--color-incorrect);
-  box-shadow: 0 0 0 1px rgba(239,68,68,0.18) inset, 0 0 18px rgba(239,68,68,0.25);
 }
 
 /* Radios/checkboxes match page accent */
@@ -2867,8 +2918,33 @@ body.theme-quiz .option{
 }
 
 body.theme-quiz .option-text{
-  flex: 1 1 auto;
+  display: block;
   cursor: pointer;
+}
+
+body.theme-quiz .option-copy{
+  flex: 1 1 auto;
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+body.theme-quiz .option-review-tag{
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+body.theme-quiz .option-review-tag[hidden]{
+  display: none !important;
 }
 
 body.theme-quiz .option input[type="radio"],
@@ -2891,6 +2967,42 @@ body.theme-quiz .option:focus-visible{
   outline: none;
   box-shadow: 0 0 0 3px rgba(var(--section-accent),0.42), 0 12px 26px rgba(18,22,28,0.16) !important;
   border-color: rgba(var(--section-accent-strong),0.38) !important;
+}
+
+body.theme-quiz .option.answer-correct-picked{
+  background: rgba(34,197,94,0.15) !important;
+  border-color: rgba(34,197,94,0.82) !important;
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.34), 0 12px 26px rgba(18,22,28,0.12) !important;
+}
+
+body.theme-quiz .option.answer-correct-picked .option-review-tag{
+  background: rgba(34,197,94,0.16);
+  border-color: rgba(34,197,94,0.32);
+  color: rgba(220,252,231,0.98);
+}
+
+body.theme-quiz .option.answer-correct-missed{
+  background: rgba(125,211,252,0.13) !important;
+  border-color: rgba(125,211,252,0.78) !important;
+  box-shadow: 0 0 0 3px rgba(125,211,252,0.28), 0 12px 26px rgba(18,22,28,0.10) !important;
+}
+
+body.theme-quiz .option.answer-correct-missed .option-review-tag{
+  background: rgba(125,211,252,0.15);
+  border-color: rgba(125,211,252,0.32);
+  color: rgba(224,242,254,0.98);
+}
+
+body.theme-quiz .option.answer-incorrect-picked{
+  background: rgba(239,68,68,0.15) !important;
+  border-color: rgba(239,68,68,0.82) !important;
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.30), 0 12px 26px rgba(18,22,28,0.12) !important;
+}
+
+body.theme-quiz .option.answer-incorrect-picked .option-review-tag{
+  background: rgba(239,68,68,0.16);
+  border-color: rgba(239,68,68,0.34);
+  color: rgba(254,226,226,0.98);
 }
 
 body.theme-quiz .grid-item:hover,

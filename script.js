@@ -225,16 +225,25 @@ function displayQuestion() {
         const label = document.createElement('label');
         label.className = 'option';
 
+        const copy = document.createElement('span');
+        copy.className = 'option-copy';
+
         const text = document.createElement('span');
         text.className = 'option-text';
         text.textContent = option;
+
+        const reviewTag = document.createElement('span');
+        reviewTag.className = 'option-review-tag';
+        reviewTag.hidden = true;
 
         input.addEventListener('change', () => {
             syncOptionSelectionState(optionsDiv);
         });
 
         label.appendChild(input);
-        label.appendChild(text);
+        copy.appendChild(text);
+        copy.appendChild(reviewTag);
+        label.appendChild(copy);
         optionsDiv.appendChild(label);
     });
 
@@ -278,6 +287,7 @@ function displayFeedback(question) {
 
   const feedbackDiv = document.getElementById('feedback');
   const feedbackMessage = document.getElementById('feedback-message');
+  let feedbackReview = document.getElementById('feedback-review');
 
   const explainArea = document.getElementById('explain-area');
   const explainToggle = document.getElementById('explain-toggle');
@@ -285,6 +295,13 @@ function displayFeedback(question) {
   const explainText = document.getElementById('explain-text');
 
   if (!feedbackDiv || !feedbackMessage) return;
+
+  if (!feedbackReview) {
+    feedbackReview = document.createElement('div');
+    feedbackReview.id = 'feedback-review';
+    feedbackReview.className = 'feedback-review';
+    feedbackMessage.insertAdjacentElement('afterend', feedbackReview);
+  }
 
   // Remove old tooltip if it exists from previous versions
   const oldTooltip = document.getElementById('explanation-tooltip');
@@ -294,35 +311,146 @@ function displayFeedback(question) {
   if (oldMark) oldMark.remove();
 
   feedbackMessage.innerHTML = '';
+  feedbackMessage.classList.remove('is-correct', 'is-partial', 'is-incorrect');
+  feedbackReview.innerHTML = '';
+  feedbackReview.hidden = true;
 
   const ua = userAnswers[currentIndex];
   if (!ua?.submitted) {
     if (explainArea) explainArea.hidden = true;
     if (explainPanel) explainPanel.hidden = true;
     if (explainToggle) explainToggle.setAttribute('aria-expanded', 'false');
+
+    (question.options || []).forEach((option, index) => {
+      if (!option) return;
+      const optionDiv = document.querySelector(`#option-${index}`)?.parentElement;
+      const reviewTag = optionDiv?.querySelector('.option-review-tag');
+      if (!optionDiv) return;
+
+      optionDiv.classList.remove(
+        'correct',
+        'incorrect',
+        'partial',
+        'has-review',
+        'answer-correct-picked',
+        'answer-correct-missed',
+        'answer-incorrect-picked'
+      );
+
+      if (reviewTag) {
+        reviewTag.hidden = true;
+        reviewTag.textContent = '';
+      }
+    });
+
     return;
   }
 
   const correct = Array.isArray(question.correct) ? question.correct : [];
   const selected = ua.selected?.slice().sort() || [];
+  const selectedCorrectCount = selected.filter((index) => correct.includes(index)).length;
+  const missedCorrectCount = correct.filter((index) => !selected.includes(index)).length;
+  const incorrectSelectedCount = selected.filter((index) => !correct.includes(index)).length;
 
   const isCorrect = arraysEqual(selected, correct);
-  feedbackMessage.textContent = isCorrect ? 'Correct!' : 'Incorrect.';
+  const isPartial = !isCorrect && question.multiple && selectedCorrectCount > 0;
 
-  // Highlight correct and incorrect options
+  if (isCorrect) {
+    feedbackMessage.textContent = question.multiple
+      ? 'Correct. All correct answers are marked below.'
+      : 'Correct.';
+    feedbackMessage.classList.add('is-correct');
+  } else if (isPartial) {
+    const summaryBits = [];
+
+    if (selectedCorrectCount > 0) {
+      summaryBits.push(`${selectedCorrectCount} correct ${selectedCorrectCount === 1 ? 'choice is' : 'choices are'} selected`);
+    }
+
+    if (missedCorrectCount > 0) {
+      summaryBits.push(`${missedCorrectCount} correct ${missedCorrectCount === 1 ? 'answer was' : 'answers were'} missed`);
+    }
+
+    if (incorrectSelectedCount > 0) {
+      summaryBits.push(`${incorrectSelectedCount} incorrect ${incorrectSelectedCount === 1 ? 'choice was' : 'choices were'} selected`);
+    }
+
+    feedbackMessage.textContent = `Partially correct. ${summaryBits.join(', ')}.`;
+    feedbackMessage.classList.add('is-partial');
+  } else {
+    feedbackMessage.textContent = question.multiple
+      ? 'Incorrect. The correct answers are marked below.'
+      : 'Incorrect. The correct answer is marked below.';
+    feedbackMessage.classList.add('is-incorrect');
+  }
+
+  // Highlight options with explicit review states
   (question.options || []).forEach((option, index) => {
     if (!option) return;
     const optionDiv = document.querySelector(`#option-${index}`)?.parentElement;
+    const reviewTag = optionDiv?.querySelector('.option-review-tag');
     if (!optionDiv) return;
 
-    optionDiv.classList.remove('correct', 'incorrect', 'partial');
+    optionDiv.classList.remove(
+      'correct',
+      'incorrect',
+      'partial',
+      'has-review',
+      'answer-correct-picked',
+      'answer-correct-missed',
+      'answer-incorrect-picked'
+    );
 
-    if (correct.includes(index)) {
-      optionDiv.classList.add('correct');
-    } else if (selected.includes(index)) {
-      optionDiv.classList.add('incorrect');
+    if (reviewTag) {
+      reviewTag.hidden = true;
+      reviewTag.textContent = '';
+    }
+
+    const selectedThis = selected.includes(index);
+    const correctThis = correct.includes(index);
+
+    if (selectedThis && correctThis) {
+      optionDiv.classList.add('has-review', 'answer-correct-picked');
+      if (reviewTag) {
+        reviewTag.textContent = 'Correct choice';
+        reviewTag.hidden = false;
+      }
+    } else if (correctThis) {
+      optionDiv.classList.add('has-review', 'answer-correct-missed');
+      if (reviewTag) {
+        reviewTag.textContent = 'Correct answer';
+        reviewTag.hidden = false;
+      }
+    } else if (selectedThis) {
+      optionDiv.classList.add('has-review', 'answer-incorrect-picked');
+      if (reviewTag) {
+        reviewTag.textContent = 'Incorrect choice';
+        reviewTag.hidden = false;
+      }
     }
   });
+
+  const reviewChips = [];
+  if (selectedCorrectCount > 0) {
+    reviewChips.push({ label: 'Correct choice', className: 'feedback-review-chip--correct-picked' });
+  }
+  if (missedCorrectCount > 0) {
+    reviewChips.push({ label: 'Correct answer', className: 'feedback-review-chip--correct-missed' });
+  }
+  if (incorrectSelectedCount > 0) {
+    reviewChips.push({ label: 'Incorrect choice', className: 'feedback-review-chip--incorrect-picked' });
+  }
+
+  if (reviewChips.length > 0) {
+    feedbackReview.hidden = false;
+
+    reviewChips.forEach((chip) => {
+      const chipEl = document.createElement('span');
+      chipEl.className = `feedback-review-chip ${chip.className}`;
+      chipEl.textContent = chip.label;
+      feedbackReview.appendChild(chipEl);
+    });
+  }
 
   // Build explanation text (prefer explanations.json; fall back to questions.json explanation)
   const short = (question.explanation || '').trim();
