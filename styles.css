@@ -610,6 +610,36 @@ body.theme-quiz .flip-grid{
   align-items: stretch;
 }
 
+body.theme-quiz .quiz-cards-loading{
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  gap: 16px;
+  padding: 28px 20px;
+  color: rgba(255,255,255,0.74);
+  text-align: center;
+}
+
+body.theme-quiz .quiz-cards-loading-spinner{
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 3px solid rgba(255,255,255,0.14);
+  border-top-color: rgba(255,255,255,0.96);
+  border-right-color: rgba(255,255,255,0.54);
+  box-shadow:
+    0 0 12px rgba(255,255,255,0.16),
+    0 0 28px rgba(255,255,255,0.08);
+  animation: forum-spinner-rotate 1s linear infinite, forum-spinner-pulse 1.9s ease-in-out infinite;
+}
+
+body.theme-quiz .quiz-cards-loading-label{
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 body.theme-quiz .flip-card{
   perspective: 1200px;
   min-height: 300px;
