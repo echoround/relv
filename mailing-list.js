@@ -9,7 +9,8 @@
     subscribedThisView: false,
     quizEngaged: false,
     quizIgnored: false,
-    quizClosed: false
+    quizClosed: false,
+    homeMobileInteracted: false
   };
 
   function getApiUrl(path) {
@@ -67,6 +68,90 @@
 
   function isMobileViewport() {
     return typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 720px)').matches;
+  }
+
+  function isHomeWidget(widget) {
+    return widget?.dataset.mailingWidget === 'home';
+  }
+
+  function isMobileHomeWidget(widget) {
+    return isHomeWidget(widget) && isMobileViewport();
+  }
+
+  function setHomeMobileCollapsed(widget, collapsed) {
+    if (!isHomeWidget(widget)) return;
+
+    widget.dataset.mobileCollapsed = collapsed ? 'true' : 'false';
+    widget.setAttribute('aria-expanded', String(!collapsed));
+
+    if (collapsed) {
+      widget.setAttribute('tabindex', '0');
+    } else {
+      widget.removeAttribute('tabindex');
+    }
+  }
+
+  function expandHomeMobileWidget(widget) {
+    if (!isMobileHomeWidget(widget)) return;
+    if (widget.dataset.mobileCollapsed !== 'true') return;
+
+    setHomeMobileCollapsed(widget, false);
+  }
+
+  function bindHomeMobileExpand(widget) {
+    if (!isHomeWidget(widget) || widget._homeMobileExpandBound) return;
+
+    widget._homeMobileExpandBound = true;
+
+    widget.addEventListener('click', (event) => {
+      if (!isMobileHomeWidget(widget)) return;
+      if (widget.dataset.mobileCollapsed !== 'true') return;
+      if (event.target.closest('[data-mailing-dismiss]')) return;
+
+      expandHomeMobileWidget(widget);
+    });
+
+    widget.addEventListener('keydown', (event) => {
+      if (!isMobileHomeWidget(widget)) return;
+      if (widget.dataset.mobileCollapsed !== 'true') return;
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+
+      event.preventDefault();
+      expandHomeMobileWidget(widget);
+    });
+  }
+
+  function waitForHomeMobileInteraction(widget) {
+    if (!isHomeWidget(widget) || widget._homeMobileInteractionBound || !isMobileViewport()) return;
+
+    widget._homeMobileInteractionBound = true;
+
+    const listeners = [];
+    const cleanup = () => {
+      listeners.forEach(({ target, type, handler, options }) => {
+        target.removeEventListener(type, handler, options);
+      });
+      widget._homeMobileInteractionBound = false;
+    };
+
+    const reveal = () => {
+      cleanup();
+
+      if (state.subscribedThisView || widget.dataset.dismissed === 'true') return;
+
+      state.homeMobileInteracted = true;
+      setHomeMobileCollapsed(widget, true);
+      showWidget(widget);
+    };
+
+    const bind = (target, type, handler, options) => {
+      listeners.push({ target, type, handler, options });
+      target.addEventListener(type, handler, options);
+    };
+
+    bind(window, 'scroll', reveal, { passive: true });
+    bind(document, 'pointerdown', reveal, { passive: true });
+    bind(document, 'keydown', reveal, false);
   }
 
   function runPointerCycle(pointer) {
@@ -150,6 +235,14 @@
     if (!widget) return;
 
     const wasHidden = widget.hidden || !widget.classList.contains('is-visible');
+
+    if (isMobileHomeWidget(widget)) {
+      if (!state.homeMobileInteracted) return;
+      if (!widget.dataset.mobileCollapsed) {
+        setHomeMobileCollapsed(widget, true);
+      }
+    }
+
     widget.hidden = false;
     widget.classList.add('is-visible');
 
@@ -252,6 +345,7 @@
 
   function initWidget(widget) {
     ensureCloseButton(widget);
+    bindHomeMobileExpand(widget);
 
     const form = widget.querySelector('[data-mailing-list-form]');
     if (!form) return;
@@ -329,9 +423,16 @@
 
     const homeWidget = document.querySelector('[data-mailing-widget="home"]');
     if (homeWidget) {
-      window.requestAnimationFrame(() => {
-        showWidget(homeWidget);
-      });
+      if (isMobileViewport()) {
+        setHomeMobileCollapsed(homeWidget, true);
+        hideWidget(homeWidget);
+        waitForHomeMobileInteraction(homeWidget);
+      } else {
+        setHomeMobileCollapsed(homeWidget, false);
+        window.requestAnimationFrame(() => {
+          showWidget(homeWidget);
+        });
+      }
     }
 
     if (document.querySelector('[data-mailing-widget="quiz"]')) {
