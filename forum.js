@@ -492,6 +492,12 @@
     }
 
     if (!state.authConfig.googleAuthEnabled) {
+      // Keep the auth card hidden until Google sign-in is configured.
+      // If you want the setup-status message back later, remove this early return.
+      card.hidden = true;
+      card.innerHTML = '';
+      syncAllFormsAuthState();
+      return;
       const authCopy = state.authConfig.status === 'backend-unavailable'
         ? 'Google sisselogimise backend ei ole veel live-is. Panen selle eraldi üles, et nupp siin päriselt nähtavaks muutuks.'
         : 'Google sisselogimine vajab veel seadistamist. Kui Google klient on lisatud, ilmub siia sama kompaktne sisselogimisnupp.';
