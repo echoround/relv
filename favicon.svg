@@ -1,55 +1,87 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Relvaload.ee favicon">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#546273"/>
-      <stop offset="0.55" stop-color="#3e4a59"/>
-      <stop offset="1" stop-color="#202832"/>
+      <stop offset="0" stop-color="#07080d"/>
+      <stop offset="1" stop-color="#0e1018"/>
     </linearGradient>
 
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#b8f0f8"/>
-      <stop offset="0.52" stop-color="#d8c6f4"/>
-      <stop offset="1" stop-color="#f7e7c6"/>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="0.54" stop-color="#ec4899"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
     </linearGradient>
 
-    <radialGradient id="glow" cx="0.25" cy="0.18" r="0.9">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
-      <stop offset="0.38" stop-color="#ffffff" stop-opacity="0.10"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    <radialGradient id="orb-left" cx="0.32" cy="0.26" r="0.52">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0.28"/>
+      <stop offset="0.58" stop-color="#8b5cf6" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/>
     </radialGradient>
 
-    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3.2" flood-color="#10161d" flood-opacity="0.28"/>
+    <radialGradient id="orb-right" cx="0.72" cy="0.3" r="0.5">
+      <stop offset="0" stop-color="#67e8f9" stop-opacity="0.22"/>
+      <stop offset="0.62" stop-color="#22d3ee" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+
+    <filter id="soft" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="4.5"/>
     </filter>
+
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
   </defs>
 
-  <circle cx="64" cy="64" r="64" fill="url(#bg)"/>
-  <circle cx="64" cy="64" r="64" fill="url(#glow)"/>
-  <circle cx="64" cy="64" r="58" fill="none" stroke="#f6f9fc" stroke-opacity="0.12" stroke-width="2"/>
+  <g clip-path="url(#circle)">
+    <rect width="128" height="128" fill="url(#bg)"/>
 
-  <path
-    d="M37 23h27c19 0 32 11 32 28 0 12-7 22-19 27l20 27H80L63 82H50v23H37V23zm13 12v35h12c13 0 21-6 21-18s-8-17-21-17H50z"
-    fill="#f7fafc"
-    filter="url(#soft-shadow)"
-  />
+    <circle cx="40" cy="38" r="34" fill="url(#orb-left)"/>
+    <circle cx="93" cy="40" r="31" fill="url(#orb-right)"/>
 
-  <path
-    d="M26 90c12-7 21-7 31-10 11-4 17-11 25-11 8 0 14 3 20 7"
-    fill="none"
-    stroke="url(#accent)"
-    stroke-width="10"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    opacity="0.96"
-  />
+    <path
+      filter="url(#soft)"
+      opacity="0.98"
+      fill="url(#wave)"
+      d="M-10 79
+         C 7 62, 24 62, 40 72
+         C 56 82, 69 93, 84 89
+         C 100 85, 114 66, 138 69
+         L138 140 L-10 140 Z"
+    />
 
-  <path
-    d="M30 90c12-7 21-7 31-10 11-4 17-11 25-11 8 0 14 3 20 7"
-    fill="none"
-    stroke="#ffffff"
-    stroke-opacity="0.18"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
+    <path
+      fill="none"
+      stroke="url(#wave)"
+      stroke-width="12"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M-4 74
+         C 13 58, 28 59, 44 70
+         C 59 80, 71 90, 86 86
+         C 101 82, 114 64, 132 66"
+    />
+
+    <path
+      fill="none"
+      stroke="#ffffff"
+      stroke-opacity="0.18"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      d="M0 72
+         C 15 58, 29 60, 44 70
+         C 58 79, 71 88, 86 84
+         C 100 80, 113 65, 128 66"
+    />
+
+    <path
+      fill="none"
+      stroke="#ffffff"
+      stroke-opacity="0.08"
+      stroke-width="1.5"
+      d="M8 86
+         C 28 79, 44 83, 60 93
+         C 72 100, 85 101, 100 95
+         C 111 90, 119 82, 128 81"
+    />
+  </g>
 </svg>
