@@ -33,7 +33,7 @@ module.exports = async function handler(req, res) {
     const authUser = getForumAuthFromRequest(req);
     const result = await addComment({
       ...payload,
-      displayName: authUser?.name || payload.displayName,
+      displayName: payload.displayName,
       authorProfile: authUser,
       ipHash,
       userAgent
@@ -46,7 +46,7 @@ module.exports = async function handler(req, res) {
         commentId: result.context.commentId,
         googleSub: authUser.sub,
         email: authUser.email,
-        displayName: authUser.name,
+        displayName: result.context.replyAuthor,
         ipHash,
         userAgent
       });

@@ -38,6 +38,8 @@
   const authorColorByName = new Map();
   const FORUM_DRAFT_KEY_PREFIX = 'relv:forum:draft';
   const FORUM_AUTH_TOKEN_KEY = 'relv:forum:auth-token';
+  const FORUM_USERNAME_KEY = 'relv:forum:display-name';
+  let avatarModulePromise = null;
 
   function getDraftStorage() {
     try {
@@ -48,6 +50,33 @@
       return window.localStorage;
     } catch (error) {
       return null;
+    }
+  }
+
+  function readPreferredDisplayName() {
+    const storage = getDraftStorage();
+    if (!storage) return '';
+
+    try {
+      return normalizeDisplayName(storage.getItem(FORUM_USERNAME_KEY) || '');
+    } catch (error) {
+      return '';
+    }
+  }
+
+  function writePreferredDisplayName(value) {
+    const storage = getDraftStorage();
+    if (!storage) return;
+
+    try {
+      const normalized = normalizeDisplayName(value);
+      if (!normalized || isAnonymousDisplayName(normalized)) {
+        return;
+      }
+
+      storage.setItem(FORUM_USERNAME_KEY, normalized);
+    } catch (error) {
+      // Ignore storage failures.
     }
   }
 
@@ -159,14 +188,24 @@
       });
     }
 
+    if (!savedDraft || !Object.prototype.hasOwnProperty.call(savedDraft, 'displayName')) {
+      seedDisplayNameField(form);
+    }
+
     const persistDraft = () => {
       syncFormDraft(form, draftKey, fieldNames);
+      writePreferredDisplayName(form.elements?.namedItem?.('displayName')?.value || '');
     };
 
     fieldNames.forEach((fieldName) => {
       const field = form.elements.namedItem(fieldName);
       if (field && typeof field.addEventListener === 'function') {
         field.addEventListener('input', persistDraft);
+        if (fieldName === 'displayName') {
+          field.addEventListener('input', () => {
+            syncFormAuthState(form);
+          });
+        }
         if (field.type === 'checkbox') {
           field.addEventListener('change', persistDraft);
         }
@@ -276,15 +315,66 @@
       .replace(/'/g, '&#39;');
   }
 
-  function getAvatarMarkup(user, className) {
-    const safeName = escapeHtml(user?.name || 'Google');
-    const safePicture = String(user?.picture || '').trim();
+  function createAvatarHost(className, size = 38) {
+    const host = document.createElement('span');
+    host.className = className;
+    host.dataset.avatarSize = String(size);
+    host.setAttribute('aria-hidden', 'true');
+    host.innerHTML = `<span class="forum-avatar-fallback">${size >= 36 ? '...' : ''}</span>`;
+    return host;
+  }
 
-    if (safePicture) {
-      return `<img class="${className}" src="${escapeHtml(safePicture)}" alt="${safeName}" referrerpolicy="no-referrer" />`;
+  function loadAnimalAvatarModule() {
+    if (!avatarModulePromise) {
+      avatarModulePromise = import('./forum-animal-avatars.js')
+        .catch((error) => {
+          avatarModulePromise = null;
+          throw error;
+        });
     }
 
-    return `<span class="${className}" aria-hidden="true">${safeName.slice(0, 1).toUpperCase()}</span>`;
+    return avatarModulePromise;
+  }
+
+  function mountAnimalAvatar(host, displayName) {
+    if (!host) return;
+
+    const safeName = normalizeDisplayName(displayName);
+    const size = Number(host.dataset.avatarSize) || 38;
+    host.dataset.avatarSeed = safeName;
+    host.innerHTML = `<span class="forum-avatar-fallback">${safeName.slice(0, 1).toUpperCase()}</span>`;
+
+    loadAnimalAvatarModule()
+      .then((module) => {
+        if (!host.isConnected) return;
+        if (host.dataset.avatarSeed !== safeName) return;
+
+        host.innerHTML = module.renderForumAnimalAvatarSvg(safeName, {
+          size,
+          anonymous: isAnonymousDisplayName(safeName),
+          label: safeName
+        });
+      })
+      .catch(() => {
+        host.innerHTML = `<span class="forum-avatar-fallback">${safeName.slice(0, 1).toUpperCase()}</span>`;
+      });
+  }
+
+  function seedDisplayNameField(form) {
+    const field = form?.elements?.namedItem?.('displayName');
+    if (!field || typeof field.value !== 'string' || field.value.trim()) {
+      return;
+    }
+
+    const preferredDisplayName = readPreferredDisplayName();
+    if (preferredDisplayName && !isAnonymousDisplayName(preferredDisplayName)) {
+      field.value = preferredDisplayName;
+    }
+  }
+
+  function getCurrentFormDisplayName(form) {
+    const value = form?.elements?.namedItem?.('displayName')?.value;
+    return normalizeDisplayName(value);
   }
 
   function ensureFormAuthElements(form) {
@@ -345,40 +435,36 @@
       authHint,
       notifyControl,
       notifyCheckbox: form.elements.namedItem('notifyReplies'),
-      notifyCopy: notifyControl.querySelector('[data-forum-notify-copy]'),
-      displayNameField: form.querySelector('[name="displayName"]')?.closest('.forum-field') || null
+      notifyCopy: notifyControl.querySelector('[data-forum-notify-copy]')
     };
   }
 
   function syncFormAuthState(form) {
     const parts = ensureFormAuthElements(form);
+    const publicDisplayName = getCurrentFormDisplayName(form);
 
     if (state.authUser) {
       parts.authContext.hidden = false;
       parts.authContext.innerHTML = `
-        ${getAvatarMarkup(state.authUser, 'forum-auth-context-avatar')}
         <div class="forum-auth-context-copy">
-          <span class="forum-auth-context-name">Postitad kui ${escapeHtml(state.authUser.name)}</span>
-          <span class="forum-auth-context-email">${escapeHtml(state.authUser.email)}</span>
+          <span class="forum-auth-context-kicker">Avalikult kuvatakse</span>
+          <div class="forum-auth-context-identity">
+            <span class="forum-auth-context-avatar" data-forum-public-avatar data-avatar-size="38" aria-hidden="true"></span>
+            <span class="forum-auth-context-name">${escapeHtml(publicDisplayName)}</span>
+          </div>
+          <span class="forum-auth-context-note">Google konto ja e-post jäävad privaatseks. Foorumis neid ei kuvata.</span>
         </div>
       `;
-
-      if (parts.displayNameField) {
-        parts.displayNameField.hidden = true;
-      }
-
-      if (form.elements.namedItem('displayName')) {
-        form.elements.namedItem('displayName').value = state.authUser.name;
-      }
+      mountAnimalAvatar(parts.authContext.querySelector('[data-forum-public-avatar]'), publicDisplayName);
 
       parts.authHint.hidden = !state.authConfig.googleAuthEnabled;
       parts.authHint.textContent = state.authConfig.notificationsEnabled
-        ? 'Google konto teeb nime ja e-posti teavitused lihtsaks. Soovi korral saad all oleva lülitiga vastuste teavitused sisse jätta.'
-        : 'Google kontoga postitades kasutame sinu konto nime. E-posti teavitused vajavad veel backendis saatja seadistamist.';
+        ? 'Google sisselogimine aitab vastuste teavitused siduda sinu kontoga. Avaliku kasutajanime valid alati ise.'
+        : 'Google konto on ühendatud. Avaliku kasutajanime valid ise ja sinu e-posti foorumis ei kuvata.';
 
       parts.notifyControl.hidden = !state.authConfig.notificationsEnabled;
       if (parts.notifyCopy) {
-        parts.notifyCopy.textContent = `Teavitused saadetakse aadressile ${state.authUser.email}.`;
+        parts.notifyCopy.textContent = 'Teavitused saadetakse sinu ühendatud Google kontole, kuid aadressi foorumis ei näidata.';
       }
 
       if (parts.notifyCheckbox && !parts.notifyCheckbox.checked) {
@@ -394,10 +480,6 @@
     parts.authContext.hidden = true;
     parts.authContext.innerHTML = '';
 
-    if (parts.displayNameField) {
-      parts.displayNameField.hidden = false;
-    }
-
     if (parts.notifyCheckbox) {
       parts.notifyCheckbox.checked = false;
     }
@@ -405,7 +487,7 @@
     parts.notifyControl.hidden = true;
     parts.authHint.hidden = !state.authConfig.googleAuthEnabled;
     parts.authHint.textContent = state.authConfig.googleAuthEnabled
-      ? 'Logi Googlega sisse, kui soovid kasutada oma nime ja saada vastuste teavitusi e-postile.'
+      ? 'Soovi korral logi Googlega sisse, kui tahad hiljem vastuste teavitusi. Avaliku kasutajanime valid ikka ise.'
       : '';
   }
 
@@ -520,16 +602,9 @@
     if (state.authUser) {
       card.innerHTML = `
         <div class="forum-auth-card-shell">
-          <div class="forum-auth-card-user">
-            ${getAvatarMarkup(state.authUser, 'forum-auth-card-avatar')}
-            <div class="forum-auth-card-meta">
-              <span class="forum-auth-card-name">${escapeHtml(state.authUser.name)}</span>
-              <span class="forum-auth-card-email">${escapeHtml(state.authUser.email)}</span>
-            </div>
-          </div>
           <div>
-            <h3 class="forum-auth-card-title">Google sisselogimine on aktiivne</h3>
-            <p class="forum-auth-card-copy">Soovi korral võid postitada anonüümselt edasi, aga sisselogituna saame vastuste teavitused siduda sinu Google e-postiga.</p>
+            <h3 class="forum-auth-card-title">Google konto on ühendatud</h3>
+            <p class="forum-auth-card-copy">Avaliku kasutajanime valid ise. Sinu e-posti ega Google profiilipilti ei näidata teistele foorumikasutajatele.</p>
           </div>
           <div class="forum-auth-card-actions">
             <button type="button" class="forum-inline-action" data-forum-logout>Logi välja</button>
@@ -546,7 +621,11 @@
       <div class="forum-auth-card-shell">
         <div>
           <h3 class="forum-auth-card-title">Google sisselogimine on valikuline</h3>
-          <p class="forum-auth-card-copy">Anonüümne postitamine jääb alles. Sisselogides kasutame sinu Google konto nime ja saad vastuste teavitused otse sellele e-postile.</p>
+          <p class="forum-auth-card-copy">${
+            state.authConfig.notificationsEnabled
+              ? 'Anonüümne postitamine jääb alles. Sisselogides saad vastuste teavitused oma kontole, aga avaliku kasutajanime valid ikkagi ise.'
+              : 'Anonüümne postitamine jääb alles. Soovi korral võid Google konto ühendada, kuid avaliku kasutajanime valid ikkagi ise.'
+          }</p>
         </div>
         <div class="forum-google-button" data-forum-google-button></div>
       </div>
@@ -648,6 +727,12 @@
 
   function appendMetaWithAuthor(container, displayName, ...parts) {
     const safeName = normalizeDisplayName(displayName);
+    const authorChip = document.createElement('span');
+    authorChip.className = 'forum-author-chip';
+
+    const avatar = createAvatarHost('forum-author-avatar', 34);
+    mountAnimalAvatar(avatar, safeName);
+
     const author = document.createElement('span');
     author.className = 'forum-author-name';
     if (isAnonymousDisplayName(safeName)) {
@@ -656,7 +741,8 @@
       author.style.setProperty('--forum-author-color', getAuthorColor(safeName));
     }
     author.textContent = safeName;
-    container.appendChild(author);
+    authorChip.append(avatar, author);
+    container.appendChild(authorChip);
 
     parts
       .filter((part) => part !== undefined && part !== null && part !== '')
@@ -828,6 +914,7 @@
 
         clearDraft(draftKey);
         form.reset();
+        seedDisplayNameField(form);
         syncFormAuthState(form);
         setStatus(
           [parentComment ? 'Vastus lisatud.' : 'Kommentaar lisatud.', payload.notificationMessage].filter(Boolean).join(' '),
@@ -1189,6 +1276,7 @@
 
         clearDraft(draftKey);
         form.reset();
+        seedDisplayNameField(form);
         syncFormAuthState(form);
         setStatus(['Uus teema lisatud.', payload.notificationMessage].filter(Boolean).join(' '), 'success');
         await loadThreads();

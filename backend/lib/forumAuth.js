@@ -40,8 +40,7 @@ function normalizeUser(payload) {
   return {
     sub: sanitizeProfileString(payload.sub, 255),
     email: sanitizeProfileString(String(payload.email).toLowerCase(), 254),
-    name: sanitizeProfileString(payload.name || payload.given_name || 'Google user', 120),
-    picture: sanitizeProfileString(payload.picture || '', 500)
+    name: sanitizeProfileString(payload.name || payload.given_name || 'Google user', 120)
   };
 }
 
@@ -71,7 +70,6 @@ function createForumSession(user) {
     sub: user.sub,
     email: user.email,
     name: user.name,
-    picture: user.picture,
     iat: now,
     exp: now + SESSION_MAX_AGE_MS
   };

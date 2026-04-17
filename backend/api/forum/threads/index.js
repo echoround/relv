@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
       const authUser = getForumAuthFromRequest(req);
       const thread = await createThread({
         ...payload,
-        displayName: authUser?.name || payload.displayName,
+        displayName: payload.displayName,
         authorProfile: authUser,
         ipHash,
         userAgent
@@ -49,7 +49,7 @@ module.exports = async function handler(req, res) {
           threadId: thread.id,
           googleSub: authUser.sub,
           email: authUser.email,
-          displayName: authUser.name,
+          displayName: thread.displayName,
           ipHash,
           userAgent
         });

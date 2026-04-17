@@ -261,8 +261,8 @@ function normalizeAuthorProfile(authorProfile) {
   return {
     provider: 'google',
     subject: String(authorProfile.sub).slice(0, 255),
-    email: String(authorProfile.email).slice(0, 254),
-    picture: String(authorProfile.picture || '').slice(0, 500)
+    email: '',
+    picture: ''
   };
 }
 
