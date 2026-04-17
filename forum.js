@@ -11,6 +11,25 @@
     replyTargetId: ''
   };
 
+  const FORUM_AUTHOR_PALETTE = [
+    '#9fd8ff', '#ffd29a', '#baf59a', '#ffb7df', '#c8bcff', '#9ef2d5',
+    '#ffd8b2', '#f7ee9e', '#8fd0ff', '#ffc3b6', '#c8ffb1', '#f6c2ff',
+    '#a8f4ff', '#e0c0ff', '#ffe59d', '#b4f5c6', '#ffb1c9', '#b6cbff',
+    '#ffd3f6', '#a9ffd9', '#ffd0a6', '#d5f6a3', '#c4d7ff', '#ffcaeb',
+    '#9ce6ff', '#ffe0b8', '#c6f0ff', '#e7d2ff', '#c9ffbe', '#ffc8a0'
+  ];
+
+  const shuffledAuthorPalette = [...FORUM_AUTHOR_PALETTE];
+  for (let index = shuffledAuthorPalette.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffledAuthorPalette[index], shuffledAuthorPalette[randomIndex]] = [
+      shuffledAuthorPalette[randomIndex],
+      shuffledAuthorPalette[index]
+    ];
+  }
+
+  const authorColorByName = new Map();
+
   function getLoadingMarkup(message) {
     return `
       <div class="forum-loading" role="status" aria-live="polite">
@@ -46,6 +65,45 @@
     const plain = String(value || '').replace(/\s+/g, ' ').trim();
     if (plain.length <= max) return plain;
     return `${plain.slice(0, max).trim()}...`;
+  }
+
+  function normalizeDisplayName(value) {
+    const normalized = String(value || '').trim();
+    return normalized || 'Anonüümne';
+  }
+
+  function getAuthorColor(displayName) {
+    const safeName = normalizeDisplayName(displayName);
+    const key = safeName.toLocaleLowerCase('et-EE');
+
+    if (!authorColorByName.has(key)) {
+      authorColorByName.set(key, shuffledAuthorPalette[authorColorByName.size % shuffledAuthorPalette.length]);
+    }
+
+    return authorColorByName.get(key);
+  }
+
+  function appendMetaWithAuthor(container, displayName, ...parts) {
+    const safeName = normalizeDisplayName(displayName);
+    const author = document.createElement('span');
+    author.className = 'forum-author-name';
+    author.style.setProperty('--forum-author-color', getAuthorColor(safeName));
+    author.textContent = safeName;
+    container.appendChild(author);
+
+    parts
+      .filter((part) => part !== undefined && part !== null && part !== '')
+      .forEach((part) => {
+        const separator = document.createElement('span');
+        separator.className = 'forum-meta-separator';
+        separator.textContent = '•';
+
+        const value = document.createElement('span');
+        value.className = 'forum-meta-text';
+        value.textContent = String(part);
+
+        container.append(separator, value);
+      });
   }
 
   function setStatus(message, type = 'info') {
@@ -215,7 +273,7 @@
 
     const itemMeta = document.createElement('div');
     itemMeta.className = 'forum-comment-meta';
-    itemMeta.textContent = `${comment.displayName} • ${formatDate(comment.createdAt)}`;
+    appendMetaWithAuthor(itemMeta, comment.displayName, formatDate(comment.createdAt));
 
     const itemBody = document.createElement('div');
     itemBody.className = 'forum-comment-body';
@@ -282,7 +340,7 @@
 
       const meta = document.createElement('span');
       meta.className = 'forum-thread-card-meta';
-      meta.textContent = `${thread.displayName} • ${thread.commentsCount} kommentaari • ${formatDate(thread.lastActivityAt)}`;
+      appendMetaWithAuthor(meta, thread.displayName, `${thread.commentsCount} kommentaari`, formatDate(thread.lastActivityAt));
 
       const preview = document.createElement('span');
       preview.className = 'forum-thread-card-preview';
@@ -343,7 +401,7 @@
 
     const meta = document.createElement('p');
     meta.className = 'forum-detail-meta';
-    meta.textContent = `${thread.displayName} • ${formatDate(thread.createdAt)} • ${thread.commentsCount} kommentaari`;
+    appendMetaWithAuthor(meta, thread.displayName, formatDate(thread.createdAt), `${thread.commentsCount} kommentaari`);
 
     header.append(title, meta);
 

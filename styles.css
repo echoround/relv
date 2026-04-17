@@ -2017,8 +2017,37 @@ body.theme-quiz .dot.mid{ background: var(--color-partial); }
   margin-top: 8px;
 }
 
-.theme-forum .forum-thread-card-meta{
-  display: block;
+.theme-forum .forum-thread-card-meta,
+.theme-forum .forum-detail-meta,
+.theme-forum .forum-comment-meta{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.theme-forum .forum-author-name{
+  color: var(--forum-author-color, rgba(255,255,255,0.94));
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 16px rgba(255,255,255,0.05);
+}
+
+.theme-forum .forum-thread-card-meta .forum-author-name,
+.theme-forum .forum-detail-meta .forum-author-name{
+  font-size: 14px;
+}
+
+.theme-forum .forum-meta-separator{
+  color: rgba(255,255,255,0.34);
+  font-size: 11px;
+  line-height: 1;
+}
+
+.theme-forum .forum-meta-text{
+  color: rgba(255,255,255,0.64);
 }
 
 .theme-forum .forum-thread-card-preview{
