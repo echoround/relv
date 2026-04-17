@@ -12,7 +12,8 @@
     authConfig: {
       googleAuthEnabled: false,
       notificationsEnabled: false,
-      googleClientId: ''
+      googleClientId: '',
+      status: 'loading'
     },
     authUser: null
   };
@@ -491,8 +492,19 @@
     }
 
     if (!state.authConfig.googleAuthEnabled) {
-      card.hidden = true;
-      card.innerHTML = '';
+      const authCopy = state.authConfig.status === 'backend-unavailable'
+        ? 'Google sisselogimise backend ei ole veel live-is. Panen selle eraldi üles, et nupp siin päriselt nähtavaks muutuks.'
+        : 'Google sisselogimine vajab veel seadistamist. Kui Google klient on lisatud, ilmub siia sama kompaktne sisselogimisnupp.';
+
+      card.hidden = false;
+      card.innerHTML = `
+        <div class="forum-auth-card-shell">
+          <div>
+            <h3 class="forum-auth-card-title">Google sisselogimine on valikuline</h3>
+            <p class="forum-auth-card-copy">${authCopy}</p>
+          </div>
+        </div>
+      `;
       syncAllFormsAuthState();
       return;
     }
@@ -550,14 +562,23 @@
         state.authConfig = {
           googleAuthEnabled: Boolean(payload.googleAuthEnabled),
           notificationsEnabled: Boolean(payload.notificationsEnabled),
-          googleClientId: String(payload.googleClientId || '')
+          googleClientId: String(payload.googleClientId || ''),
+          status: payload.googleClientId ? 'ready' : 'not-configured'
+        };
+      } else {
+        state.authConfig = {
+          googleAuthEnabled: false,
+          notificationsEnabled: false,
+          googleClientId: '',
+          status: 'backend-unavailable'
         };
       }
     } catch (error) {
       state.authConfig = {
         googleAuthEnabled: false,
         notificationsEnabled: false,
-        googleClientId: ''
+        googleClientId: '',
+        status: 'backend-unavailable'
       };
     }
 
