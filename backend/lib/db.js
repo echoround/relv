@@ -53,6 +53,63 @@ async function ensureDb() {
       `;
 
       await sql`
+        ALTER TABLE forum_threads
+        ADD COLUMN IF NOT EXISTS author_provider TEXT
+      `;
+
+      await sql`
+        ALTER TABLE forum_threads
+        ADD COLUMN IF NOT EXISTS author_subject TEXT
+      `;
+
+      await sql`
+        ALTER TABLE forum_threads
+        ADD COLUMN IF NOT EXISTS author_email TEXT
+      `;
+
+      await sql`
+        ALTER TABLE forum_threads
+        ADD COLUMN IF NOT EXISTS author_avatar_url TEXT
+      `;
+
+      await sql`
+        ALTER TABLE forum_comments
+        ADD COLUMN IF NOT EXISTS author_provider TEXT
+      `;
+
+      await sql`
+        ALTER TABLE forum_comments
+        ADD COLUMN IF NOT EXISTS author_subject TEXT
+      `;
+
+      await sql`
+        ALTER TABLE forum_comments
+        ADD COLUMN IF NOT EXISTS author_email TEXT
+      `;
+
+      await sql`
+        ALTER TABLE forum_comments
+        ADD COLUMN IF NOT EXISTS author_avatar_url TEXT
+      `;
+
+      await sql`
+        CREATE TABLE IF NOT EXISTS forum_notification_subscriptions (
+          id TEXT PRIMARY KEY,
+          thread_id TEXT NOT NULL REFERENCES forum_threads(id) ON DELETE CASCADE,
+          comment_id TEXT REFERENCES forum_comments(id) ON DELETE CASCADE,
+          google_sub TEXT NOT NULL,
+          email TEXT NOT NULL,
+          display_name TEXT NOT NULL,
+          is_active BOOLEAN NOT NULL DEFAULT TRUE,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          last_notified_at TIMESTAMPTZ,
+          ip_hash TEXT,
+          user_agent TEXT
+        )
+      `;
+
+      await sql`
         CREATE TABLE IF NOT EXISTS mailing_list_subscribers (
           id TEXT PRIMARY KEY,
           email TEXT UNIQUE NOT NULL,
@@ -69,6 +126,11 @@ async function ensureDb() {
       await sql`CREATE INDEX IF NOT EXISTS forum_comments_parent_created_idx ON forum_comments (parent_comment_id, created_at ASC)`;
       await sql`CREATE INDEX IF NOT EXISTS forum_threads_ip_hash_idx ON forum_threads (ip_hash, created_at DESC)`;
       await sql`CREATE INDEX IF NOT EXISTS forum_comments_ip_hash_idx ON forum_comments (ip_hash, created_at DESC)`;
+      await sql`CREATE INDEX IF NOT EXISTS forum_notifications_thread_idx ON forum_notification_subscriptions (thread_id, updated_at DESC)`;
+      await sql`CREATE INDEX IF NOT EXISTS forum_notifications_comment_idx ON forum_notification_subscriptions (comment_id, updated_at DESC)`;
+      await sql`CREATE INDEX IF NOT EXISTS forum_notifications_subject_idx ON forum_notification_subscriptions (google_sub, updated_at DESC)`;
+      await sql`CREATE UNIQUE INDEX IF NOT EXISTS forum_notify_thread_subject_unique ON forum_notification_subscriptions (thread_id, google_sub) WHERE comment_id IS NULL`;
+      await sql`CREATE UNIQUE INDEX IF NOT EXISTS forum_notify_comment_subject_unique ON forum_notification_subscriptions (comment_id, google_sub) WHERE comment_id IS NOT NULL`;
       await sql`CREATE INDEX IF NOT EXISTS mailing_list_ip_hash_idx ON mailing_list_subscribers (ip_hash, created_at DESC)`;
     })();
   }
@@ -186,11 +248,193 @@ async function createUniqueSlug(slugBase) {
   return `${base}-${Date.now().toString(36)}`;
 }
 
-async function createThread({ title, body, displayName, slugBase, ipHash, userAgent }) {
+function normalizeAuthorProfile(authorProfile) {
+  if (!authorProfile?.sub || !authorProfile?.email) {
+    return {
+      provider: '',
+      subject: '',
+      email: '',
+      picture: ''
+    };
+  }
+
+  return {
+    provider: 'google',
+    subject: String(authorProfile.sub).slice(0, 255),
+    email: String(authorProfile.email).slice(0, 254),
+    picture: String(authorProfile.picture || '').slice(0, 500)
+  };
+}
+
+async function upsertForumNotificationSubscription({
+  threadId,
+  commentId = null,
+  googleSub,
+  email,
+  displayName,
+  ipHash,
+  userAgent
+}) {
+  await ensureDb();
+
+  if (!threadId || !googleSub || !email) {
+    return null;
+  }
+
+  const existingRows = commentId
+    ? await sql`
+        SELECT id
+        FROM forum_notification_subscriptions
+        WHERE comment_id = ${commentId}
+          AND google_sub = ${googleSub}
+        LIMIT 1
+      `
+    : await sql`
+        SELECT id
+        FROM forum_notification_subscriptions
+        WHERE thread_id = ${threadId}
+          AND comment_id IS NULL
+          AND google_sub = ${googleSub}
+        LIMIT 1
+      `;
+
+  const existing = existingRows[0];
+
+  if (existing) {
+    const rows = await sql`
+      UPDATE forum_notification_subscriptions
+      SET
+        email = ${email},
+        display_name = ${displayName},
+        is_active = TRUE,
+        ip_hash = ${ipHash},
+        user_agent = ${userAgent},
+        updated_at = NOW()
+      WHERE id = ${existing.id}
+      RETURNING
+        id,
+        thread_id AS "threadId",
+        comment_id AS "commentId",
+        google_sub AS "googleSub",
+        email,
+        display_name AS "displayName",
+        is_active AS "isActive"
+    `;
+
+    return rows[0];
+  }
+
+  const id = crypto.randomUUID();
+  const rows = await sql`
+    INSERT INTO forum_notification_subscriptions (
+      id,
+      thread_id,
+      comment_id,
+      google_sub,
+      email,
+      display_name,
+      ip_hash,
+      user_agent
+    )
+    VALUES (
+      ${id},
+      ${threadId},
+      ${commentId || null},
+      ${googleSub},
+      ${email},
+      ${displayName},
+      ${ipHash},
+      ${userAgent}
+    )
+    RETURNING
+      id,
+      thread_id AS "threadId",
+      comment_id AS "commentId",
+      google_sub AS "googleSub",
+      email,
+      display_name AS "displayName",
+      is_active AS "isActive"
+  `;
+
+  return rows[0];
+}
+
+async function listForumNotificationRecipients({ threadId, parentCommentId = null, excludeGoogleSub = '' }) {
+  await ensureDb();
+
+  const threadRows = await sql`
+    SELECT
+      id,
+      email,
+      display_name AS "displayName",
+      google_sub AS "googleSub",
+      FALSE AS "isDirectReply"
+    FROM forum_notification_subscriptions
+    WHERE thread_id = ${threadId}
+      AND comment_id IS NULL
+      AND is_active = TRUE
+  `;
+
+  const commentRows = parentCommentId
+    ? await sql`
+        SELECT
+          id,
+          email,
+          display_name AS "displayName",
+          google_sub AS "googleSub",
+          TRUE AS "isDirectReply"
+        FROM forum_notification_subscriptions
+        WHERE comment_id = ${parentCommentId}
+          AND is_active = TRUE
+      `
+    : [];
+
+  const recipientsBySubject = new Map();
+
+  [...commentRows, ...threadRows].forEach((recipient) => {
+    if (!recipient.googleSub) return;
+    if (excludeGoogleSub && recipient.googleSub === excludeGoogleSub) return;
+    if (!recipientsBySubject.has(recipient.googleSub)) {
+      recipientsBySubject.set(recipient.googleSub, recipient);
+    }
+  });
+
+  return [...recipientsBySubject.values()];
+}
+
+async function markForumNotificationDelivered(subscriptionId) {
+  await ensureDb();
+
+  await sql`
+    UPDATE forum_notification_subscriptions
+    SET
+      last_notified_at = NOW(),
+      updated_at = NOW()
+    WHERE id = ${subscriptionId}
+  `;
+}
+
+async function disableForumNotificationSubscription(subscriptionId) {
+  await ensureDb();
+
+  const rows = await sql`
+    UPDATE forum_notification_subscriptions
+    SET
+      is_active = FALSE,
+      updated_at = NOW()
+    WHERE id = ${subscriptionId}
+    RETURNING id
+  `;
+
+  return rows[0] || null;
+}
+
+async function createThread({ title, body, displayName, slugBase, ipHash, userAgent, authorProfile = null }) {
   await ensureDb();
 
   const id = crypto.randomUUID();
   const slug = await createUniqueSlug(slugBase);
+  const author = normalizeAuthorProfile(authorProfile);
 
   await sql`
     INSERT INTO forum_threads (
@@ -199,6 +443,10 @@ async function createThread({ title, body, displayName, slugBase, ipHash, userAg
       title,
       body,
       display_name,
+      author_provider,
+      author_subject,
+      author_email,
+      author_avatar_url,
       ip_hash,
       user_agent
     )
@@ -208,6 +456,10 @@ async function createThread({ title, body, displayName, slugBase, ipHash, userAg
       ${title},
       ${body},
       ${displayName},
+      ${author.provider},
+      ${author.subject},
+      ${author.email},
+      ${author.picture},
       ${ipHash},
       ${userAgent}
     )
@@ -216,11 +468,19 @@ async function createThread({ title, body, displayName, slugBase, ipHash, userAg
   return getThreadBySlug(slug);
 }
 
-async function addComment({ threadSlug, parentCommentId, body, displayName, ipHash, userAgent }) {
+async function addComment({
+  threadSlug,
+  parentCommentId,
+  body,
+  displayName,
+  ipHash,
+  userAgent,
+  authorProfile = null
+}) {
   await ensureDb();
 
   const threadRows = await sql`
-    SELECT id
+    SELECT id, slug, title
     FROM forum_threads
     WHERE slug = ${threadSlug} AND is_hidden = FALSE
     LIMIT 1
@@ -249,6 +509,7 @@ async function addComment({ threadSlug, parentCommentId, body, displayName, ipHa
   }
 
   const id = crypto.randomUUID();
+  const author = normalizeAuthorProfile(authorProfile);
 
   await sql`
     INSERT INTO forum_comments (
@@ -257,6 +518,10 @@ async function addComment({ threadSlug, parentCommentId, body, displayName, ipHa
       parent_comment_id,
       body,
       display_name,
+      author_provider,
+      author_subject,
+      author_email,
+      author_avatar_url,
       ip_hash,
       user_agent
     )
@@ -266,6 +531,10 @@ async function addComment({ threadSlug, parentCommentId, body, displayName, ipHa
       ${parentComment ? parentComment.id : null},
       ${body},
       ${displayName},
+      ${author.provider},
+      ${author.subject},
+      ${author.email},
+      ${author.picture},
       ${ipHash},
       ${userAgent}
     )
@@ -280,7 +549,19 @@ async function addComment({ threadSlug, parentCommentId, body, displayName, ipHa
     WHERE id = ${thread.id}
   `;
 
-  return getThreadBySlug(threadSlug);
+  return {
+    thread: await getThreadBySlug(threadSlug),
+    context: {
+      threadId: thread.id,
+      threadSlug: thread.slug,
+      threadTitle: thread.title,
+      commentId: id,
+      parentCommentId: parentComment ? parentComment.id : '',
+      replyAuthor: displayName,
+      replyBody: body,
+      authorSubject: author.subject
+    }
+  };
 }
 
 async function upsertSubscriber({ email, sourcePage, ipHash, userAgent }) {
@@ -364,6 +645,10 @@ module.exports = {
   getThreadBySlug,
   createThread,
   addComment,
+  disableForumNotificationSubscription,
+  listForumNotificationRecipients,
+  markForumNotificationDelivered,
+  upsertForumNotificationSubscription,
   upsertSubscriber,
   countRecentThreadsByIp,
   countRecentCommentsByIp,

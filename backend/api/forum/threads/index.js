@@ -1,5 +1,11 @@
 const { maybeHandleOptions, sendJson, readJsonBody, getClientMeta, methodNotAllowed } = require('../../../lib/http');
-const { listThreads, createThread, countRecentThreadsByIp } = require('../../../lib/db');
+const {
+  listThreads,
+  createThread,
+  countRecentThreadsByIp,
+  upsertForumNotificationSubscription
+} = require('../../../lib/db');
+const { getForumAuthFromRequest } = require('../../../lib/forumAuth');
 const { validateThreadInput } = require('../../../lib/validation');
 
 module.exports = async function handler(req, res) {
@@ -28,15 +34,33 @@ module.exports = async function handler(req, res) {
       }
 
       const payload = validateThreadInput(body);
+      const authUser = getForumAuthFromRequest(req);
       const thread = await createThread({
         ...payload,
+        displayName: authUser?.name || payload.displayName,
+        authorProfile: authUser,
         ipHash,
         userAgent
       });
+      let notificationMessage = '';
+
+      if (payload.notifyReplies && authUser) {
+        await upsertForumNotificationSubscription({
+          threadId: thread.id,
+          googleSub: authUser.sub,
+          email: authUser.email,
+          displayName: authUser.name,
+          ipHash,
+          userAgent
+        });
+
+        notificationMessage = 'Teavitused on selle teema jaoks sees.';
+      }
 
       return sendJson(req, res, 201, {
         ok: true,
-        thread
+        thread,
+        notificationMessage
       });
     }
 

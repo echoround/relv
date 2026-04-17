@@ -27,7 +27,7 @@ function applyCors(req, res) {
   }
 
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Vary', 'Origin');
 
   return allowedOrigin;
@@ -47,6 +47,13 @@ function maybeHandleOptions(req, res) {
 function sendJson(req, res, statusCode, payload) {
   applyCors(req, res);
   res.status(statusCode).json(payload);
+}
+
+function sendHtml(req, res, statusCode, html) {
+  applyCors(req, res);
+  res.status(statusCode);
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(html);
 }
 
 async function readJsonBody(req) {
@@ -100,6 +107,7 @@ module.exports = {
   applyCors,
   maybeHandleOptions,
   sendJson,
+  sendHtml,
   readJsonBody,
   getClientMeta,
   methodNotAllowed

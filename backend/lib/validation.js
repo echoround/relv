@@ -48,6 +48,13 @@ function validateEmail(email) {
   return normalized.slice(0, 254);
 }
 
+function toBoolean(value) {
+  if (typeof value === 'boolean') return value;
+
+  const normalized = collapseWhitespace(value).toLowerCase();
+  return normalized === 'true' || normalized === '1' || normalized === 'on' || normalized === 'yes';
+}
+
 function validateThreadInput(input) {
   if (input.website || input.company) {
     throw new Error('Kahtlane päring blokeeriti.');
@@ -73,7 +80,8 @@ function validateThreadInput(input) {
     title,
     body,
     displayName,
-    slugBase: slugify(title)
+    slugBase: slugify(title),
+    notifyReplies: toBoolean(input.notifyReplies)
   };
 }
 
@@ -103,7 +111,8 @@ function validateCommentInput(input) {
     threadSlug,
     parentCommentId,
     body,
-    displayName
+    displayName,
+    notifyReplies: toBoolean(input.notifyReplies)
   };
 }
 

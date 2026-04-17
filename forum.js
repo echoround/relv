@@ -8,7 +8,13 @@
     loadingDetail: false,
     detailExpanded: false,
     commentFormOpen: false,
-    replyTargetId: ''
+    replyTargetId: '',
+    authConfig: {
+      googleAuthEnabled: false,
+      notificationsEnabled: false,
+      googleClientId: ''
+    },
+    authUser: null
   };
 
   const FORUM_AUTHOR_PALETTE = [
@@ -30,6 +36,7 @@
 
   const authorColorByName = new Map();
   const FORUM_DRAFT_KEY_PREFIX = 'relv:forum:draft';
+  const FORUM_AUTH_TOKEN_KEY = 'relv:forum:auth-token';
 
   function getDraftStorage() {
     try {
@@ -114,7 +121,17 @@
 
     fieldNames.forEach((fieldName) => {
       const field = form.elements.namedItem(fieldName);
-      snapshot[fieldName] = field && typeof field.value === 'string' ? field.value : '';
+      if (!field) {
+        snapshot[fieldName] = '';
+        return;
+      }
+
+      if (field.type === 'checkbox') {
+        snapshot[fieldName] = field.checked ? 'true' : '';
+        return;
+      }
+
+      snapshot[fieldName] = typeof field.value === 'string' ? field.value : '';
     });
 
     writeDraft(draftKey, snapshot);
@@ -126,7 +143,16 @@
     if (savedDraft) {
       fieldNames.forEach((fieldName) => {
         const field = form.elements.namedItem(fieldName);
-        if (field && typeof field.value === 'string' && typeof savedDraft[fieldName] === 'string') {
+        if (!field || typeof savedDraft[fieldName] !== 'string') {
+          return;
+        }
+
+        if (field.type === 'checkbox') {
+          field.checked = savedDraft[fieldName] === 'true';
+          return;
+        }
+
+        if (typeof field.value === 'string') {
           field.value = savedDraft[fieldName];
         }
       });
@@ -140,6 +166,9 @@
       const field = form.elements.namedItem(fieldName);
       if (field && typeof field.addEventListener === 'function') {
         field.addEventListener('input', persistDraft);
+        if (field.type === 'checkbox') {
+          field.addEventListener('change', persistDraft);
+        }
       }
     });
   }
@@ -162,6 +191,62 @@
     return base ? `${base}${path}` : '';
   }
 
+  function getAuthStorage() {
+    return getDraftStorage();
+  }
+
+  function readAuthToken() {
+    const storage = getAuthStorage();
+    if (!storage) return '';
+
+    try {
+      return String(storage.getItem(FORUM_AUTH_TOKEN_KEY) || '');
+    } catch (error) {
+      return '';
+    }
+  }
+
+  function writeAuthToken(token) {
+    const storage = getAuthStorage();
+    if (!storage) return;
+
+    try {
+      if (token) {
+        storage.setItem(FORUM_AUTH_TOKEN_KEY, token);
+      } else {
+        storage.removeItem(FORUM_AUTH_TOKEN_KEY);
+      }
+    } catch (error) {
+      // Ignore storage failures.
+    }
+  }
+
+  function getAuthHeaders(extraHeaders = {}) {
+    const token = readAuthToken();
+    return token
+      ? {
+          ...extraHeaders,
+          Authorization: `Bearer ${token}`
+        }
+      : extraHeaders;
+  }
+
+  async function waitForGoogleIdentity(timeoutMs = 6000) {
+    const start = Date.now();
+
+    while (Date.now() - start < timeoutMs) {
+      if (window.google?.accounts?.id) {
+        return window.google.accounts.id;
+      }
+
+      await new Promise((resolve) => {
+        window.setTimeout(resolve, 120);
+      });
+    }
+
+    return null;
+  }
+
   function formatDate(value) {
     if (!value) return '';
 
@@ -179,6 +264,331 @@
     const plain = String(value || '').replace(/\s+/g, ' ').trim();
     if (plain.length <= max) return plain;
     return `${plain.slice(0, max).trim()}...`;
+  }
+
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function getAvatarMarkup(user, className) {
+    const safeName = escapeHtml(user?.name || 'Google');
+    const safePicture = String(user?.picture || '').trim();
+
+    if (safePicture) {
+      return `<img class="${className}" src="${escapeHtml(safePicture)}" alt="${safeName}" referrerpolicy="no-referrer" />`;
+    }
+
+    return `<span class="${className}" aria-hidden="true">${safeName.slice(0, 1).toUpperCase()}</span>`;
+  }
+
+  function ensureFormAuthElements(form) {
+    let authContext = form.querySelector('[data-forum-auth-context]');
+    if (!authContext) {
+      authContext = document.createElement('div');
+      authContext.className = 'forum-auth-context';
+      authContext.dataset.forumAuthContext = '';
+      authContext.hidden = true;
+      form.prepend(authContext);
+    }
+
+    let authHint = form.querySelector('[data-forum-auth-hint]');
+    if (!authHint) {
+      authHint = document.createElement('p');
+      authHint.className = 'forum-auth-hint';
+      authHint.dataset.forumAuthHint = '';
+
+      const actions = form.querySelector('.forum-form-actions');
+      if (actions) {
+        actions.before(authHint);
+      } else {
+        form.appendChild(authHint);
+      }
+    }
+
+    let notifyControl = form.querySelector('[data-forum-notify-control]');
+    if (!notifyControl) {
+      notifyControl = document.createElement('div');
+      notifyControl.className = 'forum-notify-control';
+      notifyControl.dataset.forumNotifyControl = '';
+      notifyControl.hidden = true;
+      notifyControl.innerHTML = `
+        <label class="forum-notify-check">
+          <input type="checkbox" name="notifyReplies" value="true" />
+          <span class="forum-notify-text">
+            <span class="forum-notify-title">Teavita mind vastustest</span>
+            <span class="forum-notify-copy" data-forum-notify-copy></span>
+          </span>
+        </label>
+      `;
+
+      const note = form.querySelector('.forum-form-note');
+      if (note) {
+        note.before(notifyControl);
+      } else {
+        const actions = form.querySelector('.forum-form-actions');
+        if (actions) {
+          actions.before(notifyControl);
+        } else {
+          form.appendChild(notifyControl);
+        }
+      }
+    }
+
+    return {
+      authContext,
+      authHint,
+      notifyControl,
+      notifyCheckbox: form.elements.namedItem('notifyReplies'),
+      notifyCopy: notifyControl.querySelector('[data-forum-notify-copy]'),
+      displayNameField: form.querySelector('[name="displayName"]')?.closest('.forum-field') || null
+    };
+  }
+
+  function syncFormAuthState(form) {
+    const parts = ensureFormAuthElements(form);
+
+    if (state.authUser) {
+      parts.authContext.hidden = false;
+      parts.authContext.innerHTML = `
+        ${getAvatarMarkup(state.authUser, 'forum-auth-context-avatar')}
+        <div class="forum-auth-context-copy">
+          <span class="forum-auth-context-name">Postitad kui ${escapeHtml(state.authUser.name)}</span>
+          <span class="forum-auth-context-email">${escapeHtml(state.authUser.email)}</span>
+        </div>
+      `;
+
+      if (parts.displayNameField) {
+        parts.displayNameField.hidden = true;
+      }
+
+      if (form.elements.namedItem('displayName')) {
+        form.elements.namedItem('displayName').value = state.authUser.name;
+      }
+
+      parts.authHint.hidden = !state.authConfig.googleAuthEnabled;
+      parts.authHint.textContent = state.authConfig.notificationsEnabled
+        ? 'Google konto teeb nime ja e-posti teavitused lihtsaks. Soovi korral saad all oleva lülitiga vastuste teavitused sisse jätta.'
+        : 'Google kontoga postitades kasutame sinu konto nime. E-posti teavitused vajavad veel backendis saatja seadistamist.';
+
+      parts.notifyControl.hidden = !state.authConfig.notificationsEnabled;
+      if (parts.notifyCopy) {
+        parts.notifyCopy.textContent = `Teavitused saadetakse aadressile ${state.authUser.email}.`;
+      }
+
+      if (parts.notifyCheckbox && !parts.notifyCheckbox.checked) {
+        const savedDraft = readDraft(form.dataset.forumDraftKey || '');
+        if (!savedDraft || !Object.prototype.hasOwnProperty.call(savedDraft, 'notifyReplies')) {
+          parts.notifyCheckbox.checked = true;
+        }
+      }
+
+      return;
+    }
+
+    parts.authContext.hidden = true;
+    parts.authContext.innerHTML = '';
+
+    if (parts.displayNameField) {
+      parts.displayNameField.hidden = false;
+    }
+
+    if (parts.notifyCheckbox) {
+      parts.notifyCheckbox.checked = false;
+    }
+
+    parts.notifyControl.hidden = true;
+    parts.authHint.hidden = !state.authConfig.googleAuthEnabled;
+    parts.authHint.textContent = state.authConfig.googleAuthEnabled
+      ? 'Logi Googlega sisse, kui soovid kasutada oma nime ja saada vastuste teavitusi e-postile.'
+      : '';
+  }
+
+  function syncAllFormsAuthState() {
+    document.querySelectorAll('.forum-form, .forum-comment-form').forEach((form) => {
+      syncFormAuthState(form);
+    });
+  }
+
+  async function signInWithGoogleCredential(credential) {
+    const endpoint = getApiUrl('/forum/auth/google');
+    if (!endpoint) {
+      setStatus('Google sisselogimine ei ole hetkel saadaval.', 'error');
+      return;
+    }
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ credential })
+      });
+
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.ok || !payload.token || !payload.user) {
+        throw new Error(payload.error || 'Google sisselogimine ebaõnnestus.');
+      }
+
+      writeAuthToken(payload.token);
+      state.authUser = payload.user;
+      clearStatus();
+      renderForumAuthCard();
+    } catch (error) {
+      setStatus(error.message || 'Google sisselogimine ebaõnnestus.', 'error');
+    }
+  }
+
+  function logoutForumAuth() {
+    writeAuthToken('');
+    state.authUser = null;
+
+    if (window.google?.accounts?.id?.disableAutoSelect) {
+      window.google.accounts.id.disableAutoSelect();
+    }
+
+    renderForumAuthCard();
+  }
+
+  async function renderGoogleButton(buttonHost) {
+    if (!buttonHost || !state.authConfig.googleAuthEnabled) return;
+
+    const googleIdentity = await waitForGoogleIdentity();
+    if (!googleIdentity) {
+      buttonHost.textContent = 'Google sisselogimise nuppu ei õnnestunud laadida.';
+      return;
+    }
+
+    buttonHost.innerHTML = '';
+    googleIdentity.initialize({
+      client_id: state.authConfig.googleClientId,
+      callback: (response) => {
+        if (response?.credential) {
+          signInWithGoogleCredential(response.credential);
+        }
+      }
+    });
+    googleIdentity.renderButton(buttonHost, {
+      theme: 'outline',
+      size: 'medium',
+      shape: 'pill',
+      text: 'signin_with',
+      logo_alignment: 'left',
+      width: 240
+    });
+  }
+
+  function renderForumAuthCard() {
+    const card = document.querySelector('[data-forum-auth-card]');
+    if (!card) {
+      syncAllFormsAuthState();
+      return;
+    }
+
+    if (!state.authConfig.googleAuthEnabled) {
+      card.hidden = true;
+      card.innerHTML = '';
+      syncAllFormsAuthState();
+      return;
+    }
+
+    card.hidden = false;
+
+    if (state.authUser) {
+      card.innerHTML = `
+        <div class="forum-auth-card-shell">
+          <div class="forum-auth-card-user">
+            ${getAvatarMarkup(state.authUser, 'forum-auth-card-avatar')}
+            <div class="forum-auth-card-meta">
+              <span class="forum-auth-card-name">${escapeHtml(state.authUser.name)}</span>
+              <span class="forum-auth-card-email">${escapeHtml(state.authUser.email)}</span>
+            </div>
+          </div>
+          <div>
+            <h3 class="forum-auth-card-title">Google sisselogimine on aktiivne</h3>
+            <p class="forum-auth-card-copy">Soovi korral võid postitada anonüümselt edasi, aga sisselogituna saame vastuste teavitused siduda sinu Google e-postiga.</p>
+          </div>
+          <div class="forum-auth-card-actions">
+            <button type="button" class="forum-inline-action" data-forum-logout>Logi välja</button>
+          </div>
+        </div>
+      `;
+
+      card.querySelector('[data-forum-logout]')?.addEventListener('click', logoutForumAuth);
+      syncAllFormsAuthState();
+      return;
+    }
+
+    card.innerHTML = `
+      <div class="forum-auth-card-shell">
+        <div>
+          <h3 class="forum-auth-card-title">Google sisselogimine on valikuline</h3>
+          <p class="forum-auth-card-copy">Anonüümne postitamine jääb alles. Sisselogides kasutame sinu Google konto nime ja saad vastuste teavitused otse sellele e-postile.</p>
+        </div>
+        <div class="forum-google-button" data-forum-google-button></div>
+      </div>
+    `;
+
+    renderGoogleButton(card.querySelector('[data-forum-google-button]'));
+    syncAllFormsAuthState();
+  }
+
+  async function initForumAuth() {
+    const endpoint = getApiUrl('/forum/auth/config');
+    if (!endpoint) return;
+
+    try {
+      const response = await fetch(endpoint);
+      const payload = await response.json().catch(() => ({}));
+
+      if (response.ok && payload.ok) {
+        state.authConfig = {
+          googleAuthEnabled: Boolean(payload.googleAuthEnabled),
+          notificationsEnabled: Boolean(payload.notificationsEnabled),
+          googleClientId: String(payload.googleClientId || '')
+        };
+      }
+    } catch (error) {
+      state.authConfig = {
+        googleAuthEnabled: false,
+        notificationsEnabled: false,
+        googleClientId: ''
+      };
+    }
+
+    if (!state.authConfig.googleAuthEnabled) {
+      writeAuthToken('');
+      state.authUser = null;
+      renderForumAuthCard();
+      return;
+    }
+
+    const token = readAuthToken();
+    if (token) {
+      try {
+        const sessionResponse = await fetch(getApiUrl('/forum/auth/session'), {
+          headers: getAuthHeaders()
+        });
+        const sessionPayload = await sessionResponse.json().catch(() => ({}));
+
+        if (sessionResponse.ok && sessionPayload.ok && sessionPayload.user) {
+          state.authUser = sessionPayload.user;
+        } else {
+          writeAuthToken('');
+          state.authUser = null;
+        }
+      } catch (error) {
+        writeAuthToken('');
+        state.authUser = null;
+      }
+    }
+
+    renderForumAuthCard();
   }
 
   function normalizeDisplayName(value) {
@@ -320,6 +730,7 @@
 
     const form = document.createElement('form');
     form.className = 'forum-comment-form';
+    form.dataset.forumDraftKey = draftKey;
     form.innerHTML = `
       <div class="forum-form-head">
         <h3 class="forum-form-title">${parentComment ? 'Vasta kommentaarile' : 'Lisa kommentaar'}</h3>
@@ -346,7 +757,9 @@
       </div>
     `;
 
-    bindFormDraftPersistence(form, draftKey, ['displayName', 'body']);
+    ensureFormAuthElements(form);
+    bindFormDraftPersistence(form, draftKey, ['displayName', 'body', 'notifyReplies']);
+    syncFormAuthState(form);
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -366,13 +779,16 @@
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            ...getAuthHeaders({
+              'Content-Type': 'application/json'
+            })
           },
           body: JSON.stringify({
             threadSlug: thread.slug,
             parentCommentId: parentComment?.id || '',
             displayName: formData.get('displayName'),
             body: formData.get('body'),
+            notifyReplies: formData.get('notifyReplies') === 'true',
             website: formData.get('website'),
             company: formData.get('company')
           })
@@ -385,7 +801,11 @@
 
         clearDraft(draftKey);
         form.reset();
-        setStatus(parentComment ? 'Vastus lisatud.' : 'Kommentaar lisatud.', 'success');
+        syncFormAuthState(form);
+        setStatus(
+          [parentComment ? 'Vastus lisatud.' : 'Kommentaar lisatud.', payload.notificationMessage].filter(Boolean).join(' '),
+          'success'
+        );
         setDetailExpanded(true);
         state.commentFormOpen = false;
         state.replyTargetId = '';
@@ -697,8 +1117,11 @@
     const form = document.querySelector('[data-forum-create-form]');
     if (!form) return;
     const draftKey = getThreadDraftKey();
+    form.dataset.forumDraftKey = draftKey;
 
-    bindFormDraftPersistence(form, draftKey, ['title', 'displayName', 'body']);
+    ensureFormAuthElements(form);
+    bindFormDraftPersistence(form, draftKey, ['title', 'displayName', 'body', 'notifyReplies']);
+    syncFormAuthState(form);
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -718,12 +1141,15 @@
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            ...getAuthHeaders({
+              'Content-Type': 'application/json'
+            })
           },
           body: JSON.stringify({
             title: formData.get('title'),
             displayName: formData.get('displayName'),
             body: formData.get('body'),
+            notifyReplies: formData.get('notifyReplies') === 'true',
             website: formData.get('website'),
             company: formData.get('company')
           })
@@ -736,7 +1162,8 @@
 
         clearDraft(draftKey);
         form.reset();
-        setStatus('Uus teema lisatud.', 'success');
+        syncFormAuthState(form);
+        setStatus(['Uus teema lisatud.', payload.notificationMessage].filter(Boolean).join(' '), 'success');
         await loadThreads();
         await loadThread(payload.thread.slug, true);
       } catch (error) {
@@ -775,11 +1202,12 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
     if (!document.body.classList.contains('theme-forum')) return;
 
     initCreateThreadForm();
     initThreadDismiss();
+    await initForumAuth();
     renderThreadDetail();
     loadThreads();
 

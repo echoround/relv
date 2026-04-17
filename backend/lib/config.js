@@ -18,5 +18,11 @@ function parseAllowedOrigins() {
 module.exports = {
   allowedOrigins: parseAllowedOrigins(),
   databaseUrl: process.env.DATABASE_URL || '',
-  abuseSalt: process.env.ABUSE_SALT || 'relv-default-salt'
+  abuseSalt: process.env.ABUSE_SALT || 'relv-default-salt',
+  forumAuthSecret: process.env.FORUM_AUTH_SECRET || process.env.ABUSE_SALT || 'relv-default-salt',
+  googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+  resendApiKey: process.env.RESEND_API_KEY || '',
+  notificationFromEmail: process.env.NOTIFICATION_FROM_EMAIL || '',
+  siteUrl: process.env.SITE_URL || 'https://relvaload.ee',
+  publicApiBaseUrl: process.env.PUBLIC_API_BASE_URL || 'https://relv-backend.vercel.app/api'
 };
