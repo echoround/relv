@@ -336,6 +336,21 @@
     return avatarModulePromise;
   }
 
+  function warmAnimalAvatarModule() {
+    const warm = () => {
+      loadAnimalAvatarModule().catch(() => {
+        // Ignore warm-up failures and fall back to on-demand loading.
+      });
+    };
+
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(warm, { timeout: 1200 });
+      return;
+    }
+
+    window.setTimeout(warm, 180);
+  }
+
   function mountAnimalAvatar(host, displayName) {
     if (!host) return;
 
@@ -457,10 +472,8 @@
       `;
       mountAnimalAvatar(parts.authContext.querySelector('[data-forum-public-avatar]'), publicDisplayName);
 
-      parts.authHint.hidden = !state.authConfig.googleAuthEnabled;
-      parts.authHint.textContent = state.authConfig.notificationsEnabled
-        ? 'Google sisselogimine aitab vastuste teavitused siduda sinu kontoga. Avaliku kasutajanime valid alati ise.'
-        : 'Google konto on ühendatud. Avaliku kasutajanime valid ise ja sinu e-posti foorumis ei kuvata.';
+      parts.authHint.hidden = true;
+      parts.authHint.textContent = '';
 
       parts.notifyControl.hidden = !state.authConfig.notificationsEnabled;
       if (parts.notifyCopy) {
@@ -1322,9 +1335,12 @@
 
     initCreateThreadForm();
     initThreadDismiss();
-    await initForumAuth();
     renderThreadDetail();
-    loadThreads();
+    warmAnimalAvatarModule();
+
+    const authInit = initForumAuth();
+    const threadsInit = loadThreads();
+    await Promise.allSettled([authInit, threadsInit]);
 
     window.addEventListener('hashchange', () => {
       const slug = window.location.hash.replace(/^#/, '').trim();

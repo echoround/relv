@@ -1,20 +1,20 @@
 const BACKGROUND_PALETTES = [
-  { id: 'dawn', sky: '#2d3557', glow: '#ffb4a2', mist: '#ffd6c7' },
-  { id: 'lagoon', sky: '#16324f', glow: '#5eead4', mist: '#b8fff3' },
-  { id: 'violet', sky: '#33204f', glow: '#d8b4fe', mist: '#f3d8ff' },
-  { id: 'mint', sky: '#1f3a36', glow: '#86efac', mist: '#d8ffe1' },
-  { id: 'sunset', sky: '#432534', glow: '#fca5a5', mist: '#ffd8cf' },
-  { id: 'glacier', sky: '#243b5c', glow: '#93c5fd', mist: '#d9eeff' },
-  { id: 'peach', sky: '#4a2f2b', glow: '#fdba74', mist: '#ffe1bf' },
-  { id: 'berry', sky: '#40224a', glow: '#f9a8d4', mist: '#ffd8ec' },
-  { id: 'forest', sky: '#21362b', glow: '#bef264', mist: '#ecffc7' },
-  { id: 'storm', sky: '#2c3346', glow: '#c4b5fd', mist: '#e7ddff' },
-  { id: 'marine', sky: '#15384a', glow: '#67e8f9', mist: '#caf6ff' },
-  { id: 'ember', sky: '#462a22', glow: '#fda4af', mist: '#ffd1d5' },
-  { id: 'gold', sky: '#4a3421', glow: '#fcd34d', mist: '#ffebb2' },
-  { id: 'orchid', sky: '#34214f', glow: '#f0abfc', mist: '#fad9ff' },
-  { id: 'teal', sky: '#1e3f44', glow: '#99f6e4', mist: '#dbfff7' },
-  { id: 'cloud', sky: '#31405d', glow: '#cbd5e1', mist: '#eef4ff' }
+  { id: 'slate', base: '#70809a', accent: '#5e6d87', detail: '#9aa7ba' },
+  { id: 'lagoon', base: '#5a8094', accent: '#456677', detail: '#8cb8c8' },
+  { id: 'violet', base: '#7e78a8', accent: '#65608f', detail: '#a8a3cf' },
+  { id: 'mint', base: '#6d9588', accent: '#56786d', detail: '#99baae' },
+  { id: 'rose', base: '#a27b89', accent: '#845f6c', detail: '#c5a6b1' },
+  { id: 'glacier', base: '#6e8cab', accent: '#577290', detail: '#9eb7d2' },
+  { id: 'sand', base: '#a78b73', accent: '#8a705b', detail: '#c6b098' },
+  { id: 'berry', base: '#8e7599', accent: '#715d7d', detail: '#b49ec0' },
+  { id: 'forest', base: '#6c8a72', accent: '#56705b', detail: '#98b09d' },
+  { id: 'storm', base: '#667388', accent: '#4f5b70', detail: '#929eb0' },
+  { id: 'marine', base: '#617f8d', accent: '#4c6672', detail: '#94b0bc' },
+  { id: 'ember', base: '#9d7a72', accent: '#7f6059', detail: '#c2a19a' },
+  { id: 'gold', base: '#9b8968', accent: '#7d6d52', detail: '#c0b08e' },
+  { id: 'orchid', base: '#80739a', accent: '#655c7d', detail: '#a99ec0' },
+  { id: 'teal', base: '#69888b', accent: '#506b6d', detail: '#95b2b4' },
+  { id: 'cloud', base: '#7c8799', accent: '#646f81', detail: '#a8b1c0' }
 ];
 
 const ANIMAL_ARCHETYPES = [
@@ -364,27 +364,23 @@ function escapeAttribute(value) {
 function createBackgroundMarkup(palette, uniqueId) {
   return `
     <defs>
-      <linearGradient id="bg-${uniqueId}" x1="18" y1="18" x2="110" y2="110" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="${palette.sky}" />
-        <stop offset="1" stop-color="${palette.glow}" />
-      </linearGradient>
-      <radialGradient id="mist-${uniqueId}" cx="0.28" cy="0.24" r="0.72">
-        <stop offset="0" stop-color="${palette.mist}" stop-opacity="0.78" />
-        <stop offset="1" stop-color="${palette.mist}" stop-opacity="0" />
-      </radialGradient>
       <clipPath id="clip-${uniqueId}">
         <circle cx="64" cy="64" r="60" />
       </clipPath>
     </defs>
-    <circle cx="64" cy="64" r="60" fill="url(#bg-${uniqueId})" />
-    <circle cx="42" cy="37" r="34" fill="url(#mist-${uniqueId})" />
-    <path d="M6 92C23 73 43 73 60 82C78 91 92 100 122 89V124H6Z" fill="#ffffff" opacity="0.12" />
-    <path d="M10 92C28 78 45 78 61 86C77 94 91 101 118 92" fill="none" stroke="#ffffff" stroke-opacity="0.26" stroke-width="4" stroke-linecap="round" opacity="0.72" />
+    <g clip-path="url(#clip-${uniqueId})">
+      <circle cx="64" cy="64" r="60" fill="${palette.base}" />
+      <circle cx="38" cy="36" r="18" fill="${palette.detail}" opacity="0.2" />
+      <circle cx="89" cy="43" r="12" fill="${palette.detail}" opacity="0.12" />
+      <path d="M4 94C24 79 44 77 62 84C78 90 95 97 124 88V124H4Z" fill="${palette.accent}" />
+      <path d="M0 86C18 74 38 73 56 79C71 84 87 90 128 82V88C95 95 75 93 56 88C38 83 20 84 0 94Z" fill="${palette.detail}" opacity="0.18" />
+    </g>
+    <circle cx="64" cy="64" r="60" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="4" />
   `;
 }
 
 function renderAnonymousAvatar(uniqueId) {
-  const palette = { sky: '#3a414f', glow: '#6b7485', mist: '#cbd5e1' };
+  const palette = { base: '#77808d', accent: '#626a76', detail: '#a4acb7' };
   return `
     ${createBackgroundMarkup(palette, uniqueId)}
     <g clip-path="url(#clip-${uniqueId})">
