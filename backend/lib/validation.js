@@ -17,7 +17,7 @@ function stripSoftSpam(value) {
 
 function sanitizeDisplayName(value) {
   const cleaned = collapseWhitespace(stripSoftSpam(value));
-  if (!cleaned) return 'Anonüümne';
+  if (!cleaned) return 'anon';
   return cleaned.slice(0, 40);
 }
 

@@ -2035,6 +2035,12 @@ body.theme-quiz .dot.mid{ background: var(--color-partial); }
   text-shadow: 0 0 16px rgba(255,255,255,0.05);
 }
 
+.theme-forum .forum-author-name.is-anonymous{
+  color: rgba(255,255,255,0.56);
+  font-weight: 600;
+  text-shadow: none;
+}
+
 .theme-forum .forum-thread-card-meta .forum-author-name,
 .theme-forum .forum-detail-meta .forum-author-name{
   font-size: 14px;

@@ -69,11 +69,23 @@
 
   function normalizeDisplayName(value) {
     const normalized = String(value || '').trim();
-    return normalized || 'Anonüümne';
+    if (!normalized) return 'anon';
+
+    const lowered = normalized.toLocaleLowerCase('et-EE');
+    if (lowered === 'anonüümne' || lowered === 'anon') {
+      return 'anon';
+    }
+
+    return normalized;
+  }
+
+  function isAnonymousDisplayName(displayName) {
+    return normalizeDisplayName(displayName) === 'anon';
   }
 
   function getAuthorColor(displayName) {
     const safeName = normalizeDisplayName(displayName);
+    if (isAnonymousDisplayName(safeName)) return '';
     const key = safeName.toLocaleLowerCase('et-EE');
 
     if (!authorColorByName.has(key)) {
@@ -87,7 +99,11 @@
     const safeName = normalizeDisplayName(displayName);
     const author = document.createElement('span');
     author.className = 'forum-author-name';
-    author.style.setProperty('--forum-author-color', getAuthorColor(safeName));
+    if (isAnonymousDisplayName(safeName)) {
+      author.classList.add('is-anonymous');
+    } else {
+      author.style.setProperty('--forum-author-color', getAuthorColor(safeName));
+    }
     author.textContent = safeName;
     container.appendChild(author);
 
