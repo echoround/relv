@@ -29,6 +29,120 @@
   }
 
   const authorColorByName = new Map();
+  const FORUM_DRAFT_KEY_PREFIX = 'relv:forum:draft';
+
+  function getDraftStorage() {
+    try {
+      if (typeof window === 'undefined' || !('localStorage' in window)) {
+        return null;
+      }
+
+      return window.localStorage;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function buildDraftKey(scope, suffix = '') {
+    return [FORUM_DRAFT_KEY_PREFIX, scope, suffix].filter(Boolean).join(':');
+  }
+
+  function getThreadDraftKey() {
+    return buildDraftKey('thread');
+  }
+
+  function getCommentDraftKey(threadSlug, parentCommentId = '') {
+    return buildDraftKey('comment', `${String(threadSlug || 'thread')}:${String(parentCommentId || 'root')}`);
+  }
+
+  function readDraft(key) {
+    const storage = getDraftStorage();
+    if (!storage || !key) return null;
+
+    try {
+      const raw = storage.getItem(key);
+      if (!raw) return null;
+
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === 'object' ? parsed : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function writeDraft(key, draft) {
+    const storage = getDraftStorage();
+    if (!storage || !key) return;
+
+    const snapshot = {};
+    let hasContent = false;
+
+    Object.entries(draft || {}).forEach(([field, value]) => {
+      const safeValue = typeof value === 'string' ? value : '';
+      snapshot[field] = safeValue;
+
+      if (safeValue.trim()) {
+        hasContent = true;
+      }
+    });
+
+    try {
+      if (!hasContent) {
+        storage.removeItem(key);
+        return;
+      }
+
+      storage.setItem(key, JSON.stringify(snapshot));
+    } catch (error) {
+      // Ignore storage failures in privacy mode or when quota is full.
+    }
+  }
+
+  function clearDraft(key) {
+    const storage = getDraftStorage();
+    if (!storage || !key) return;
+
+    try {
+      storage.removeItem(key);
+    } catch (error) {
+      // Ignore storage failures.
+    }
+  }
+
+  function syncFormDraft(form, draftKey, fieldNames) {
+    const snapshot = {};
+
+    fieldNames.forEach((fieldName) => {
+      const field = form.elements.namedItem(fieldName);
+      snapshot[fieldName] = field && typeof field.value === 'string' ? field.value : '';
+    });
+
+    writeDraft(draftKey, snapshot);
+  }
+
+  function bindFormDraftPersistence(form, draftKey, fieldNames) {
+    const savedDraft = readDraft(draftKey);
+
+    if (savedDraft) {
+      fieldNames.forEach((fieldName) => {
+        const field = form.elements.namedItem(fieldName);
+        if (field && typeof field.value === 'string' && typeof savedDraft[fieldName] === 'string') {
+          field.value = savedDraft[fieldName];
+        }
+      });
+    }
+
+    const persistDraft = () => {
+      syncFormDraft(form, draftKey, fieldNames);
+    };
+
+    fieldNames.forEach((fieldName) => {
+      const field = form.elements.namedItem(fieldName);
+      if (field && typeof field.addEventListener === 'function') {
+        field.addEventListener('input', persistDraft);
+      }
+    });
+  }
 
   function getLoadingMarkup(message) {
     return `
@@ -202,6 +316,7 @@
   function createCommentForm(thread, parentComment = null) {
     const wrapper = document.createElement('div');
     wrapper.className = parentComment ? 'forum-comment-reply-wrap' : 'forum-comment-form-wrap';
+    const draftKey = getCommentDraftKey(thread.slug, parentComment?.id || '');
 
     const form = document.createElement('form');
     form.className = 'forum-comment-form';
@@ -230,6 +345,8 @@
         <button type="submit" class="btn btn-primary">${parentComment ? 'Saada vastus' : 'Saada kommentaar'}</button>
       </div>
     `;
+
+    bindFormDraftPersistence(form, draftKey, ['displayName', 'body']);
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -266,6 +383,7 @@
           throw new Error(payload.error || 'Kommentaari saatmine ebaõnnestus.');
         }
 
+        clearDraft(draftKey);
         form.reset();
         setStatus(parentComment ? 'Vastus lisatud.' : 'Kommentaar lisatud.', 'success');
         setDetailExpanded(true);
@@ -578,6 +696,9 @@
   function initCreateThreadForm() {
     const form = document.querySelector('[data-forum-create-form]');
     if (!form) return;
+    const draftKey = getThreadDraftKey();
+
+    bindFormDraftPersistence(form, draftKey, ['title', 'displayName', 'body']);
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -613,6 +734,7 @@
           throw new Error(payload.error || 'Teema loomine ebaõnnestus.');
         }
 
+        clearDraft(draftKey);
         form.reset();
         setStatus('Uus teema lisatud.', 'success');
         await loadThreads();
