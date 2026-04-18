@@ -37,6 +37,7 @@
   let googleIdentityInitialized = false;
   let readyPromise = null;
   let booted = false;
+  let placeholderBindingsReady = false;
 
   function getStorage() {
     try {
@@ -57,6 +58,10 @@
 
     const base = String(window.RELV_CONFIG?.apiBase || '').replace(/\/$/, '');
     return base ? `${base}${String(path || '').startsWith('/') ? path : `/${path || ''}`}` : '';
+  }
+
+  function shouldEagerBoot() {
+    return document.body?.classList?.contains('theme-forum') || false;
   }
 
   function readAuthToken() {
@@ -205,6 +210,29 @@
     });
   }
 
+  function updatePlaceholderTriggersFromToken() {
+    const hasToken = Boolean(readAuthToken());
+
+    document.querySelectorAll('[data-site-auth-lazy-trigger]').forEach((button) => {
+      const label = button.querySelector('.site-auth-trigger-label');
+      if (label) {
+        label.textContent = hasToken ? 'Konto' : 'Logi sisse';
+      }
+
+      button.classList.toggle('is-connected', hasToken);
+    });
+  }
+
+  function activatePlaceholderTriggers() {
+    document.querySelectorAll('.site-auth-trigger--placeholder').forEach((button) => {
+      button.classList.remove('site-auth-trigger--placeholder');
+      button.dataset.siteAuthLazyTrigger = 'true';
+      button.removeAttribute('aria-hidden');
+      button.removeAttribute('tabindex');
+      button.disabled = false;
+    });
+  }
+
   function notifySubscribers() {
     const snapshot = getStateSnapshot();
     subscribers.forEach((callback) => {
@@ -268,6 +296,10 @@
     }
 
     googleIdentityPromise = (async () => {
+      if (!window.google?.accounts?.id) {
+        await loadGoogleIdentityScript();
+      }
+
       const start = Date.now();
 
       while (Date.now() - start < timeoutMs) {
@@ -287,6 +319,31 @@
     });
 
     return googleIdentityPromise;
+  }
+
+  function loadGoogleIdentityScript() {
+    if (window.google?.accounts?.id) {
+      return Promise.resolve(window.google.accounts.id);
+    }
+
+    const existingScript = document.querySelector('script[data-site-auth-google-script]');
+    if (existingScript) {
+      return new Promise((resolve, reject) => {
+        existingScript.addEventListener('load', () => resolve(window.google?.accounts?.id || null), { once: true });
+        existingScript.addEventListener('error', () => reject(new Error('Google Identity laadimine ebaõnnestus.')), { once: true });
+      });
+    }
+
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.dataset.siteAuthGoogleScript = 'true';
+      script.addEventListener('load', () => resolve(window.google?.accounts?.id || null), { once: true });
+      script.addEventListener('error', () => reject(new Error('Google Identity laadimine ebaõnnestus.')), { once: true });
+      document.head.appendChild(script);
+    });
   }
 
   async function signInWithGoogleCredential(credential) {
@@ -411,6 +468,47 @@
         logo_alignment: 'left',
         width: Math.min(Math.max(host.clientWidth || 220, 220), 240)
       });
+    });
+  }
+
+  function openRenderedPanel(isMobileHost) {
+    const host = isMobileHost
+      ? document.querySelector('[data-site-auth-mobile]')
+      : document.querySelector('[data-site-auth]');
+
+    const trigger = host?.querySelector('[data-site-auth-trigger]');
+    const panel = host?.querySelector('[data-site-auth-panel]');
+    if (!trigger || !panel) return;
+
+    closeAllPanels();
+    panel.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+  }
+
+  function bindLazyPlaceholderTriggers() {
+    if (placeholderBindingsReady) return;
+    placeholderBindingsReady = true;
+
+    document.addEventListener('click', (event) => {
+      const placeholderTrigger = event.target.closest('[data-site-auth-lazy-trigger]');
+      if (!placeholderTrigger) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const isMobileHost = Boolean(placeholderTrigger.closest('[data-site-auth-mobile]'));
+      placeholderTrigger.disabled = true;
+
+      ready()
+        .then(() => {
+          openRenderedPanel(isMobileHost);
+        })
+        .catch((error) => {
+          console.error('Site auth lazy init error:', error);
+        })
+        .finally(() => {
+          placeholderTrigger.disabled = false;
+        });
     });
   }
 
@@ -634,9 +732,15 @@
     }
 
     bindPanelDismissal();
-    ready().catch((error) => {
-      console.error('Site auth init error:', error);
-    });
+    activatePlaceholderTriggers();
+    bindLazyPlaceholderTriggers();
+    updatePlaceholderTriggersFromToken();
+
+    if (shouldEagerBoot()) {
+      ready().catch((error) => {
+        console.error('Site auth init error:', error);
+      });
+    }
   }
 
   boot();

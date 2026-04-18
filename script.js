@@ -47,6 +47,10 @@ async function trackQuizAnswerProgress(question, selectedOptions) {
         return;
     }
 
+    if (!auth.readAuthToken || !auth.readAuthToken()) {
+        return;
+    }
+
     const endpoint = getApiUrl('/quiz/progress');
     if (!endpoint) {
         return;
