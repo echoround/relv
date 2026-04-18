@@ -54,7 +54,10 @@
         <a href="quiz.html" class="nav-link">Teooria test</a>
         <a href="kuidas.html" class="nav-link">Kuidas saada relvaluba?</a>
         <a href="foorum.html" class="nav-link is-active">Foorum <span class="nav-badge">Uus</span></a>
+        <div class="site-auth-host site-auth-host--mobile" data-site-auth-mobile hidden></div>
       </nav>
+
+      <div class="site-auth-host" data-site-auth hidden></div>
 
       <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -76,8 +79,6 @@
           <h2 class="forum-panel-title">Alusta uut teemat</h2>
           <p class="forum-panel-copy">Küsimuste, kogemuste, eksamiks valmistumise ja muu relvaomamisega seotud arutelude jaoks.</p>
         </div>
-
-        <section class="forum-auth-card" data-forum-auth-card hidden></section>
 
         <form class="forum-form" data-forum-create-form>
           <label class="forum-field">
@@ -142,6 +143,7 @@
   </script>
 
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="site-auth.js"></script>
   <script src="forum.js"></script>
   <script src="scroll.js"></script>
 </body>

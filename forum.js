@@ -500,7 +500,7 @@
     parts.notifyControl.hidden = true;
     parts.authHint.hidden = !state.authConfig.googleAuthEnabled;
     parts.authHint.textContent = state.authConfig.googleAuthEnabled
-      ? 'Soovi korral logi Googlega sisse, kui tahad hiljem vastuste teavitusi. Avaliku kasutajanime valid ikka ise.'
+      ? 'Soovi korral logi ülal sisse, kui tahad hiljem vastuste teavitusi. Avaliku kasutajanime valid ikka ise.'
       : '';
   }
 
@@ -508,6 +508,24 @@
     document.querySelectorAll('.forum-form, .forum-comment-form').forEach((form) => {
       syncFormAuthState(form);
     });
+  }
+
+  function applySharedAuthState(nextState) {
+    if (!nextState || typeof nextState !== 'object') {
+      return;
+    }
+
+    if (nextState.authConfig) {
+      state.authConfig = {
+        googleAuthEnabled: Boolean(nextState.authConfig.googleAuthEnabled),
+        notificationsEnabled: Boolean(nextState.authConfig.notificationsEnabled),
+        googleClientId: String(nextState.authConfig.googleClientId || ''),
+        status: String(nextState.authConfig.status || state.authConfig.status || 'loading')
+      };
+    }
+
+    state.authUser = nextState.user || null;
+    renderForumAuthCard();
   }
 
   async function signInWithGoogleCredential(credential) {
@@ -581,74 +599,20 @@
 
   function renderForumAuthCard() {
     const card = document.querySelector('[data-forum-auth-card]');
-    if (!card) {
-      syncAllFormsAuthState();
-      return;
-    }
-
-    if (!state.authConfig.googleAuthEnabled) {
-      // Keep the auth card hidden until Google sign-in is configured.
-      // If you want the setup-status message back later, remove this early return.
+    if (card) {
       card.hidden = true;
       card.innerHTML = '';
-      syncAllFormsAuthState();
-      return;
-      const authCopy = state.authConfig.status === 'backend-unavailable'
-        ? 'Google sisselogimise backend ei ole veel live-is. Panen selle eraldi üles, et nupp siin päriselt nähtavaks muutuks.'
-        : 'Google sisselogimine vajab veel seadistamist. Kui Google klient on lisatud, ilmub siia sama kompaktne sisselogimisnupp.';
-
-      card.hidden = false;
-      card.innerHTML = `
-        <div class="forum-auth-card-shell">
-          <div>
-            <h3 class="forum-auth-card-title">Google sisselogimine on valikuline</h3>
-            <p class="forum-auth-card-copy">${authCopy}</p>
-          </div>
-        </div>
-      `;
-      syncAllFormsAuthState();
-      return;
     }
-
-    card.hidden = false;
-
-    if (state.authUser) {
-      card.innerHTML = `
-        <div class="forum-auth-card-shell">
-          <div>
-            <h3 class="forum-auth-card-title">Google konto on ühendatud</h3>
-            <p class="forum-auth-card-copy">Avaliku kasutajanime valid ise. Sinu e-posti ega Google profiilipilti ei näidata teistele foorumikasutajatele.</p>
-          </div>
-          <div class="forum-auth-card-actions">
-            <button type="button" class="forum-inline-action" data-forum-logout>Logi välja</button>
-          </div>
-        </div>
-      `;
-
-      card.querySelector('[data-forum-logout]')?.addEventListener('click', logoutForumAuth);
-      syncAllFormsAuthState();
-      return;
-    }
-
-    card.innerHTML = `
-      <div class="forum-auth-card-shell">
-        <div>
-          <h3 class="forum-auth-card-title">Google sisselogimine on valikuline</h3>
-          <p class="forum-auth-card-copy">${
-            state.authConfig.notificationsEnabled
-              ? 'Anonüümne postitamine jääb alles. Sisselogides saad vastuste teavitused oma kontole, aga avaliku kasutajanime valid ikkagi ise.'
-              : 'Anonüümne postitamine jääb alles. Soovi korral võid Google konto ühendada, kuid avaliku kasutajanime valid ikkagi ise.'
-          }</p>
-        </div>
-        <div class="forum-google-button" data-forum-google-button></div>
-      </div>
-    `;
-
-    renderGoogleButton(card.querySelector('[data-forum-google-button]'));
     syncAllFormsAuthState();
   }
 
   async function initForumAuth() {
+    if (window.RELV_SITE_AUTH?.ready) {
+      const sharedState = await window.RELV_SITE_AUTH.ready();
+      applySharedAuthState(sharedState);
+      return;
+    }
+
     const endpoint = getApiUrl('/forum/auth/config');
     if (!endpoint) return;
 
@@ -1332,6 +1296,12 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     if (!document.body.classList.contains('theme-forum')) return;
+
+    if (window.RELV_SITE_AUTH?.subscribe) {
+      window.RELV_SITE_AUTH.subscribe((nextState) => {
+        applySharedAuthState(nextState);
+      });
+    }
 
     initCreateThreadForm();
     initThreadDismiss();
