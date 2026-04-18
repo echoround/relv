@@ -1,5 +1,18 @@
 (function siteAuthBootstrap() {
   const AUTH_TOKEN_KEY = 'relv:forum:auth-token';
+  const EMPTY_PREFERENCES = {
+    newsletterSubscribed: false
+  };
+  const EMPTY_QUIZ_STATS = {
+    answeredCount: 0,
+    correctCount: 0,
+    partialCount: 0,
+    incorrectCount: 0,
+    lastQuestionId: '',
+    lastResultType: '',
+    lastAnsweredAt: ''
+  };
+
   const state = {
     authConfig: {
       googleAuthEnabled: false,
@@ -7,8 +20,18 @@
       googleClientId: '',
       status: 'loading'
     },
-    user: null
+    user: null,
+    preferences: { ...EMPTY_PREFERENCES },
+    quizStats: { ...EMPTY_QUIZ_STATS }
   };
+
+  const uiState = {
+    newsletterSaving: false,
+    newsletterMessage: '',
+    newsletterTone: 'muted',
+    newsletterMessageTimer: 0
+  };
+
   const subscribers = new Set();
   let googleIdentityPromise = null;
   let googleIdentityInitialized = false;
@@ -81,6 +104,78 @@
       .replace(/'/g, '&#39;');
   }
 
+  function normalizePreferences(value) {
+    return {
+      newsletterSubscribed: Boolean(value?.newsletterSubscribed)
+    };
+  }
+
+  function normalizeQuizStats(value) {
+    return {
+      answeredCount: Math.max(0, Number(value?.answeredCount) || 0),
+      correctCount: Math.max(0, Number(value?.correctCount) || 0),
+      partialCount: Math.max(0, Number(value?.partialCount) || 0),
+      incorrectCount: Math.max(0, Number(value?.incorrectCount) || 0),
+      lastQuestionId: String(value?.lastQuestionId || ''),
+      lastResultType: String(value?.lastResultType || ''),
+      lastAnsweredAt: String(value?.lastAnsweredAt || '')
+    };
+  }
+
+  function applyAccountState(payload = {}) {
+    if (Object.prototype.hasOwnProperty.call(payload, 'user')) {
+      state.user = payload.user
+        ? {
+            ...payload.user
+          }
+        : null;
+    }
+
+    if (payload.preferences) {
+      state.preferences = normalizePreferences(payload.preferences);
+    } else if (!state.user) {
+      state.preferences = { ...EMPTY_PREFERENCES };
+    }
+
+    if (payload.quizStats) {
+      state.quizStats = normalizeQuizStats(payload.quizStats);
+    } else if (!state.user) {
+      state.quizStats = { ...EMPTY_QUIZ_STATS };
+    }
+  }
+
+  function clearNewsletterMessageTimer() {
+    if (uiState.newsletterMessageTimer) {
+      window.clearTimeout(uiState.newsletterMessageTimer);
+      uiState.newsletterMessageTimer = 0;
+    }
+  }
+
+  function setNewsletterUiState({ saving = false, message = '', tone = 'muted', autoClearMs = 0 } = {}) {
+    clearNewsletterMessageTimer();
+
+    uiState.newsletterSaving = Boolean(saving);
+    uiState.newsletterMessage = String(message || '');
+    uiState.newsletterTone = String(tone || 'muted');
+
+    if (autoClearMs > 0 && uiState.newsletterMessage) {
+      uiState.newsletterMessageTimer = window.setTimeout(() => {
+        uiState.newsletterMessage = '';
+        uiState.newsletterTone = 'muted';
+        updateNewsletterControls();
+      }, autoClearMs);
+    }
+  }
+
+  function resetAccountState() {
+    applyAccountState({
+      user: null,
+      preferences: EMPTY_PREFERENCES,
+      quizStats: EMPTY_QUIZ_STATS
+    });
+    setNewsletterUiState();
+  }
+
   function getStateSnapshot() {
     return {
       authConfig: {
@@ -90,7 +185,13 @@
         ? {
             ...state.user
           }
-        : null
+        : null,
+      preferences: {
+        ...state.preferences
+      },
+      quizStats: {
+        ...state.quizStats
+      }
     };
   }
 
@@ -126,6 +227,39 @@
     return () => {
       subscribers.delete(callback);
     };
+  }
+
+  function updateNewsletterControls() {
+    document.querySelectorAll('[data-site-auth-newsletter-toggle]').forEach((input) => {
+      input.checked = Boolean(state.preferences.newsletterSubscribed);
+      input.disabled = uiState.newsletterSaving;
+    });
+
+    document.querySelectorAll('[data-site-auth-newsletter-status]').forEach((statusEl) => {
+      const hasMessage = Boolean(uiState.newsletterMessage);
+      statusEl.hidden = !hasMessage;
+      statusEl.textContent = uiState.newsletterMessage;
+      statusEl.dataset.tone = uiState.newsletterTone;
+    });
+  }
+
+  function ingestAccountData(payload, options = {}) {
+    const shouldRender = Boolean(options.render);
+    const shouldNotify = options.notify !== false;
+
+    applyAccountState(payload);
+
+    if (shouldRender) {
+      renderSiteAuthHosts();
+    } else {
+      updateNewsletterControls();
+    }
+
+    if (shouldNotify) {
+      notifySubscribers();
+    }
+
+    return getStateSnapshot();
   }
 
   async function waitForGoogleIdentity(timeoutMs = 6000) {
@@ -175,10 +309,9 @@
     }
 
     writeAuthToken(payload.token);
-    state.user = payload.user;
+    setNewsletterUiState();
     closeAllPanels();
-    renderSiteAuthHosts();
-    notifySubscribers();
+    ingestAccountData(payload, { render: true });
   }
 
   async function ensureGoogleButtonReady() {
@@ -209,9 +342,39 @@
     return googleIdentity;
   }
 
+  async function saveNewsletterPreference(newsletterSubscribed) {
+    const endpoint = getApiUrl('/forum/auth/preferences');
+    if (!endpoint) {
+      throw new Error('Eelistuste teenus ei ole praegu saadaval.');
+    }
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: getAuthHeaders({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        newsletterSubscribed: Boolean(newsletterSubscribed)
+      })
+    });
+
+    const payload = await response.json().catch(() => ({}));
+
+    if (response.status === 401) {
+      logout();
+      throw new Error('Sessioon aegus. Logi uuesti sisse.');
+    }
+
+    if (!response.ok || !payload.ok) {
+      throw new Error(payload.error || 'Salvestamine ebaõnnestus.');
+    }
+
+    return payload;
+  }
+
   function logout() {
     writeAuthToken('');
-    state.user = null;
+    resetAccountState();
     closeAllPanels();
 
     if (window.google?.accounts?.id?.disableAutoSelect) {
@@ -251,6 +414,47 @@
     });
   }
 
+  function bindSignedInControls(host) {
+    host.querySelector('[data-site-auth-logout]')?.addEventListener('click', () => {
+      logout();
+    });
+
+    const newsletterToggle = host.querySelector('[data-site-auth-newsletter-toggle]');
+    if (!newsletterToggle) return;
+
+    newsletterToggle.addEventListener('change', async () => {
+      const nextValue = newsletterToggle.checked;
+
+      setNewsletterUiState({
+        saving: true,
+        message: 'Salvestan...',
+        tone: 'muted'
+      });
+      updateNewsletterControls();
+
+      try {
+        const payload = await saveNewsletterPreference(nextValue);
+        applyAccountState(payload);
+        setNewsletterUiState({
+          saving: false,
+          message: nextValue ? 'Uudiskiri on sisse lülitatud.' : 'Uudiskiri on välja lülitatud.',
+          tone: 'success',
+          autoClearMs: 1800
+        });
+        updateNewsletterControls();
+        notifySubscribers();
+      } catch (error) {
+        newsletterToggle.checked = !nextValue;
+        setNewsletterUiState({
+          saving: false,
+          message: error.message || 'Salvestamine ebaõnnestus.',
+          tone: 'error'
+        });
+        updateNewsletterControls();
+      }
+    });
+  }
+
   function renderHost(host) {
     const isSignedIn = Boolean(state.user);
     host.hidden = !state.authConfig.googleAuthEnabled;
@@ -272,7 +476,17 @@
                   <div class="site-auth-panel-title">Google konto on ühendatud</div>
                   <div class="site-auth-panel-text">${escapeHtml(state.user.name || 'Google')}</div>
                   <div class="site-auth-panel-text site-auth-panel-text--muted">${escapeHtml(state.user.email || '')}</div>
-                  <div class="site-auth-panel-note">Foorumis kasutad enda valitud kasutajanime, mitte Google profiili.</div>
+                  <div class="site-auth-panel-note">Foorumis kasutad enda valitud kasutajanime. Google profiili ja e-posti me teistele ei näita.</div>
+                </div>
+                <div class="site-auth-consent-wrap">
+                  <label class="site-auth-consent">
+                    <input type="checkbox" class="site-auth-consent-checkbox" data-site-auth-newsletter-toggle ${state.preferences.newsletterSubscribed ? 'checked' : ''}>
+                    <span class="site-auth-consent-copy">
+                      <span class="site-auth-consent-title">Saada mulle ka uudiskiri</span>
+                      <span class="site-auth-consent-note">Valikuline. Kasutame sinu Google e-posti ainult siis, kui selle lubad.</span>
+                    </span>
+                  </label>
+                  <div class="site-auth-consent-status" data-site-auth-newsletter-status hidden></div>
                 </div>
                 <div class="site-auth-panel-actions">
                   <button type="button" class="site-auth-action" data-site-auth-logout>Logi välja</button>
@@ -301,9 +515,9 @@
       trigger.setAttribute('aria-expanded', String(willOpen));
     });
 
-    host.querySelector('[data-site-auth-logout]')?.addEventListener('click', () => {
-      logout();
-    });
+    if (isSignedIn) {
+      bindSignedInControls(host);
+    }
   }
 
   function renderSiteAuthHosts() {
@@ -313,6 +527,7 @@
     ];
 
     hosts.forEach(renderHost);
+    updateNewsletterControls();
     renderGoogleButtons().catch((error) => {
       console.error('Site auth Google button error:', error);
     });
@@ -356,7 +571,7 @@
 
     if (!state.authConfig.googleAuthEnabled) {
       writeAuthToken('');
-      state.user = null;
+      resetAccountState();
       renderSiteAuthHosts();
       notifySubscribers();
       return getStateSnapshot();
@@ -371,17 +586,17 @@
         const sessionPayload = await sessionResponse.json().catch(() => ({}));
 
         if (sessionResponse.ok && sessionPayload.ok && sessionPayload.user) {
-          state.user = sessionPayload.user;
+          applyAccountState(sessionPayload);
         } else {
           writeAuthToken('');
-          state.user = null;
+          resetAccountState();
         }
       } catch (error) {
         writeAuthToken('');
-        state.user = null;
+        resetAccountState();
       }
     } else {
-      state.user = null;
+      resetAccountState();
     }
 
     renderSiteAuthHosts();
@@ -394,12 +609,13 @@
       readyPromise = initSiteAuth();
     }
 
-    return readyPromise;
+    return readyPromise.then(() => getStateSnapshot());
   }
 
   window.RELV_SITE_AUTH = {
     getAuthHeaders,
     getState: getStateSnapshot,
+    ingestAccountData,
     logout,
     readAuthToken,
     ready,

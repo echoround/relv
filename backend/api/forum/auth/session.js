@@ -1,5 +1,6 @@
 const { maybeHandleOptions, methodNotAllowed, sendJson } = require('../../../lib/http');
 const { getForumAuthFromRequest } = require('../../../lib/forumAuth');
+const { getAccountSnapshot } = require('../../../lib/db');
 
 module.exports = async function handler(req, res) {
   if (maybeHandleOptions(req, res)) return;
@@ -16,8 +17,14 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  const account = await getAccountSnapshot({
+    googleSub: user.sub,
+    email: user.email
+  });
+
   return sendJson(req, res, 200, {
     ok: true,
-    user
+    user,
+    ...account
   });
 };

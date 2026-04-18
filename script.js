@@ -12,6 +12,71 @@ let quizCardsIdleHandle = null;
 let quizCardsRenderQueued = false;
 let quizCardsRendered = false;
 
+function getApiUrl(path) {
+    if (typeof window.relvApiUrl === 'function') {
+        return window.relvApiUrl(path);
+    }
+
+    const base = String(window.RELV_CONFIG?.apiBase || '').replace(/\/$/, '');
+    return base ? `${base}${String(path || '').startsWith('/') ? path : `/${path || ''}`}` : '';
+}
+
+function getQuizAnswerReview(question, selectedOptions) {
+    const correct = Array.isArray(question?.correct) ? question.correct.slice().sort((a, b) => a - b) : [];
+    const selected = Array.isArray(selectedOptions) ? selectedOptions.slice().sort((a, b) => a - b) : [];
+
+    const selectedCorrectCount = selected.filter((index) => correct.includes(index)).length;
+    const missedCorrectCount = correct.filter((index) => !selected.includes(index)).length;
+    const incorrectSelectedCount = selected.filter((index) => !correct.includes(index)).length;
+    const isCorrect = arraysEqual(selected, correct);
+    const isPartial = !isCorrect && question?.multiple && selectedCorrectCount > 0;
+
+    return {
+        questionId: question?.id != null ? String(question.id) : String(currentIndex + 1),
+        resultType: isCorrect ? 'correct' : (isPartial ? 'partial' : 'incorrect'),
+        selectedCount: selected.length,
+        selectedCorrectCount,
+        missedCorrectCount,
+        incorrectSelectedCount
+    };
+}
+
+async function trackQuizAnswerProgress(question, selectedOptions) {
+    const auth = window.RELV_SITE_AUTH;
+    if (!auth?.ready || !auth?.getAuthHeaders) {
+        return;
+    }
+
+    const endpoint = getApiUrl('/quiz/progress');
+    if (!endpoint) {
+        return;
+    }
+
+    try {
+        const authState = await auth.ready();
+        if (!authState?.user?.sub || !authState.user.email) {
+            return;
+        }
+
+        const payload = getQuizAnswerReview(question, selectedOptions);
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: auth.getAuthHeaders({
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(payload),
+            keepalive: true
+        });
+
+        const result = await response.json().catch(() => ({}));
+        if (response.ok && result?.ok && result.quizStats && typeof auth.ingestAccountData === 'function') {
+            auth.ingestAccountData(result);
+        }
+    } catch (error) {
+        console.error('Quiz progress tracking error:', error);
+    }
+}
+
 function getQuestionCardsLoadingMarkup() {
   return `
     <div class="quiz-cards-loading" role="status" aria-live="polite">
@@ -462,9 +527,11 @@ function displayFeedback(question) {
 document.getElementById('submit-btn').addEventListener('click', () => {
     const selectedOptions = Array.from(document.querySelectorAll('input[name="option"]:checked'))
         .map(input => parseInt(input.value)) || [];
+    const question = questions[currentIndex];
     userAnswers[currentIndex] = userAnswers[currentIndex] || { selected: [], submitted: false };
     userAnswers[currentIndex].selected = selectedOptions;
     userAnswers[currentIndex].submitted = true;
+    trackQuizAnswerProgress(question, selectedOptions);
     displayQuestion();
 });
 

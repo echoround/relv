@@ -121,6 +121,57 @@ async function ensureDb() {
         )
       `;
 
+      await sql`
+        CREATE TABLE IF NOT EXISTS quiz_answer_events (
+          id TEXT PRIMARY KEY,
+          google_sub TEXT NOT NULL,
+          email TEXT NOT NULL,
+          display_name TEXT NOT NULL,
+          question_id TEXT NOT NULL,
+          result_type TEXT NOT NULL,
+          selected_count INTEGER NOT NULL DEFAULT 0,
+          selected_correct_count INTEGER NOT NULL DEFAULT 0,
+          missed_correct_count INTEGER NOT NULL DEFAULT 0,
+          incorrect_selected_count INTEGER NOT NULL DEFAULT 0,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `;
+
+      await sql`
+        CREATE TABLE IF NOT EXISTS quiz_question_progress (
+          google_sub TEXT NOT NULL,
+          question_id TEXT NOT NULL,
+          email TEXT NOT NULL,
+          display_name TEXT NOT NULL,
+          result_type TEXT NOT NULL,
+          selected_count INTEGER NOT NULL DEFAULT 0,
+          selected_correct_count INTEGER NOT NULL DEFAULT 0,
+          missed_correct_count INTEGER NOT NULL DEFAULT 0,
+          incorrect_selected_count INTEGER NOT NULL DEFAULT 0,
+          attempt_count INTEGER NOT NULL DEFAULT 1,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          PRIMARY KEY (google_sub, question_id)
+        )
+      `;
+
+      await sql`
+        CREATE TABLE IF NOT EXISTS quiz_user_stats (
+          google_sub TEXT PRIMARY KEY,
+          email TEXT NOT NULL,
+          display_name TEXT NOT NULL,
+          answered_count INTEGER NOT NULL DEFAULT 0,
+          correct_count INTEGER NOT NULL DEFAULT 0,
+          partial_count INTEGER NOT NULL DEFAULT 0,
+          incorrect_count INTEGER NOT NULL DEFAULT 0,
+          last_question_id TEXT,
+          last_result_type TEXT,
+          last_answered_at TIMESTAMPTZ,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `;
+
       await sql`CREATE INDEX IF NOT EXISTS forum_threads_last_activity_idx ON forum_threads (last_activity_at DESC)`;
       await sql`CREATE INDEX IF NOT EXISTS forum_comments_thread_created_idx ON forum_comments (thread_id, created_at ASC)`;
       await sql`CREATE INDEX IF NOT EXISTS forum_comments_parent_created_idx ON forum_comments (parent_comment_id, created_at ASC)`;
@@ -132,6 +183,8 @@ async function ensureDb() {
       await sql`CREATE UNIQUE INDEX IF NOT EXISTS forum_notify_thread_subject_unique ON forum_notification_subscriptions (thread_id, google_sub) WHERE comment_id IS NULL`;
       await sql`CREATE UNIQUE INDEX IF NOT EXISTS forum_notify_comment_subject_unique ON forum_notification_subscriptions (comment_id, google_sub) WHERE comment_id IS NOT NULL`;
       await sql`CREATE INDEX IF NOT EXISTS mailing_list_ip_hash_idx ON mailing_list_subscribers (ip_hash, created_at DESC)`;
+      await sql`CREATE INDEX IF NOT EXISTS quiz_answer_events_subject_created_idx ON quiz_answer_events (google_sub, created_at DESC)`;
+      await sql`CREATE INDEX IF NOT EXISTS quiz_question_progress_subject_updated_idx ON quiz_question_progress (google_sub, updated_at DESC)`;
     })();
   }
 
@@ -600,6 +653,242 @@ async function upsertSubscriber({ email, sourcePage, ipHash, userAgent }) {
   return rows[0];
 }
 
+async function getSubscriberByEmail(email) {
+  await ensureDb();
+
+  if (!email) return null;
+
+  const rows = await sql`
+    SELECT
+      email,
+      source_page AS "sourcePage",
+      created_at AS "createdAt",
+      updated_at AS "updatedAt"
+    FROM mailing_list_subscribers
+    WHERE email = ${email}
+    LIMIT 1
+  `;
+
+  return rows[0] || null;
+}
+
+async function removeSubscriberByEmail(email) {
+  await ensureDb();
+
+  if (!email) return null;
+
+  const rows = await sql`
+    DELETE FROM mailing_list_subscribers
+    WHERE email = ${email}
+    RETURNING email
+  `;
+
+  return rows[0] || null;
+}
+
+function getEmptyQuizStats() {
+  return {
+    answeredCount: 0,
+    correctCount: 0,
+    partialCount: 0,
+    incorrectCount: 0,
+    lastQuestionId: '',
+    lastResultType: '',
+    lastAnsweredAt: ''
+  };
+}
+
+async function getQuizProgressSummary(googleSub) {
+  if (!googleSub) {
+    return getEmptyQuizStats();
+  }
+
+  const [countRows, latestRows] = await Promise.all([
+    sql`
+      SELECT
+        COUNT(*)::INT AS "answeredCount",
+        COUNT(*) FILTER (WHERE result_type = 'correct')::INT AS "correctCount",
+        COUNT(*) FILTER (WHERE result_type = 'partial')::INT AS "partialCount",
+        COUNT(*) FILTER (WHERE result_type = 'incorrect')::INT AS "incorrectCount"
+      FROM quiz_question_progress
+      WHERE google_sub = ${googleSub}
+    `,
+    sql`
+      SELECT
+        COALESCE(question_id, '') AS "lastQuestionId",
+        COALESCE(result_type, '') AS "lastResultType",
+        COALESCE(updated_at::TEXT, '') AS "lastAnsweredAt"
+      FROM quiz_question_progress
+      WHERE google_sub = ${googleSub}
+      ORDER BY updated_at DESC
+      LIMIT 1
+    `
+  ]);
+
+  return {
+    ...getEmptyQuizStats(),
+    ...(countRows[0] || {}),
+    ...(latestRows[0] || {})
+  };
+}
+
+async function getQuizUserStats(googleSub) {
+  await ensureDb();
+
+  return getQuizProgressSummary(googleSub);
+}
+
+async function getAccountSnapshot({ googleSub, email }) {
+  await ensureDb();
+
+  const [subscriber, quizStats] = await Promise.all([
+    getSubscriberByEmail(email),
+    getQuizUserStats(googleSub)
+  ]);
+
+  return {
+    preferences: {
+      newsletterSubscribed: Boolean(subscriber)
+    },
+    quizStats
+  };
+}
+
+async function recordQuizAnswerProgress({
+  googleSub,
+  email,
+  displayName,
+  questionId,
+  resultType,
+  selectedCount,
+  selectedCorrectCount,
+  missedCorrectCount,
+  incorrectSelectedCount
+}) {
+  await ensureDb();
+
+  if (!googleSub || !email || !questionId || !resultType) {
+    return getEmptyQuizStats();
+  }
+
+  const safeDisplayName = String(displayName || 'Google user').trim().slice(0, 120) || 'Google user';
+  const safeQuestionId = String(questionId || '').trim().slice(0, 80);
+  const safeResultType = String(resultType || '').trim();
+  const safeSelectedCount = Math.max(0, Number(selectedCount) || 0);
+  const safeSelectedCorrectCount = Math.max(0, Number(selectedCorrectCount) || 0);
+  const safeMissedCorrectCount = Math.max(0, Number(missedCorrectCount) || 0);
+  const safeIncorrectSelectedCount = Math.max(0, Number(incorrectSelectedCount) || 0);
+
+  const eventId = crypto.randomUUID();
+  await sql`
+    INSERT INTO quiz_answer_events (
+      id,
+      google_sub,
+      email,
+      display_name,
+      question_id,
+      result_type,
+      selected_count,
+      selected_correct_count,
+      missed_correct_count,
+      incorrect_selected_count
+    )
+    VALUES (
+      ${eventId},
+      ${googleSub},
+      ${email},
+      ${safeDisplayName},
+      ${safeQuestionId},
+      ${safeResultType},
+      ${safeSelectedCount},
+      ${safeSelectedCorrectCount},
+      ${safeMissedCorrectCount},
+      ${safeIncorrectSelectedCount}
+    )
+  `;
+
+  await sql`
+    INSERT INTO quiz_question_progress (
+      google_sub,
+      question_id,
+      email,
+      display_name,
+      result_type,
+      selected_count,
+      selected_correct_count,
+      missed_correct_count,
+      incorrect_selected_count,
+      attempt_count
+    )
+    VALUES (
+      ${googleSub},
+      ${safeQuestionId},
+      ${email},
+      ${safeDisplayName},
+      ${safeResultType},
+      ${safeSelectedCount},
+      ${safeSelectedCorrectCount},
+      ${safeMissedCorrectCount},
+      ${safeIncorrectSelectedCount},
+      1
+    )
+    ON CONFLICT (google_sub, question_id)
+    DO UPDATE SET
+      email = EXCLUDED.email,
+      display_name = EXCLUDED.display_name,
+      result_type = EXCLUDED.result_type,
+      selected_count = EXCLUDED.selected_count,
+      selected_correct_count = EXCLUDED.selected_correct_count,
+      missed_correct_count = EXCLUDED.missed_correct_count,
+      incorrect_selected_count = EXCLUDED.incorrect_selected_count,
+      attempt_count = quiz_question_progress.attempt_count + 1,
+      updated_at = NOW()
+  `;
+
+  const stats = await getQuizProgressSummary(googleSub);
+
+  await sql`
+    INSERT INTO quiz_user_stats (
+      google_sub,
+      email,
+      display_name,
+      answered_count,
+      correct_count,
+      partial_count,
+      incorrect_count,
+      last_question_id,
+      last_result_type,
+      last_answered_at
+    )
+    VALUES (
+      ${googleSub},
+      ${email},
+      ${safeDisplayName},
+      ${stats.answeredCount},
+      ${stats.correctCount},
+      ${stats.partialCount},
+      ${stats.incorrectCount},
+      ${stats.lastQuestionId || safeQuestionId},
+      ${stats.lastResultType || safeResultType},
+      NOW()
+    )
+    ON CONFLICT (google_sub)
+    DO UPDATE SET
+      email = EXCLUDED.email,
+      display_name = EXCLUDED.display_name,
+      answered_count = EXCLUDED.answered_count,
+      correct_count = EXCLUDED.correct_count,
+      partial_count = EXCLUDED.partial_count,
+      incorrect_count = EXCLUDED.incorrect_count,
+      last_question_id = EXCLUDED.last_question_id,
+      last_result_type = EXCLUDED.last_result_type,
+      last_answered_at = NOW(),
+      updated_at = NOW()
+  `;
+
+  return stats;
+}
+
 async function countRecentThreadsByIp(ipHash, hours) {
   await ensureDb();
 
@@ -650,6 +939,11 @@ module.exports = {
   markForumNotificationDelivered,
   upsertForumNotificationSubscription,
   upsertSubscriber,
+  getSubscriberByEmail,
+  removeSubscriberByEmail,
+  getQuizUserStats,
+  getAccountSnapshot,
+  recordQuizAnswerProgress,
   countRecentThreadsByIp,
   countRecentCommentsByIp,
   countRecentSubscriptionsByIp
