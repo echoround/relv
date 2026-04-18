@@ -748,7 +748,7 @@ async function getAccountSnapshot({ googleSub, email }) {
 
   return {
     preferences: {
-      newsletterSubscribed: Boolean(subscriber)
+      newsletterSubscribed: subscriber?.sourcePage === 'site-auth-google'
     },
     quizStats
   };

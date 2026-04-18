@@ -2,7 +2,6 @@ const { maybeHandleOptions, methodNotAllowed, readJsonBody, sendJson, getClientM
 const { getForumAuthFromRequest } = require('../../../lib/forumAuth');
 const {
   getAccountSnapshot,
-  getSubscriberByEmail,
   removeSubscriberByEmail,
   upsertSubscriber
 } = require('../../../lib/db');
@@ -28,11 +27,9 @@ module.exports = async function handler(req, res) {
     const newsletterSubscribed = Boolean(body.newsletterSubscribed);
 
     if (newsletterSubscribed) {
-      const existingSubscriber = await getSubscriberByEmail(user.email);
-
       await upsertSubscriber({
         email: user.email,
-        sourcePage: existingSubscriber?.sourcePage || 'site-auth-google',
+        sourcePage: 'site-auth-google',
         ipHash,
         userAgent
       });

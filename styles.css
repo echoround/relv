@@ -340,6 +340,10 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
     width: 100%;
     margin-top: 12px;
     padding-top: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 8px;
+    box-sizing: border-box;
     border-top: 1px solid rgba(255,255,255,0.08);
   }
 
@@ -355,7 +359,8 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
 
   .site-auth-host--mobile .site-auth-panel{
     position: static;
-    width: auto;
+    width: 100%;
+    max-width: 100%;
     margin-top: 12px;
     background: rgba(255,255,255,0.05);
     box-shadow: none;
@@ -3776,7 +3781,10 @@ body.theme-quiz .flip-card-answers li,
     gap: 0 !important;
     border-radius: 0 !important;
     background: linear-gradient(180deg, rgb(61, 69, 79), rgb(39, 45, 53)) !important;
-    overflow: hidden !important;
+    overflow-x: visible !important;
+    overflow-y: auto !important;
+    max-height: calc(100vh - 84px) !important;
+    -webkit-overflow-scrolling: touch;
   }
 
   .site-nav .nav-link{
