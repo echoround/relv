@@ -131,7 +131,9 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   flex: 0 0 auto;
+  min-width: 138px;
 }
 
 .site-auth-host[hidden]{
@@ -140,6 +142,7 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
 
 .site-auth-root{
   position: relative;
+  width: 100%;
 }
 
 .site-auth-trigger{
@@ -148,19 +151,32 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-height: 42px;
-  padding: 10px 16px;
+  min-width: 138px;
+  min-height: 40px;
+  padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.05);
   color: rgba(255,255,255,0.9);
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.10em;
+  line-height: 1;
   text-transform: uppercase;
   cursor: pointer;
   transition: transform .16s ease, background .16s ease, border-color .16s ease;
+}
+
+.site-auth-trigger--placeholder{
+  cursor: default;
+  pointer-events: none;
+}
+
+.site-auth-trigger--placeholder,
+.site-auth-trigger--placeholder:hover,
+.site-auth-trigger--placeholder:focus-visible{
+  transform: none;
 }
 
 .site-auth-trigger:hover,
@@ -272,6 +288,7 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
 
   .site-auth-host--mobile .site-auth-trigger{
     width: 100%;
+    min-width: 0;
     justify-content: space-between;
   }
 

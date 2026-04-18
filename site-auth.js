@@ -13,6 +13,7 @@
   let googleIdentityPromise = null;
   let googleIdentityInitialized = false;
   let readyPromise = null;
+  let booted = false;
 
   function getStorage() {
     try {
@@ -240,12 +241,12 @@
     buttonHosts.forEach((host) => {
       host.innerHTML = '';
       googleIdentity.renderButton(host, {
-        theme: 'outline',
-        size: 'medium',
+        theme: 'filled_black',
+        size: 'large',
         shape: 'pill',
         text: 'signin_with',
         logo_alignment: 'left',
-        width: Math.min(Math.max(host.clientWidth || 180, 180), 240)
+        width: Math.min(Math.max(host.clientWidth || 220, 220), 240)
       });
     });
   }
@@ -405,7 +406,13 @@
     subscribe
   };
 
-  document.addEventListener('DOMContentLoaded', () => {
+  function boot() {
+    if (booted) {
+      return;
+    }
+
+    booted = true;
+
     if (!document.querySelector('[data-site-auth], [data-site-auth-mobile]')) {
       return;
     }
@@ -414,5 +421,11 @@
     ready().catch((error) => {
       console.error('Site auth init error:', error);
     });
-  });
+  }
+
+  boot();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  }
 })();
