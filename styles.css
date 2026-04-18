@@ -133,7 +133,7 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   align-items: center;
   justify-content: flex-end;
   flex: 0 0 auto;
-  min-width: 138px;
+  min-width: 122px;
 }
 
 .site-auth-host[hidden]{
@@ -151,15 +151,15 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-width: 138px;
-  min-height: 40px;
-  padding: 10px 14px;
+  min-width: 122px;
+  min-height: 36px;
+  padding: 8px 12px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.05);
   color: rgba(255,255,255,0.9);
   font: inherit;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.10em;
   line-height: 1;
@@ -259,10 +259,12 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
 .site-auth-google-button{
   margin-top: 12px;
   min-height: 40px;
+  display: flex;
+  justify-content: center;
 }
 
 .site-auth-google-button > div{
-  width: 100% !important;
+  max-width: 100%;
 }
 
 .site-auth-host--mobile{
