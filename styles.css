@@ -191,6 +191,32 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   background: rgba(34,211,238,0.08);
 }
 
+.site-auth-trigger.is-loading{
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.site-auth-trigger.is-loading .site-auth-trigger-label{
+  opacity: 0;
+}
+
+.site-auth-trigger.is-loading::after{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.18);
+  border-top-color: rgba(255,255,255,0.92);
+  border-right-color: rgba(255,255,255,0.72);
+  box-shadow: 0 0 14px rgba(255,255,255,0.10);
+  animation: forum-spinner-rotate 1s linear infinite, forum-spinner-pulse 1.9s ease-in-out infinite;
+}
+
 .site-auth-panel{
   position: absolute;
   top: calc(100% + 12px);

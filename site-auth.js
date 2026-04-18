@@ -233,6 +233,13 @@
     });
   }
 
+  function setTriggerLoading(button, loading) {
+    if (!button) return;
+
+    button.classList.toggle('is-loading', Boolean(loading));
+    button.setAttribute('aria-busy', loading ? 'true' : 'false');
+  }
+
   function notifySubscribers() {
     const snapshot = getStateSnapshot();
     subscribers.forEach((callback) => {
@@ -498,6 +505,7 @@
 
       const isMobileHost = Boolean(placeholderTrigger.closest('[data-site-auth-mobile]'));
       placeholderTrigger.disabled = true;
+      setTriggerLoading(placeholderTrigger, true);
 
       ready()
         .then(() => {
@@ -507,6 +515,7 @@
           console.error('Site auth lazy init error:', error);
         })
         .finally(() => {
+          setTriggerLoading(placeholderTrigger, false);
           placeholderTrigger.disabled = false;
         });
     });

@@ -306,6 +306,16 @@
     return `${plain.slice(0, max).trim()}...`;
   }
 
+  function formatCommentCount(count) {
+    const safeCount = Number(count) || 0;
+    return safeCount === 1 ? '1 kommentaar' : `${safeCount} kommentaari`;
+  }
+
+  function formatCommentsHeading(count) {
+    const safeCount = Number(count) || 0;
+    return safeCount === 1 ? 'Kommentaar (1)' : `Kommentaarid (${safeCount})`;
+  }
+
   function escapeHtml(value) {
     return String(value || '')
       .replace(/&/g, '&amp;')
@@ -984,7 +994,7 @@
 
       const meta = document.createElement('span');
       meta.className = 'forum-thread-card-meta';
-      appendMetaWithAuthor(meta, thread.displayName, `${thread.commentsCount} kommentaari`, formatDate(thread.lastActivityAt));
+      appendMetaWithAuthor(meta, thread.displayName, formatCommentCount(thread.commentsCount), formatDate(thread.lastActivityAt));
 
       const preview = document.createElement('span');
       preview.className = 'forum-thread-card-preview';
@@ -1045,7 +1055,7 @@
 
     const meta = document.createElement('p');
     meta.className = 'forum-detail-meta';
-    appendMetaWithAuthor(meta, thread.displayName, formatDate(thread.createdAt), `${thread.commentsCount} kommentaari`);
+    appendMetaWithAuthor(meta, thread.displayName, formatDate(thread.createdAt), formatCommentCount(thread.commentsCount));
 
     header.append(title, meta);
 
@@ -1081,7 +1091,7 @@
 
     const commentsHeading = document.createElement('h3');
     commentsHeading.className = 'forum-comments-title';
-    commentsHeading.textContent = `Kommentaarid (${thread.commentsCount})`;
+    commentsHeading.textContent = formatCommentsHeading(thread.commentsCount);
     commentsWrap.appendChild(commentsHeading);
 
     if (thread.commentsCount === 0) {
