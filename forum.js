@@ -458,12 +458,12 @@
       authContext.hidden = false;
       authContext.innerHTML = `
         <div class="forum-auth-context-copy">
-          <span class="forum-auth-context-kicker">Avalikult kuvatakse</span>
+          <span class="forum-auth-context-kicker">Sinu avalik fooruminimi</span>
           <div class="forum-auth-context-identity">
             <span class="forum-auth-context-avatar" data-forum-public-avatar data-avatar-size="38" aria-hidden="true"></span>
             <span class="forum-auth-context-name">${escapeHtml(publicDisplayName)}</span>
           </div>
-          <span class="forum-auth-context-note">Google konto ja e-post jäävad privaatseks. Foorumis neid ei kuvata.</span>
+          <span class="forum-auth-context-note">Muuda allolevat kasutajanime välja, kui tahad postitada teise nimega. Google konto ja e-post jäävad privaatseks.</span>
         </div>
       `;
       if (!authContext.parentElement) {
