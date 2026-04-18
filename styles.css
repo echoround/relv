@@ -3415,6 +3415,10 @@ body.theme-quiz .option input[type="checkbox"]{
 body.theme-quiz .quiz-layout > .glass-card{
   position: relative;
   isolation: isolate;
+  contain: paint;
+  overflow: hidden;
+  overflow: clip;
+  background-clip: padding-box;
 }
 
 body.theme-quiz .option.is-selected{
