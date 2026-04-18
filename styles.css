@@ -3818,3 +3818,53 @@ body.theme-quiz .flip-card-answers li,
     box-shadow: inset 3px 0 0 rgba(var(--nav-link-accent-strong), 0.84) !important;
   }
 }
+
+@media (max-width: 720px){
+  body.theme-hero,
+  body.theme-quiz,
+  body.theme-kuidas,
+  body.theme-forum{
+    background-attachment: scroll !important;
+  }
+
+  .site-header,
+  .glow-card,
+  .glass-card,
+  .step-card,
+  .content-card,
+  #quiz-container,
+  #question-grid,
+  #content-container,
+  .theme-forum .forum-panel,
+  .theme-forum .forum-comment,
+  .theme-forum .forum-thread-card,
+  .theme-forum .forum-detail-toggle,
+  .mailing-widget,
+  body.theme-quiz .flip-card-face{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 10px 24px rgba(10, 14, 20, 0.18) !important;
+  }
+
+  .site-header{
+    background: rgba(34, 39, 46, 0.96) !important;
+  }
+
+  .glow-card,
+  .glass-card,
+  .step-card,
+  .content-card,
+  .theme-forum .forum-panel,
+  .theme-forum .forum-comment,
+  .theme-forum .forum-thread-card,
+  .theme-forum .forum-detail-toggle,
+  .mailing-widget,
+  body.theme-quiz .flip-card-face{
+    background: linear-gradient(180deg, rgba(74, 83, 94, 0.96), rgba(52, 59, 68, 0.96)) !important;
+  }
+
+  body.theme-quiz #quiz-container,
+  body.theme-quiz #question-grid{
+    background: transparent !important;
+  }
+}
