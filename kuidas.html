@@ -80,6 +80,36 @@
                   line-height: 1.6;
                   font-size: 15px;
               }
+              .step-stack{
+                  display:grid;
+                  gap: 12px;
+              }
+              .step-list{
+                  margin: 2px 0 0 18px;
+                  padding: 0;
+                  color: rgba(255,255,255,0.74);
+                  line-height: 1.6;
+                  font-size: 15px;
+              }
+              .step-list li + li{
+                  margin-top: 6px;
+              }
+              .step-key{
+                  font-weight: 800;
+                  color: rgba(255,255,255,0.92);
+              }
+              .step-key--blue{
+                  color: rgba(96,165,250,0.98);
+              }
+              .step-key--amber{
+                  color: rgba(245,158,11,0.98);
+              }
+              .step-key--rose{
+                  color: rgba(251,113,133,0.98);
+              }
+              .step-key--mint{
+                  color: rgba(134,239,172,0.98);
+              }
               .content-card{
                   background: rgba(255,255,255,0.06);
                   border: 1px solid rgba(255,255,255,0.10);
@@ -174,11 +204,25 @@
       <article class="step-card">
         <div class="step-inner">
           <div class="step-num">1</div>
-          <div>
-            <h3 class="step-title">Esmaabikoolitus</h3>
+          <div class="step-stack">
+            <h3 class="step-title">Eeltingimused ja otstarve</h3>
             <p class="step-text">
-              Eesti Relvaseaduse järgi peab relvaloa taotleja tõendama, et ta on edukalt läbinud 16-tunnise akrediteeritud esmaabikursuse.
-              Selleks tuleb esitada vastav tunnistus.
+              Enne taotluse esitamist tuleb paika panna, <span class="step-key step-key--blue">milleks relva taotled</span>.
+              Levinumad otstarbed on jahipidamine, laskesport, piiratud käibega padrunisalvega spordialad, turvalisuse tagamine,
+              kutsealal tegutsemine, kollektsioneerimine ning ajaloolise või kultuurilise sündmuse etendamine.
+            </p>
+            <p class="step-text">
+              Vanus sõltub relva liigist ja otstarbest. Näiteks võib <span class="step-key step-key--blue">vähemalt 18-aastane</span> taotleda
+              sporditulirelva, jahitulirelva, gaasirelva või sileraudset püssi turvalisuse tagamiseks. Püstoli, revolvri või vintraudse või
+              kombineeritud püssi taotlemisel turvalisuse tagamiseks peab taotleja olema <span class="step-key step-key--amber">vähemalt 21-aastane</span>.
+            </p>
+            <p class="step-text">
+              Otstarbest sõltuvad ka lisadokumendid. Sporditulirelva puhul tuleb tõendada vastava laskespordiklubi liikmelisust,
+              jahirelva puhul jahipidamise õigust ning piiratud käibega padrunisalvega sporditulirelva puhul aktiivset seotust laskespordiga.
+            </p>
+            <p class="step-text">
+              Relvaluba ega soetamisluba ei anta, kui esineb välistav asjaolu: näiteks teatud tervisehäire, piiratud teovõime, asjakohane karistatus,
+              valeandmete esitamine või nõuetekohaste hoiutingimuste puudumine.
             </p>
           </div>
         </div>
@@ -187,12 +231,14 @@
       <article class="step-card">
         <div class="step-inner">
           <div class="step-num">2</div>
-          <div>
-            <h3 class="step-title">Tervisetõend</h3>
+          <div class="step-stack">
+            <h3 class="step-title">Esmaabikoolitus</h3>
             <p class="step-text">
-              Eestis väljastab perearst relvaloa taotlejale tervisetõendi, mis kinnitab, et relva omamist välistavad terviseseisundid puuduvad.
-              Tõendi saamiseks läbite perearsti tervisekontrolli ning vajadusel ka psühhiaatri või teiste eriarstide konsultatsiooni (perearst suunab).
-              <strong>Oluline ajastus:</strong> tervisekontroll peab olema tehtud <strong>mitte varem kui 3 kuud</strong> enne soetamisloa/relvaloa taotlemist.
+              Relvaloa taotleja peab esitama dokumendi, mis tõendab vähemalt
+              <span class="step-key step-key--mint">16-tunnise esmaabikoolituse</span> läbimist.
+            </p>
+            <p class="step-text">
+              Koolituse peab olema andnud tervishoiutöötaja, kes on läbinud esmaabiõpetajate koolituskursuse ja kellel on sellekohane tunnistus.
             </p>
           </div>
         </div>
@@ -201,12 +247,18 @@
       <article class="step-card">
         <div class="step-inner">
           <div class="step-num">3</div>
-          <div>
-            <h3 class="step-title">Taotluse esitamine PPA-le</h3>
+          <div class="step-stack">
+            <h3 class="step-title">Tervisetõend</h3>
             <p class="step-text">
-              Taotlus esitatakse veebipõhiselt iseteenindusportaali kaudu. Sisselogimiseks vajate ID-kaarti / Mobiil-ID / Smart-ID-d.
-              Pärast sisselogimist täidate taotluse, lisate vajalikud andmed ja dokumendid ning tasute riigilõivu.
-              Taotluse menetlemise riigilõiv on <strong>60 €</strong>.
+              Tervisekontrolli eesmärk on kinnitada, et taotlejal ei esine relvaloa andmist välistavaid terviseseisundeid.
+              Tervisekontrolli korraldab ja tervisetõendi väljastab perearst, kaasates vajaduse korral eriarste.
+              Kontroll tehakse taotleja kulul.
+            </p>
+            <p class="step-text">
+              Oluline ajastus: tervisekontroll peab olema tehtud
+              <span class="step-key step-key--rose">kõige varem 3 kuud</span> enne soetamisloa taotlemist või,
+              kui eelnevalt soetamisluba ei taotleta, enne relvaloa taotlemist. Tervisetõend kehtib kuni
+              <span class="step-key step-key--blue">5 aastat</span>.
             </p>
           </div>
         </div>
@@ -215,16 +267,16 @@
       <article class="step-card">
         <div class="step-inner">
           <div class="step-num">4</div>
-          <div>
-            <h3 class="step-title">Relva hoiutingimuste ülevaatus</h3>
+          <div class="step-stack">
+            <h3 class="step-title">Taotluse esitamine PPA-le</h3>
             <p class="step-text">
-              Pärast taotluse esitamist kontrollib Politsei- ja Piirivalveamet teie poolt märgitud hoiukohta, et see vastaks nõuetele.
-              Relvad ja laskemoon peavad olema hoitud nii, et kõrvalised isikud neile ligi ei pääseks.
-              Kui teil on <strong>rohkem kui üks</strong> tulirelv, on relvakapp praktikas vältimatu ja see peab olema kindlalt kinnitatud põranda,
-              seina või muu ehituskonstruktsiooni külge.
-              <br><br>
-              <strong>Nüanss:</strong> <strong>ühe</strong> tulirelva puhul relvakapp ei ole alati nõutav — sel juhul tuleb relva ja laskemoona hoida
-              kõrvalisele isikule raskesti avastatavas ja kättesaamatus kohas (turvalisuse mõttes on relvakapp siiski hea standard).
+              Relvaloa taotlus esitatakse PPA-le. Taotluses tuleb märkida taotleja andmed, soovitava relva liik, relva otstarve ja hoiukoht
+              ning lisada nõutavad dokumendid.
+            </p>
+            <p class="step-text">
+              Lihtsaim viis on teha seda veebis <a href="https://relvataotlus.politsei.ee/#/login">PPA iseteeninduses</a>.
+              Relvaloa taotluse läbivaatamise riigilõiv on <span class="step-key step-key--amber">60 €</span>.
+              PPA vaatab taotluse üldjuhul läbi <span class="step-key step-key--blue">2 kuu jooksul</span> alates kõigi dokumentide esitamisest ja riigilõivu tasumisest.
             </p>
           </div>
         </div>
@@ -233,12 +285,24 @@
       <article class="step-card">
         <div class="step-inner">
           <div class="step-num">5</div>
-          <div>
-            <h3 class="step-title">Eksamiks valmistumine</h3>
+          <div class="step-stack">
+            <h3 class="step-title">Relva hoiutingimused</h3>
             <p class="step-text">
-              Eksamiks ettevalmistumiseks pakume koolitusprogrammi, mis hõlmab 10 tundi teooriat ja 3 tundi praktilist õpet lasketiirus.
-              Koolituse jooksul saate omandada kõik teadmised ja oskused, mis on vajalikud eksami edukaks läbimiseks ning edaspidi relvade ohutuks
-              käsitsemiseks ja omamiseks. Registreeruda saab meie veebilehel.
+              Relva ja laskemoona tuleb hoida nii, et need oleksid säilinud, ümbrusele ohutud ja kõrvalistele isikutele kättesaamatud.
+              Tulirelva hoitakse ainult <span class="step-key step-key--blue">tühjaks laetuna</span>.
+            </p>
+            <p class="step-text">
+              Füüsiline isik peab hoidma relva oma elukohas või PPA-ga kooskõlastatud hoiukohas. Lisaks võib relva hoida kuni kahes eri aadressil
+              asuvas ajutises hoiukohas, kui need on PPA-ga kooskõlastatud.
+            </p>
+            <p class="step-text">
+              Üldjuhul peab tulirelva hoidmiseks olema relvakapp, mis on statsionaarselt kinnitatud põranda, seina või muu ehituskonstruktsiooni külge.
+              <span class="step-key step-key--mint">Ühe relva ja selle laskemoona</span> puhul ei ole relvakapp alati nõutav, kuid siis peab hoiukoht olema
+              kõrvalisele isikule raskesti avastatav ja kättesaadav. Piiratud käibega padrunisalvega tulirelva puhul tuleb ka ühe relva korral järgida relvakapi nõudeid.
+            </p>
+            <p class="step-text">
+              Padruneid, püssirohtu ja sütikuid tuleb hoida relvadest eraldi lukustatavas osas või relvahoidlas. Kui hoiate rohkem kui kaheksat tulirelva,
+              peab olema relvahoidla või kapp, mis on mõeldud vähemalt üheksa tulirelva hoidmiseks.
             </p>
           </div>
         </div>
@@ -247,24 +311,46 @@
       <article class="step-card">
         <div class="step-inner">
           <div class="step-num">6</div>
-          <div>
-            <h3 class="step-title">Eksam</h3>
+          <div class="step-stack">
+            <h3 class="step-title">Eksamiks valmistumine</h3>
             <p class="step-text">
-              Eksam toimub eesti keeles ja koosneb kahest osast. Enne eksamit tuleb tasuda riigilõiv:
-              <strong>90 €</strong> (kui sooritate erandina ainult ühe osa – ainult teooria või ainult käsitsemiskatse – siis <strong>75 €</strong>).
+              Relvaeksamiks valmistumine ei ole eraldi seadusest tulenev kohustus, kuid põhjalik ettevalmistus on praktiliselt väga oluline.
+              Eksamil kontrollitakse nii seaduse tundmist kui ka ohutut relvakäsitsemist.
             </p>
+            <p class="step-text">
+              Pakume ettevalmistuskoolitust, mis hõlmab teooriat ja praktilist õpet lasketiirus.
+              Koolituse eesmärk on anda teadmised ja oskused, mis on vajalikud eksami läbimiseks ning edaspidiseks relvade ohutuks käsitsemiseks ja omamiseks.
+            </p>
+          </div>
+        </div>
+      </article>
 
-            <ul style="margin:10px 0 0 18px; color:rgba(255,255,255,.74); line-height:1.6;">
+      <article class="step-card">
+        <div class="step-inner">
+          <div class="step-num">7</div>
+          <div class="step-stack">
+            <h3 class="step-title">Relvaeksam</h3>
+            <p class="step-text">
+              Relvaeksam toimub eesti keeles ja koosneb tavapäraselt kahest osast:
+              <span class="step-key step-key--blue">teooriaeksamist</span> ning
+              <span class="step-key step-key--mint">relva käsitsemise katsest ja laskekatsest</span>.
+              Täiseksami riigilõiv on <span class="step-key step-key--amber">90 €</span>; kui teha tuleb ainult teooriaeksam või ainult käsitsemise katse,
+              on riigilõiv <span class="step-key step-key--amber">75 €</span>.
+            </p>
+            <ul class="step-list">
               <li>
-                <strong>Teooriaeksam:</strong> 30-minutiline test <strong>10</strong> valikvastustega küsimusega.
-                Teooria loetakse sooritatuks, kui vastate õigesti <strong>vähemalt 8</strong> küsimusele.
+                <span class="step-key">Teooriaeksam:</span> 30 minuti jooksul vastatakse 10 valikvastustega küsimusele.
+                Eksam on sooritatud, kui õigesti on vastatud vähemalt <span class="step-key step-key--blue">8 küsimusele</span>.
               </li>
-
-              <li style="margin-top:8px;">
-                <strong>Relva käsitsemise katse + laskekatse:</strong> hinnatakse ohutut relvakäsitsemist ja laskmist.
-                Nõuded sõltuvad relvaliigist. Näiteks <strong>püstolist/revolvrist</strong> tehakse <strong>3 lasku</strong>, millest
-                <strong>vähemalt 2</strong> peavad tabama märklehte; <strong>vintraudsest püssist</strong> tehakse <strong>3 lasku</strong>,
-                millest <strong>kõik 3</strong> peavad tabama nõutud tsoone. Täpsed distantsid ja detailid sõltuvad relvaliigist ning on määruses kirjas.
+              <li>
+                <span class="step-key">Püssi laskekatse:</span> 25 meetri kauguselt tehakse 3 lasku ja kõik 3 peavad tabama märklehe ringe 7-10.
+              </li>
+              <li>
+                <span class="step-key">Püstoli või revolvri laskekatse:</span> üldjuhul 15 meetri kauguselt, alla 63,5 mm relvaraua puhul 10 meetri kauguselt.
+                Käskluse peale tuleb <span class="step-key step-key--rose">15 sekundi</span> jooksul relv laadida ja teha 3 lasku, millest vähemalt 2 peavad tabama märklehte.
+              </li>
+              <li>
+                Enne laskekatset võib teha ühe harjutuslasu. Gaasi- või akustilise relva soetamisloa või relvaloa taotlemisel relva käsitsemise katset tegema ei pea.
               </li>
             </ul>
           </div>
@@ -273,12 +359,16 @@
 
       <article class="step-card">
         <div class="step-inner">
-          <div class="step-num">7</div>
-          <div>
+          <div class="step-num">8</div>
+          <div class="step-stack">
             <h3 class="step-title">Korduseksam</h3>
             <p class="step-text">
-              Kui eksam ebaõnnestub, saate seda korrata vastavalt eksamigraafikule. Kui praktiline osa ei õnnestu, on teil võimalus see kahe kuu jooksul pärast
-              teooriaeksami sooritamist uuesti teha. Kui te seda aja jooksul ei läbi, tuleb ka teooriaeksam uuesti sooritada. Korduseksami eest tuleb tasuda riigilõiv.
+              Kui teooriaeksam ebaõnnestub, laskekatsele ei lubata ja eksam loetakse mittesooritatuks.
+              Kui laskekatse ebaõnnestub, võib seda korrata <span class="step-key step-key--rose">kõige varem 5 päeva pärast</span>,
+              kuid mitte hiljem kui <span class="step-key step-key--blue">2 kuu jooksul</span> teooriaeksami sooritamisest.
+            </p>
+            <p class="step-text">
+              Kui laskekatset selle aja jooksul edukalt ei sooritata, tuleb uuesti teha ka teooriaeksam. Korduseksami eest tuleb uuesti tasuda riigilõiv.
             </p>
           </div>
         </div>
@@ -286,13 +376,41 @@
 
       <article class="step-card">
         <div class="step-inner">
-          <div class="step-num">8</div>
-          <div>
-            <h3 class="step-title">Relva soetamine ja registreerimine</h3>
+          <div class="step-num">9</div>
+          <div class="step-stack">
+            <h3 class="step-title">Relvaluba ja soetamisluba</h3>
             <p class="step-text">
-              Kui relv soetatakse tegevusloa omajalt (nt relvapood), kantakse relva andmed tehingu käigus registrisse ja relvaloale.
-              Kui relv soetatakse <strong>välisriigist</strong>, tuleb relv registreerimiseks esitada <strong>7 tööpäeva</strong> jooksul
-              alates Eestisse saabumise päevast (elu- või asukohajärgsesse prefektuuri).
+              Relvaluba väljastatakse isikule, kes on esitanud nõutud dokumendid, kelle suhtes ei esine välistavaid asjaolusid ning kes on sooritanud nõutava relvaeksami.
+              Füüsilise isiku relvaluba kehtib kuni <span class="step-key step-key--blue">5 aastat</span>, kuid mitte kauem kui tervisetõend.
+            </p>
+            <p class="step-text">
+              Pärast relvaloa saamist tuleb relva ostmiseks üldjuhul taotleda eraldi soetamisluba.
+              Soetamisloa taotluse läbivaatamise riigilõiv on <span class="step-key step-key--amber">60 €</span>,
+              soetamisluba kehtib <span class="step-key step-key--blue">3 kuud</span> ja seda saab enne tähtaja lõppu pikendada veel 3 kuu võrra.
+              Pikendamise riigilõiv on <span class="step-key step-key--amber">30 €</span>.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-inner">
+          <div class="step-num">10</div>
+          <div class="step-stack">
+            <h3 class="step-title">Relva ost, registreerimine ja kohustused</h3>
+            <p class="step-text">
+              Kui relv ostetakse tegevusloa omajalt, näiteks relvapoest, kantakse relva andmed tehingu tegemisel registrisse ja relvaloale.
+              Kui relv on soetatud välisriigist, tuleb see registreerimiseks ja relvaloale kandmiseks esitada
+              <span class="step-key step-key--rose">7 tööpäeva jooksul</span> alates relva Eestisse saabumise päevast.
+            </p>
+            <p class="step-text">
+              Pärast loa saamist tuleb kogu aeg järgida hoidmise, kandmise, edasitoimetamise ja kasutamise nõudeid. PPA-d tuleb teavitada relva kadumisest,
+              vargusest või hävimisest <span class="step-key step-key--rose">viivitamata</span> ning hoiukoha või relva otstarbe muutumisest
+              <span class="step-key step-key--rose">7 tööpäeva jooksul</span>.
+            </p>
+            <p class="step-text">
+              Relvaloa pikendamise dokumendid tuleb esitada vähemalt <span class="step-key step-key--blue">2 kuud enne</span> loa kehtivuse lõppu.
+              Kui pikendatakse relvaluba, mille ainus otstarve on turvalisuse tagamine, tuleb sooritada relva käsitsemise katse.
             </p>
           </div>
         </div>
