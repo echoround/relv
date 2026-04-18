@@ -393,14 +393,7 @@
   }
 
   function ensureFormAuthElements(form) {
-    let authContext = form.querySelector('[data-forum-auth-context]');
-    if (!authContext) {
-      authContext = document.createElement('div');
-      authContext.className = 'forum-auth-context';
-      authContext.dataset.forumAuthContext = '';
-      authContext.hidden = true;
-      form.prepend(authContext);
-    }
+    const authContext = form.querySelector('[data-forum-auth-context]');
 
     let authHint = form.querySelector('[data-forum-auth-hint]');
     if (!authHint) {
@@ -459,8 +452,11 @@
     const publicDisplayName = getCurrentFormDisplayName(form);
 
     if (state.authUser) {
-      parts.authContext.hidden = false;
-      parts.authContext.innerHTML = `
+      const authContext = parts.authContext || document.createElement('div');
+      authContext.className = 'forum-auth-context';
+      authContext.dataset.forumAuthContext = '';
+      authContext.hidden = false;
+      authContext.innerHTML = `
         <div class="forum-auth-context-copy">
           <span class="forum-auth-context-kicker">Avalikult kuvatakse</span>
           <div class="forum-auth-context-identity">
@@ -470,7 +466,11 @@
           <span class="forum-auth-context-note">Google konto ja e-post jäävad privaatseks. Foorumis neid ei kuvata.</span>
         </div>
       `;
-      mountAnimalAvatar(parts.authContext.querySelector('[data-forum-public-avatar]'), publicDisplayName);
+      if (!authContext.parentElement) {
+        form.prepend(authContext);
+      }
+
+      mountAnimalAvatar(authContext.querySelector('[data-forum-public-avatar]'), publicDisplayName);
 
       parts.authHint.hidden = true;
       parts.authHint.textContent = '';
@@ -490,8 +490,7 @@
       return;
     }
 
-    parts.authContext.hidden = true;
-    parts.authContext.innerHTML = '';
+    parts.authContext?.remove();
 
     if (parts.notifyCheckbox) {
       parts.notifyCheckbox.checked = false;
