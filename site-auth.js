@@ -790,12 +790,8 @@
                   <div class="site-auth-panel-note">Foorumis kasutad enda valitud kasutajanime. Google profiili ja e-posti me teistele ei näita.</div>
                 </div>
                 <div class="site-auth-avatar-wrap">
-                  <button type="button" class="site-auth-avatar-toggle" data-site-auth-avatar-toggle aria-expanded="${uiState.avatarPickerOpen ? 'true' : 'false'}">
+                  <button type="button" class="site-auth-avatar-toggle" data-site-auth-avatar-toggle aria-expanded="${uiState.avatarPickerOpen ? 'true' : 'false'}" aria-label="Vali avatar">
                     <span class="site-auth-avatar-preview" data-site-auth-avatar-preview data-avatar-size="54" aria-hidden="true"></span>
-                    <span class="site-auth-avatar-copy">
-                      <span class="site-auth-avatar-title">Sinu avatar</span>
-                      <span class="site-auth-avatar-note">Alguses juhuslik, aga püsiv. Klõpsa, kui tahad ise valida.</span>
-                    </span>
                   </button>
                   <div class="site-auth-avatar-picker" data-site-auth-avatar-picker ${uiState.avatarPickerOpen ? '' : 'hidden'}>
                     <div class="site-auth-avatar-grid" data-site-auth-avatar-grid></div>

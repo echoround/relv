@@ -356,51 +356,27 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   margin-top: 12px;
   display: grid;
   gap: 10px;
+  justify-items: start;
 }
 
 .site-auth-avatar-toggle{
   appearance: none;
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 11px 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
+  justify-content: center;
+  width: auto;
+  padding: 0;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
   color: inherit;
   cursor: pointer;
-  text-align: left;
-  transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+  transition: transform .16s ease;
 }
 
 .site-auth-avatar-toggle:hover,
 .site-auth-avatar-toggle:focus-visible{
-  border-color: rgba(255,255,255,0.16);
-  background: rgba(255,255,255,0.06);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
-}
-
-.site-auth-avatar-copy{
-  min-width: 0;
-  display: grid;
-  gap: 4px;
-}
-
-.site-auth-avatar-title{
-  color: rgba(255,255,255,0.92);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.site-auth-avatar-note{
-  color: rgba(255,255,255,0.62);
-  font-size: 11px;
-  line-height: 1.45;
+  transform: translateY(-1px);
 }
 
 .site-auth-avatar-preview,
@@ -416,6 +392,15 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.16);
   background: rgba(255,255,255,0.05);
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.site-auth-avatar-toggle:hover .site-auth-avatar-preview,
+.site-auth-avatar-toggle:focus-visible .site-auth-avatar-preview,
+.site-auth-avatar-toggle[aria-expanded="true"] .site-auth-avatar-preview{
+  border-color: rgba(34,211,238,0.34);
+  background: rgba(34,211,238,0.08);
+  box-shadow: 0 0 0 3px rgba(34,211,238,0.18);
 }
 
 .site-auth-avatar-choice-preview{
@@ -454,6 +439,7 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  max-width: 256px;
 }
 
 .site-auth-avatar-choice{
