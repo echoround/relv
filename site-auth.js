@@ -446,7 +446,8 @@
             });
 
             button.appendChild(preview);
-            button.addEventListener('click', async () => {
+            button.addEventListener('click', async (event) => {
+              event.stopPropagation();
               if (uiState.avatarSaving || avatar.id === resolvedAvatarId) {
                 return;
               }
@@ -739,9 +740,21 @@
       logout();
     });
 
-    host.querySelector('[data-site-auth-avatar-toggle]')?.addEventListener('click', () => {
+    host.querySelector('[data-site-auth-avatar-toggle]')?.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       uiState.avatarPickerOpen = !uiState.avatarPickerOpen;
       updateAvatarControls();
+
+      if (uiState.avatarPickerOpen) {
+        window.requestAnimationFrame(() => {
+          host.querySelector('[data-site-auth-avatar-picker]')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'nearest'
+          });
+        });
+      }
     });
 
     const newsletterToggle = host.querySelector('[data-site-auth-newsletter-toggle]');

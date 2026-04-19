@@ -14,6 +14,15 @@ let quizCardsRendered = false;
 let quizAvatarModulePromise = null;
 let quizAccountStripExpanded = false;
 
+function shouldShowQuizAccountStripLoading(snapshot) {
+    const auth = window.RELV_SITE_AUTH;
+    return Boolean(
+        auth?.readAuthToken?.() &&
+        snapshot?.authConfig?.status === 'loading' &&
+        !snapshot?.user?.sub
+    );
+}
+
 function getApiUrl(path) {
     if (typeof window.relvApiUrl === 'function') {
         return window.relvApiUrl(path);
@@ -167,9 +176,37 @@ function jumpToQuestionById(questionId) {
     document.getElementById('quiz')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+function renderQuizAccountStripLoading() {
+    const strip = document.getElementById('quiz-account-strip');
+    if (!strip) return;
+
+    strip.hidden = false;
+    strip.innerHTML = `
+        <div class="quiz-account-strip-shell quiz-account-strip-shell--loading" aria-hidden="true">
+            <div class="quiz-account-strip-loading-row">
+                <span class="quiz-account-strip-avatar quiz-account-strip-avatar--placeholder">
+                    <span class="quiz-account-avatar-fallback"></span>
+                </span>
+                <span class="quiz-account-strip-stats quiz-account-strip-stats--loading">
+                    <span class="quiz-account-chip quiz-account-chip--loading"></span>
+                    <span class="quiz-account-chip quiz-account-chip--loading"></span>
+                    <span class="quiz-account-chip quiz-account-chip--loading"></span>
+                    <span class="quiz-account-chip quiz-account-chip--loading"></span>
+                </span>
+                <span class="quiz-account-strip-spinner" aria-hidden="true"></span>
+            </div>
+        </div>
+    `;
+}
+
 function renderQuizAccountStrip(snapshot) {
     const strip = document.getElementById('quiz-account-strip');
     if (!strip) return;
+
+    if (shouldShowQuizAccountStripLoading(snapshot)) {
+        renderQuizAccountStripLoading();
+        return;
+    }
 
     const user = snapshot?.user || null;
     if (!user?.sub) {
