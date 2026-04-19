@@ -1,7 +1,8 @@
 (function siteAuthBootstrap() {
   const AUTH_TOKEN_KEY = 'relv:forum:auth-token';
   const EMPTY_PREFERENCES = {
-    newsletterSubscribed: false
+    newsletterSubscribed: false,
+    avatarId: ''
   };
   const EMPTY_QUIZ_STATS = {
     answeredCount: 0,
@@ -29,11 +30,17 @@
     newsletterSaving: false,
     newsletterMessage: '',
     newsletterTone: 'muted',
-    newsletterMessageTimer: 0
+    newsletterMessageTimer: 0,
+    avatarSaving: false,
+    avatarMessage: '',
+    avatarTone: 'muted',
+    avatarMessageTimer: 0,
+    avatarPickerOpen: false
   };
 
   const subscribers = new Set();
   let googleIdentityPromise = null;
+  let avatarModulePromise = null;
   let googleIdentityInitialized = false;
   let readyPromise = null;
   let booted = false;
@@ -61,7 +68,15 @@
   }
 
   function shouldEagerBoot() {
-    return document.body?.classList?.contains('theme-forum') || false;
+    if (document.body?.classList?.contains('theme-forum')) {
+      return true;
+    }
+
+    if (document.body?.classList?.contains('theme-quiz') && readAuthToken()) {
+      return true;
+    }
+
+    return false;
   }
 
   function readAuthToken() {
@@ -111,7 +126,8 @@
 
   function normalizePreferences(value) {
     return {
-      newsletterSubscribed: Boolean(value?.newsletterSubscribed)
+      newsletterSubscribed: Boolean(value?.newsletterSubscribed),
+      avatarId: String(value?.avatarId || '').trim().toLowerCase()
     };
   }
 
@@ -156,6 +172,13 @@
     }
   }
 
+  function clearAvatarMessageTimer() {
+    if (uiState.avatarMessageTimer) {
+      window.clearTimeout(uiState.avatarMessageTimer);
+      uiState.avatarMessageTimer = 0;
+    }
+  }
+
   function setNewsletterUiState({ saving = false, message = '', tone = 'muted', autoClearMs = 0 } = {}) {
     clearNewsletterMessageTimer();
 
@@ -172,6 +195,22 @@
     }
   }
 
+  function setAvatarUiState({ saving = false, message = '', tone = 'muted', autoClearMs = 0 } = {}) {
+    clearAvatarMessageTimer();
+
+    uiState.avatarSaving = Boolean(saving);
+    uiState.avatarMessage = String(message || '');
+    uiState.avatarTone = String(tone || 'muted');
+
+    if (autoClearMs > 0 && uiState.avatarMessage) {
+      uiState.avatarMessageTimer = window.setTimeout(() => {
+        uiState.avatarMessage = '';
+        uiState.avatarTone = 'muted';
+        updateAvatarControls();
+      }, autoClearMs);
+    }
+  }
+
   function resetAccountState() {
     applyAccountState({
       user: null,
@@ -179,6 +218,12 @@
       quizStats: EMPTY_QUIZ_STATS
     });
     setNewsletterUiState();
+    setAvatarUiState({
+      saving: false,
+      message: '',
+      tone: 'muted'
+    });
+    uiState.avatarPickerOpen = false;
   }
 
   function getStateSnapshot() {
@@ -208,6 +253,11 @@
     document.querySelectorAll('[data-site-auth-trigger]').forEach((button) => {
       button.setAttribute('aria-expanded', 'false');
     });
+
+    if (uiState.avatarPickerOpen) {
+      uiState.avatarPickerOpen = false;
+      updateAvatarControls();
+    }
   }
 
   function updatePlaceholderTriggersFromToken() {
@@ -278,6 +328,154 @@
     });
   }
 
+  async function loadAvatarModule() {
+    if (!avatarModulePromise) {
+      avatarModulePromise = import('./forum-animal-avatars.js').catch((error) => {
+        avatarModulePromise = null;
+        throw error;
+      });
+    }
+
+    return avatarModulePromise;
+  }
+
+  function getResolvedAvatarId(module) {
+    return module.resolveForumAnimalAvatarId(
+      state.user?.sub || state.user?.email || 'anon',
+      state.preferences.avatarId
+    );
+  }
+
+  function renderAvatarMarkup(host, module, options = {}) {
+    if (!host || !state.user) return;
+
+    const size = Number(options.size || host.dataset.avatarSize) || 52;
+    const avatarId = getResolvedAvatarId(module);
+    host.innerHTML = module.renderForumAnimalAvatarSvg(state.user.name || 'konto', {
+      size,
+      seedKey: state.user.sub || state.user.email || state.user.name || 'konto',
+      avatarId,
+      label: 'konto'
+    });
+  }
+
+  function updateAvatarControls() {
+    const pickerHosts = [...document.querySelectorAll('[data-site-auth-avatar-picker]')];
+    const toggleButtons = [...document.querySelectorAll('[data-site-auth-avatar-toggle]')];
+    const statusHosts = [...document.querySelectorAll('[data-site-auth-avatar-status]')];
+
+    toggleButtons.forEach((button) => {
+      button.disabled = uiState.avatarSaving;
+      button.setAttribute('aria-expanded', String(uiState.avatarPickerOpen));
+    });
+
+    pickerHosts.forEach((picker) => {
+      picker.hidden = !uiState.avatarPickerOpen;
+    });
+
+    statusHosts.forEach((statusEl) => {
+      const hasMessage = Boolean(uiState.avatarMessage);
+      statusEl.hidden = !hasMessage;
+      statusEl.textContent = uiState.avatarMessage;
+      statusEl.dataset.tone = uiState.avatarTone;
+    });
+
+    if (!state.user) {
+      document.querySelectorAll('[data-site-auth-avatar-preview], [data-site-auth-avatar-choice-preview]').forEach((host) => {
+        host.innerHTML = '';
+      });
+      document.querySelectorAll('[data-site-auth-avatar-grid]').forEach((grid) => {
+        grid.innerHTML = '';
+      });
+      return;
+    }
+
+    loadAvatarModule()
+      .then((module) => {
+        const resolvedAvatarId = getResolvedAvatarId(module);
+
+        document.querySelectorAll('[data-site-auth-avatar-preview]').forEach((host) => {
+          renderAvatarMarkup(host, module, {
+            size: Number(host.dataset.avatarSize) || 52
+          });
+        });
+
+        document.querySelectorAll('[data-site-auth-avatar-grid]').forEach((grid) => {
+          if (!uiState.avatarPickerOpen && grid.dataset.avatarHydrated === 'true') {
+            return;
+          }
+
+          grid.dataset.avatarHydrated = 'true';
+          grid.innerHTML = '';
+
+          module.listForumAnimalAvatars().forEach((avatar) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'site-auth-avatar-choice';
+            button.dataset.avatarId = avatar.id;
+            button.setAttribute('aria-label', `Vali avatar: ${avatar.label}`);
+            button.setAttribute('title', avatar.label);
+            button.dataset.active = String(avatar.id === resolvedAvatarId);
+            button.disabled = uiState.avatarSaving;
+
+            const preview = document.createElement('span');
+            preview.className = 'site-auth-avatar-choice-preview';
+            preview.dataset.siteAuthAvatarChoicePreview = '';
+            preview.dataset.avatarSize = '40';
+            preview.innerHTML = module.renderForumAnimalAvatarSvg(state.user.name || avatar.label, {
+              size: 40,
+              seedKey: state.user.sub || state.user.email || state.user.name || 'konto',
+              avatarId: avatar.id,
+              label: avatar.label
+            });
+
+            button.appendChild(preview);
+            button.addEventListener('click', async () => {
+              if (uiState.avatarSaving || avatar.id === resolvedAvatarId) {
+                return;
+              }
+
+              setAvatarUiState({
+                saving: true,
+                message: 'Salvestan avatari...',
+                tone: 'muted'
+              });
+              updateAvatarControls();
+
+              try {
+                const payload = await saveAccountPreferences({
+                  avatarId: avatar.id
+                });
+                applyAccountState(payload);
+                setAvatarUiState({
+                  saving: false,
+                  message: 'Avatar salvestatud.',
+                  tone: 'success',
+                  autoClearMs: 1800
+                });
+                updateAvatarControls();
+                notifySubscribers();
+              } catch (error) {
+                setAvatarUiState({
+                  saving: false,
+                  message: error.message || 'Avatari salvestamine ebaõnnestus.',
+                  tone: 'error'
+                });
+                updateAvatarControls();
+              }
+            });
+
+            grid.appendChild(button);
+          });
+        });
+      })
+      .catch(() => {
+        document.querySelectorAll('[data-site-auth-avatar-preview]').forEach((host) => {
+          host.innerHTML = '<span class="site-auth-avatar-fallback"></span>';
+        });
+      });
+  }
+
   function ingestAccountData(payload, options = {}) {
     const shouldRender = Boolean(options.render);
     const shouldNotify = options.notify !== false;
@@ -288,6 +486,7 @@
       renderSiteAuthHosts();
     } else {
       updateNewsletterControls();
+      updateAvatarControls();
     }
 
     if (shouldNotify) {
@@ -406,7 +605,7 @@
     return googleIdentity;
   }
 
-  async function saveNewsletterPreference(newsletterSubscribed) {
+  async function saveAccountPreferences(updates) {
     const endpoint = getApiUrl('/forum/auth/preferences');
     if (!endpoint) {
       throw new Error('Eelistuste teenus ei ole praegu saadaval.');
@@ -417,9 +616,7 @@
       headers: getAuthHeaders({
         'Content-Type': 'application/json'
       }),
-      body: JSON.stringify({
-        newsletterSubscribed: Boolean(newsletterSubscribed)
-      })
+      body: JSON.stringify(updates || {})
     });
 
     const payload = await response.json().catch(() => ({}));
@@ -526,6 +723,11 @@
       logout();
     });
 
+    host.querySelector('[data-site-auth-avatar-toggle]')?.addEventListener('click', () => {
+      uiState.avatarPickerOpen = !uiState.avatarPickerOpen;
+      updateAvatarControls();
+    });
+
     const newsletterToggle = host.querySelector('[data-site-auth-newsletter-toggle]');
     if (!newsletterToggle) return;
 
@@ -540,7 +742,9 @@
       updateNewsletterControls();
 
       try {
-        const payload = await saveNewsletterPreference(nextValue);
+        const payload = await saveAccountPreferences({
+          newsletterSubscribed: nextValue
+        });
         applyAccountState(payload);
         setNewsletterUiState({
           saving: false,
@@ -584,6 +788,19 @@
                   <div class="site-auth-panel-text">${escapeHtml(state.user.name || 'Google')}</div>
                   <div class="site-auth-panel-text site-auth-panel-text--muted">${escapeHtml(state.user.email || '')}</div>
                   <div class="site-auth-panel-note">Foorumis kasutad enda valitud kasutajanime. Google profiili ja e-posti me teistele ei näita.</div>
+                </div>
+                <div class="site-auth-avatar-wrap">
+                  <button type="button" class="site-auth-avatar-toggle" data-site-auth-avatar-toggle aria-expanded="${uiState.avatarPickerOpen ? 'true' : 'false'}">
+                    <span class="site-auth-avatar-preview" data-site-auth-avatar-preview data-avatar-size="54" aria-hidden="true"></span>
+                    <span class="site-auth-avatar-copy">
+                      <span class="site-auth-avatar-title">Sinu avatar</span>
+                      <span class="site-auth-avatar-note">Alguses juhuslik, aga püsiv. Klõpsa, kui tahad ise valida.</span>
+                    </span>
+                  </button>
+                  <div class="site-auth-avatar-picker" data-site-auth-avatar-picker ${uiState.avatarPickerOpen ? '' : 'hidden'}>
+                    <div class="site-auth-avatar-grid" data-site-auth-avatar-grid></div>
+                    <div class="site-auth-avatar-status" data-site-auth-avatar-status hidden></div>
+                  </div>
                 </div>
                 <div class="site-auth-consent-wrap">
                   <label class="site-auth-consent">
@@ -635,6 +852,7 @@
 
     hosts.forEach(renderHost);
     updateNewsletterControls();
+    updateAvatarControls();
     renderGoogleButtons().catch((error) => {
       console.error('Site auth Google button error:', error);
     });

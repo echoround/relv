@@ -2,6 +2,7 @@ const { maybeHandleOptions, sendJson, readJsonBody, getClientMeta, methodNotAllo
 const {
   addComment,
   countRecentCommentsByIp,
+  getAccountSnapshot,
   listForumNotificationRecipients,
   markForumNotificationDelivered,
   upsertForumNotificationSubscription
@@ -31,10 +32,21 @@ module.exports = async function handler(req, res) {
 
     const payload = validateCommentInput(body);
     const authUser = getForumAuthFromRequest(req);
+    const account = authUser
+      ? await getAccountSnapshot({
+          googleSub: authUser.sub,
+          email: authUser.email
+        })
+      : null;
     const result = await addComment({
       ...payload,
       displayName: payload.displayName,
-      authorProfile: authUser,
+      authorProfile: authUser
+        ? {
+            ...authUser,
+            avatarId: account?.preferences?.avatarId || ''
+          }
+        : null,
       ipHash,
       userAgent
     });

@@ -15,7 +15,10 @@
       googleClientId: '',
       status: 'loading'
     },
-    authUser: null
+    authUser: null,
+    authPreferences: {
+      avatarId: ''
+    }
   };
 
   const FORUM_AUTHOR_PALETTE = [
@@ -361,21 +364,25 @@
     window.setTimeout(warm, 180);
   }
 
-  function mountAnimalAvatar(host, displayName) {
+  function mountAnimalAvatar(host, displayName, options = {}) {
     if (!host) return;
 
     const safeName = normalizeDisplayName(displayName);
     const size = Number(host.dataset.avatarSize) || 38;
-    host.dataset.avatarSeed = safeName;
+    const seedKey = String(options.seedKey || safeName || 'anon');
+    const avatarId = String(options.avatarId || '').trim().toLowerCase();
+    host.dataset.avatarSeed = `${safeName}:${seedKey}:${avatarId}`;
     host.innerHTML = `<span class="forum-avatar-fallback">${safeName.slice(0, 1).toUpperCase()}</span>`;
 
     loadAnimalAvatarModule()
       .then((module) => {
         if (!host.isConnected) return;
-        if (host.dataset.avatarSeed !== safeName) return;
+        if (host.dataset.avatarSeed !== `${safeName}:${seedKey}:${avatarId}`) return;
 
         host.innerHTML = module.renderForumAnimalAvatarSvg(safeName, {
           size,
+          seedKey,
+          avatarId,
           anonymous: isAnonymousDisplayName(safeName),
           label: safeName
         });
@@ -480,7 +487,10 @@
         form.prepend(authContext);
       }
 
-      mountAnimalAvatar(authContext.querySelector('[data-forum-public-avatar]'), publicDisplayName);
+      mountAnimalAvatar(authContext.querySelector('[data-forum-public-avatar]'), publicDisplayName, {
+        avatarId: state.authPreferences.avatarId,
+        seedKey: state.authUser?.sub || publicDisplayName
+      });
 
       parts.authHint.hidden = true;
       parts.authHint.textContent = '';
@@ -534,6 +544,9 @@
     }
 
     state.authUser = nextState.user || null;
+    state.authPreferences = {
+      avatarId: String(nextState.preferences?.avatarId || '').trim().toLowerCase()
+    };
     renderForumAuthCard();
   }
 
@@ -713,11 +726,14 @@
 
   function appendMetaWithAuthor(container, displayName, ...parts) {
     const safeName = normalizeDisplayName(displayName);
+    const avatarOptions = parts.length > 0 && typeof parts[parts.length - 1] === 'object' && parts[parts.length - 1] !== null
+      ? parts.pop()
+      : {};
     const authorChip = document.createElement('span');
     authorChip.className = 'forum-author-chip';
 
     const avatar = createAvatarHost('forum-author-avatar', 34);
-    mountAnimalAvatar(avatar, safeName);
+    mountAnimalAvatar(avatar, safeName, avatarOptions);
 
     const author = document.createElement('span');
     author.className = 'forum-author-name';
@@ -927,7 +943,9 @@
 
     const itemMeta = document.createElement('div');
     itemMeta.className = 'forum-comment-meta';
-    appendMetaWithAuthor(itemMeta, comment.displayName, formatDate(comment.createdAt));
+    appendMetaWithAuthor(itemMeta, comment.displayName, formatDate(comment.createdAt), {
+      avatarId: comment.avatarId
+    });
 
     const itemBody = document.createElement('div');
     itemBody.className = 'forum-comment-body';
@@ -994,7 +1012,9 @@
 
       const meta = document.createElement('span');
       meta.className = 'forum-thread-card-meta';
-      appendMetaWithAuthor(meta, thread.displayName, formatCommentCount(thread.commentsCount), formatDate(thread.lastActivityAt));
+      appendMetaWithAuthor(meta, thread.displayName, formatCommentCount(thread.commentsCount), formatDate(thread.lastActivityAt), {
+        avatarId: thread.avatarId
+      });
 
       const preview = document.createElement('span');
       preview.className = 'forum-thread-card-preview';
@@ -1055,7 +1075,9 @@
 
     const meta = document.createElement('p');
     meta.className = 'forum-detail-meta';
-    appendMetaWithAuthor(meta, thread.displayName, formatDate(thread.createdAt), formatCommentCount(thread.commentsCount));
+    appendMetaWithAuthor(meta, thread.displayName, formatDate(thread.createdAt), formatCommentCount(thread.commentsCount), {
+      avatarId: thread.avatarId
+    });
 
     header.append(title, meta);
 

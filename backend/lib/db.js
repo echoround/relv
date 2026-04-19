@@ -8,6 +8,37 @@ if (!databaseUrl) {
 
 const sql = databaseUrl ? neon(databaseUrl) : null;
 let schemaPromise = null;
+const ACCOUNT_AVATAR_IDS = [
+  'fox', 'bear', 'rabbit', 'owl', 'frog', 'penguin', 'deer', 'raccoon',
+  'cat', 'koala', 'pig', 'tiger', 'wolf', 'seal', 'hedgehog', 'alpaca',
+  'duck', 'otter'
+];
+
+function normalizeAccountAvatarId(value) {
+  const avatarId = String(value || '').trim().toLowerCase();
+  return ACCOUNT_AVATAR_IDS.includes(avatarId) ? avatarId : '';
+}
+
+function hashAccountAvatarSeed(value) {
+  let hash = 0;
+  const source = String(value || 'anon');
+
+  for (let index = 0; index < source.length; index += 1) {
+    hash = (hash * 31 + source.charCodeAt(index)) >>> 0;
+  }
+
+  return hash >>> 0;
+}
+
+function resolveAccountAvatarId(googleSub, storedAvatarId = '') {
+  const explicitId = normalizeAccountAvatarId(storedAvatarId);
+  if (explicitId) {
+    return explicitId;
+  }
+
+  const hash = hashAccountAvatarSeed(String(googleSub || 'anon').trim().toLowerCase());
+  return ACCOUNT_AVATAR_IDS[hash % ACCOUNT_AVATAR_IDS.length] || ACCOUNT_AVATAR_IDS[0];
+}
 
 async function ensureDb() {
   if (!sql) {
@@ -122,6 +153,16 @@ async function ensureDb() {
       `;
 
       await sql`
+        CREATE TABLE IF NOT EXISTS account_preferences (
+          google_sub TEXT PRIMARY KEY,
+          email TEXT NOT NULL,
+          avatar_id TEXT,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `;
+
+      await sql`
         CREATE TABLE IF NOT EXISTS quiz_answer_events (
           id TEXT PRIMARY KEY,
           google_sub TEXT NOT NULL,
@@ -183,6 +224,7 @@ async function ensureDb() {
       await sql`CREATE UNIQUE INDEX IF NOT EXISTS forum_notify_thread_subject_unique ON forum_notification_subscriptions (thread_id, google_sub) WHERE comment_id IS NULL`;
       await sql`CREATE UNIQUE INDEX IF NOT EXISTS forum_notify_comment_subject_unique ON forum_notification_subscriptions (comment_id, google_sub) WHERE comment_id IS NOT NULL`;
       await sql`CREATE INDEX IF NOT EXISTS mailing_list_ip_hash_idx ON mailing_list_subscribers (ip_hash, created_at DESC)`;
+      await sql`CREATE INDEX IF NOT EXISTS account_preferences_email_idx ON account_preferences (email)`;
       await sql`CREATE INDEX IF NOT EXISTS quiz_answer_events_subject_created_idx ON quiz_answer_events (google_sub, created_at DESC)`;
       await sql`CREATE INDEX IF NOT EXISTS quiz_question_progress_subject_updated_idx ON quiz_question_progress (google_sub, updated_at DESC)`;
     })();
@@ -200,6 +242,7 @@ async function listThreads(limit = 25) {
       title,
       body,
       display_name AS "displayName",
+      COALESCE(author_avatar_url, '') AS "avatarId",
       comments_count AS "commentsCount",
       created_at AS "createdAt",
       updated_at AS "updatedAt",
@@ -246,6 +289,7 @@ async function getThreadBySlug(slug) {
       title,
       body,
       display_name AS "displayName",
+      COALESCE(author_avatar_url, '') AS "avatarId",
       comments_count AS "commentsCount",
       created_at AS "createdAt",
       updated_at AS "updatedAt",
@@ -263,6 +307,7 @@ async function getThreadBySlug(slug) {
       id,
       body,
       display_name AS "displayName",
+      COALESCE(author_avatar_url, '') AS "avatarId",
       parent_comment_id AS "parentCommentId",
       created_at AS "createdAt",
       updated_at AS "updatedAt"
@@ -315,8 +360,59 @@ function normalizeAuthorProfile(authorProfile) {
     provider: 'google',
     subject: String(authorProfile.sub).slice(0, 255),
     email: '',
-    picture: ''
+    picture: normalizeAccountAvatarId(authorProfile.avatarId)
   };
+}
+
+async function getAccountPreferences(googleSub) {
+  await ensureDb();
+
+  if (!googleSub) {
+    return {
+      avatarId: ''
+    };
+  }
+
+  const rows = await sql`
+    SELECT
+      COALESCE(avatar_id, '') AS "avatarId"
+    FROM account_preferences
+    WHERE google_sub = ${googleSub}
+    LIMIT 1
+  `;
+
+  return rows[0] || { avatarId: '' };
+}
+
+async function upsertAccountPreferences({ googleSub, email, avatarId = '' }) {
+  await ensureDb();
+
+  if (!googleSub || !email) {
+    return null;
+  }
+
+  const safeAvatarId = normalizeAccountAvatarId(avatarId);
+  const rows = await sql`
+    INSERT INTO account_preferences (
+      google_sub,
+      email,
+      avatar_id
+    )
+    VALUES (
+      ${googleSub},
+      ${email},
+      ${safeAvatarId || null}
+    )
+    ON CONFLICT (google_sub)
+    DO UPDATE SET
+      email = EXCLUDED.email,
+      avatar_id = EXCLUDED.avatar_id,
+      updated_at = NOW()
+    RETURNING
+      COALESCE(avatar_id, '') AS "avatarId"
+  `;
+
+  return rows[0] || { avatarId: '' };
 }
 
 async function upsertForumNotificationSubscription({
@@ -741,14 +837,16 @@ async function getQuizUserStats(googleSub) {
 async function getAccountSnapshot({ googleSub, email }) {
   await ensureDb();
 
-  const [subscriber, quizStats] = await Promise.all([
+  const [subscriber, quizStats, accountPreferences] = await Promise.all([
     getSubscriberByEmail(email),
-    getQuizUserStats(googleSub)
+    getQuizUserStats(googleSub),
+    getAccountPreferences(googleSub)
   ]);
 
   return {
     preferences: {
-      newsletterSubscribed: subscriber?.sourcePage === 'site-auth-google'
+      newsletterSubscribed: subscriber?.sourcePage === 'site-auth-google',
+      avatarId: resolveAccountAvatarId(googleSub, accountPreferences?.avatarId)
     },
     quizStats
   };
@@ -941,9 +1039,11 @@ module.exports = {
   upsertSubscriber,
   getSubscriberByEmail,
   removeSubscriberByEmail,
+  getAccountPreferences,
   getQuizUserStats,
   getAccountSnapshot,
   recordQuizAnswerProgress,
+  upsertAccountPreferences,
   countRecentThreadsByIp,
   countRecentCommentsByIp,
   countRecentSubscriptionsByIp

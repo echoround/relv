@@ -11,6 +11,7 @@ let quizCardsObserver = null;
 let quizCardsIdleHandle = null;
 let quizCardsRenderQueued = false;
 let quizCardsRendered = false;
+let quizAvatarModulePromise = null;
 
 function getApiUrl(path) {
     if (typeof window.relvApiUrl === 'function') {
@@ -19,6 +20,103 @@ function getApiUrl(path) {
 
     const base = String(window.RELV_CONFIG?.apiBase || '').replace(/\/$/, '');
     return base ? `${base}${String(path || '').startsWith('/') ? path : `/${path || ''}`}` : '';
+}
+
+function loadQuizAvatarModule() {
+    if (!quizAvatarModulePromise) {
+        quizAvatarModulePromise = import('./forum-animal-avatars.js').catch((error) => {
+            quizAvatarModulePromise = null;
+            throw error;
+        });
+    }
+
+    return quizAvatarModulePromise;
+}
+
+function getQuizAccountStatsSnapshot(snapshot) {
+    return {
+        answeredCount: Math.max(0, Number(snapshot?.quizStats?.answeredCount) || 0),
+        correctCount: Math.max(0, Number(snapshot?.quizStats?.correctCount) || 0),
+        partialCount: Math.max(0, Number(snapshot?.quizStats?.partialCount) || 0),
+        incorrectCount: Math.max(0, Number(snapshot?.quizStats?.incorrectCount) || 0)
+    };
+}
+
+function renderQuizAccountStrip(snapshot) {
+    const strip = document.getElementById('quiz-account-strip');
+    if (!strip) return;
+
+    const user = snapshot?.user || null;
+    if (!user?.sub) {
+        strip.hidden = true;
+        strip.innerHTML = '';
+        return;
+    }
+
+    const stats = getQuizAccountStatsSnapshot(snapshot);
+    strip.hidden = false;
+    strip.innerHTML = `
+        <div class="quiz-account-strip-shell">
+            <span class="quiz-account-strip-avatar" data-quiz-account-avatar data-avatar-size="42" aria-hidden="true"></span>
+            <div class="quiz-account-strip-copy">
+                <div class="quiz-account-strip-title-row">
+                    <span class="quiz-account-strip-title">Sinu statistika</span>
+                    <span class="quiz-account-strip-user">Püsiv konto</span>
+                </div>
+                <div class="quiz-account-strip-stats">
+                    <span class="quiz-account-chip">
+                        <span class="quiz-account-chip-label">Vastatud</span>
+                        <span class="quiz-account-chip-value">${stats.answeredCount}</span>
+                    </span>
+                    <span class="quiz-account-chip quiz-account-chip--correct">
+                        <span class="quiz-account-chip-label">Õiged</span>
+                        <span class="quiz-account-chip-value">${stats.correctCount}</span>
+                    </span>
+                    <span class="quiz-account-chip quiz-account-chip--partial">
+                        <span class="quiz-account-chip-label">Osalised</span>
+                        <span class="quiz-account-chip-value">${stats.partialCount}</span>
+                    </span>
+                    <span class="quiz-account-chip quiz-account-chip--incorrect">
+                        <span class="quiz-account-chip-label">Valed</span>
+                        <span class="quiz-account-chip-value">${stats.incorrectCount}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    const avatarHost = strip.querySelector('[data-quiz-account-avatar]');
+    if (!avatarHost) return;
+
+    avatarHost.innerHTML = '<span class="quiz-account-avatar-fallback"></span>';
+    loadQuizAvatarModule()
+        .then((module) => {
+            if (!avatarHost.isConnected) return;
+
+            avatarHost.innerHTML = module.renderForumAnimalAvatarSvg(user.name || 'konto', {
+                size: Number(avatarHost.dataset.avatarSize) || 42,
+                seedKey: user.sub || user.email || user.name || 'konto',
+                avatarId: snapshot?.preferences?.avatarId || '',
+                label: 'quiz'
+            });
+        })
+        .catch(() => {
+            avatarHost.innerHTML = '<span class="quiz-account-avatar-fallback"></span>';
+        });
+}
+
+function setupQuizAccountStrip() {
+    const strip = document.getElementById('quiz-account-strip');
+    const auth = window.RELV_SITE_AUTH;
+    if (!strip || !auth?.subscribe || !auth?.getState) {
+        return;
+    }
+
+    auth.subscribe((snapshot) => {
+        renderQuizAccountStrip(snapshot);
+    });
+
+    renderQuizAccountStrip(auth.getState());
 }
 
 function getQuizAnswerReview(question, selectedOptions) {
@@ -181,6 +279,7 @@ function initializeQuizSession() {
   }));
 
   setupExplanationUI();
+  setupQuizAccountStrip();
   displayQuestion();
   createQuestionGrid();
   scheduleQuestionCardsRender();

@@ -3,6 +3,7 @@ const { getForumAuthFromRequest } = require('../../../lib/forumAuth');
 const {
   getAccountSnapshot,
   removeSubscriberByEmail,
+  upsertAccountPreferences,
   upsertSubscriber
 } = require('../../../lib/db');
 
@@ -24,17 +25,30 @@ module.exports = async function handler(req, res) {
   try {
     const body = await readJsonBody(req);
     const { ipHash, userAgent } = getClientMeta(req);
-    const newsletterSubscribed = Boolean(body.newsletterSubscribed);
+    const hasNewsletterPreference = Object.prototype.hasOwnProperty.call(body || {}, 'newsletterSubscribed');
+    const hasAvatarPreference = Object.prototype.hasOwnProperty.call(body || {}, 'avatarId');
 
-    if (newsletterSubscribed) {
-      await upsertSubscriber({
+    if (hasNewsletterPreference) {
+      const newsletterSubscribed = Boolean(body.newsletterSubscribed);
+
+      if (newsletterSubscribed) {
+        await upsertSubscriber({
+          email: user.email,
+          sourcePage: 'site-auth-google',
+          ipHash,
+          userAgent
+        });
+      } else {
+        await removeSubscriberByEmail(user.email);
+      }
+    }
+
+    if (hasAvatarPreference) {
+      await upsertAccountPreferences({
+        googleSub: user.sub,
         email: user.email,
-        sourcePage: 'site-auth-google',
-        ipHash,
-        userAgent
+        avatarId: body.avatarId
       });
-    } else {
-      await removeSubscriberByEmail(user.email);
     }
 
     const account = await getAccountSnapshot({

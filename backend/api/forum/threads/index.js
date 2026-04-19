@@ -3,6 +3,7 @@ const {
   listThreads,
   createThread,
   countRecentThreadsByIp,
+  getAccountSnapshot,
   upsertForumNotificationSubscription
 } = require('../../../lib/db');
 const { getForumAuthFromRequest } = require('../../../lib/forumAuth');
@@ -35,10 +36,21 @@ module.exports = async function handler(req, res) {
 
       const payload = validateThreadInput(body);
       const authUser = getForumAuthFromRequest(req);
+      const account = authUser
+        ? await getAccountSnapshot({
+            googleSub: authUser.sub,
+            email: authUser.email
+          })
+        : null;
       const thread = await createThread({
         ...payload,
         displayName: payload.displayName,
-        authorProfile: authUser,
+        authorProfile: authUser
+          ? {
+              ...authUser,
+              avatarId: account?.preferences?.avatarId || ''
+            }
+          : null,
         ipHash,
         userAgent
       });

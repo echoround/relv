@@ -340,6 +340,7 @@ const ANIMAL_ARCHETYPES = [
     }
   }
 ];
+const ANIMAL_BY_ID = new Map(ANIMAL_ARCHETYPES.map((animal) => [animal.id, animal]));
 let avatarInstanceCounter = 0;
 
 function hashSeed(value) {
@@ -359,6 +360,25 @@ function escapeAttribute(value) {
     .replace(/"/g, '&quot;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+}
+
+function normalizeAnimalAvatarId(value) {
+  const candidate = String(value || '').trim().toLowerCase();
+  return ANIMAL_BY_ID.has(candidate) ? candidate : '';
+}
+
+export function listForumAnimalAvatars() {
+  return ANIMAL_ARCHETYPES.map(({ id, label }) => ({ id, label }));
+}
+
+export function resolveForumAnimalAvatarId(seed, preferredAvatarId = '') {
+  const explicitId = normalizeAnimalAvatarId(preferredAvatarId);
+  if (explicitId) {
+    return explicitId;
+  }
+
+  const hash = hashSeed(String(seed || 'anon').trim().toLowerCase() || 'anon');
+  return ANIMAL_ARCHETYPES[hash % ANIMAL_ARCHETYPES.length].id;
 }
 
 function createBackgroundMarkup(palette, uniqueId) {
@@ -400,8 +420,9 @@ function renderAnonymousAvatar(uniqueId) {
 
 export function renderForumAnimalAvatarSvg(seed, options = {}) {
   const normalizedSeed = String(seed || 'anon').trim().toLowerCase();
+  const seedKey = String(options.seedKey || normalizedSeed || 'anon').trim().toLowerCase() || 'anon';
   const anonymous = Boolean(options.anonymous) || normalizedSeed === 'anon';
-  const hash = hashSeed(normalizedSeed || 'anon');
+  const hash = hashSeed(seedKey);
   const size = Number(options.size) > 0 ? Number(options.size) : 44;
   const label = options.label || (anonymous ? 'anon' : normalizedSeed);
   avatarInstanceCounter += 1;
@@ -415,7 +436,8 @@ export function renderForumAnimalAvatarSvg(seed, options = {}) {
     `;
   }
 
-  const animal = ANIMAL_ARCHETYPES[hash % ANIMAL_ARCHETYPES.length];
+  const animalId = resolveForumAnimalAvatarId(seedKey, options.avatarId);
+  const animal = ANIMAL_BY_ID.get(animalId) || ANIMAL_ARCHETYPES[hash % ANIMAL_ARCHETYPES.length];
   const palette = BACKGROUND_PALETTES[(hash >>> 3) % BACKGROUND_PALETTES.length];
 
   return `
