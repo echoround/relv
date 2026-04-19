@@ -811,6 +811,13 @@ body.theme-quiz .quiz-account-strip-shell{
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.10);
   background: rgba(0,0,0,0.16);
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+body.theme-quiz .quiz-account-strip-shell:hover,
+body.theme-quiz .quiz-account-strip-shell:focus-within{
+  border-color: rgba(125, 211, 252, 0.24);
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.12);
 }
 
 body.theme-quiz .quiz-account-strip-toggle{
@@ -826,6 +833,15 @@ body.theme-quiz .quiz-account-strip-toggle{
   color: inherit;
   text-align: left;
   cursor: pointer;
+  border-radius: inherit;
+  outline: none;
+  box-shadow: none;
+}
+
+body.theme-quiz .quiz-account-strip-toggle:focus,
+body.theme-quiz .quiz-account-strip-toggle:focus-visible{
+  outline: none;
+  box-shadow: none;
 }
 
 body.theme-quiz .quiz-account-strip-chevron{
