@@ -2424,6 +2424,16 @@ body.theme-quiz .dot.mid{ background: var(--color-partial); }
   }
 }
 
+body.theme-quiz .quiz-account-strip-toggle,
+body.theme-quiz .quiz-account-strip-toggle:hover,
+body.theme-quiz .quiz-account-strip-toggle:focus,
+body.theme-quiz .quiz-account-strip-toggle:focus-visible{
+  box-shadow: none !important;
+  border-color: transparent !important;
+  outline: none !important;
+  transform: none !important;
+}
+
 @keyframes onlineBump{
   0%   { transform: translateY(0) scale(1); }
   55%  { transform: translateY(-1px) scale(1.02); }
