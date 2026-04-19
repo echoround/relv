@@ -435,6 +435,10 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   gap: 8px;
 }
 
+.site-auth-avatar-picker[hidden]{
+  display: none !important;
+}
+
 .site-auth-avatar-grid{
   display: flex;
   flex-wrap: wrap;
