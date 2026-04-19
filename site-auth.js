@@ -9,9 +9,12 @@
     correctCount: 0,
     partialCount: 0,
     incorrectCount: 0,
+    currentCorrectStreak: 0,
+    bestCorrectStreak: 0,
     lastQuestionId: '',
     lastResultType: '',
-    lastAnsweredAt: ''
+    lastAnsweredAt: '',
+    questionProgress: []
   };
 
   const state = {
@@ -137,9 +140,22 @@
       correctCount: Math.max(0, Number(value?.correctCount) || 0),
       partialCount: Math.max(0, Number(value?.partialCount) || 0),
       incorrectCount: Math.max(0, Number(value?.incorrectCount) || 0),
+      currentCorrectStreak: Math.max(0, Number(value?.currentCorrectStreak) || 0),
+      bestCorrectStreak: Math.max(0, Number(value?.bestCorrectStreak) || 0),
       lastQuestionId: String(value?.lastQuestionId || ''),
       lastResultType: String(value?.lastResultType || ''),
-      lastAnsweredAt: String(value?.lastAnsweredAt || '')
+      lastAnsweredAt: String(value?.lastAnsweredAt || ''),
+      questionProgress: Array.isArray(value?.questionProgress)
+        ? value.questionProgress.map((entry) => ({
+            questionId: String(entry?.questionId || ''),
+            resultType: String(entry?.resultType || ''),
+            attemptCount: Math.max(0, Number(entry?.attemptCount) || 0),
+            selectedCorrectCount: Math.max(0, Number(entry?.selectedCorrectCount) || 0),
+            missedCorrectCount: Math.max(0, Number(entry?.missedCorrectCount) || 0),
+            incorrectSelectedCount: Math.max(0, Number(entry?.incorrectSelectedCount) || 0),
+            updatedAt: String(entry?.updatedAt || '')
+          }))
+        : []
     };
   }
 

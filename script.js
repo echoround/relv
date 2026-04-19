@@ -12,6 +12,7 @@ let quizCardsIdleHandle = null;
 let quizCardsRenderQueued = false;
 let quizCardsRendered = false;
 let quizAvatarModulePromise = null;
+let quizAccountStripExpanded = false;
 
 function getApiUrl(path) {
     if (typeof window.relvApiUrl === 'function') {
@@ -33,13 +34,137 @@ function loadQuizAvatarModule() {
     return quizAvatarModulePromise;
 }
 
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function getQuizAccountStatsSnapshot(snapshot) {
     return {
         answeredCount: Math.max(0, Number(snapshot?.quizStats?.answeredCount) || 0),
         correctCount: Math.max(0, Number(snapshot?.quizStats?.correctCount) || 0),
         partialCount: Math.max(0, Number(snapshot?.quizStats?.partialCount) || 0),
-        incorrectCount: Math.max(0, Number(snapshot?.quizStats?.incorrectCount) || 0)
+        incorrectCount: Math.max(0, Number(snapshot?.quizStats?.incorrectCount) || 0),
+        currentCorrectStreak: Math.max(0, Number(snapshot?.quizStats?.currentCorrectStreak) || 0),
+        bestCorrectStreak: Math.max(0, Number(snapshot?.quizStats?.bestCorrectStreak) || 0),
+        questionProgress: Array.isArray(snapshot?.quizStats?.questionProgress) ? snapshot.quizStats.questionProgress : []
     };
+}
+
+function getQuizQuestionLookup() {
+    return new Map(
+        (Array.isArray(questionPool) ? questionPool : [])
+            .filter((question) => question && question.id != null)
+            .map((question) => [String(question.id), question])
+    );
+}
+
+function getQuestionExcerpt(question) {
+    const text = String(question?.text || '').trim();
+    if (!text) return '';
+    return text.length > 92 ? `${text.slice(0, 89).trimEnd()}...` : text;
+}
+
+function getToughestQuestionEntries(progressEntries) {
+    return progressEntries
+        .filter((entry) => entry && entry.resultType !== 'correct')
+        .map((entry) => ({
+            ...entry,
+            severityScore:
+                (entry.resultType === 'incorrect' ? 300 : 200) +
+                ((Number(entry.attemptCount) || 0) * 10) +
+                (Number(entry.incorrectSelectedCount) || 0) * 3 +
+                (Number(entry.missedCorrectCount) || 0)
+        }))
+        .sort((left, right) => {
+            if (right.severityScore !== left.severityScore) {
+                return right.severityScore - left.severityScore;
+            }
+
+            return String(right.updatedAt || '').localeCompare(String(left.updatedAt || ''));
+        })
+        .slice(0, 4);
+}
+
+function getStrongestQuestionEntries(progressEntries) {
+    return progressEntries
+        .filter((entry) => entry && entry.resultType === 'correct')
+        .sort((left, right) => {
+            if ((left.attemptCount || 0) !== (right.attemptCount || 0)) {
+                return (left.attemptCount || 0) - (right.attemptCount || 0);
+            }
+
+            return String(right.updatedAt || '').localeCompare(String(left.updatedAt || ''));
+        })
+        .slice(0, 4);
+}
+
+function getUnansweredQuestionEntries(progressEntries) {
+    const answeredIds = new Set(
+        progressEntries
+            .map((entry) => String(entry?.questionId || ''))
+            .filter(Boolean)
+    );
+
+    return (Array.isArray(questionPool) ? questionPool : [])
+        .filter((question) => question && question.id != null && !answeredIds.has(String(question.id)))
+        .slice(0, 6)
+        .map((question) => ({
+            questionId: String(question.id),
+            resultType: 'unanswered',
+            attemptCount: 0
+        }));
+}
+
+function renderQuizQuestionList(listTitle, entries, lookup, emptyText) {
+    const safeEntries = Array.isArray(entries) ? entries : [];
+    const itemsMarkup = safeEntries.length > 0
+        ? safeEntries.map((entry) => {
+            const question = lookup.get(String(entry.questionId || ''));
+            const excerpt = getQuestionExcerpt(question);
+            const badge = String(entry.questionId || '?');
+            return `
+                <button type="button" class="quiz-account-list-item" data-quiz-account-question-id="${escapeHtml(entry.questionId)}">
+                    <span class="quiz-account-list-badge">${escapeHtml(badge)}</span>
+                    <span class="quiz-account-list-copy">
+                        <span class="quiz-account-list-text">${escapeHtml(excerpt || `Küsimus ${badge}`)}</span>
+                        <span class="quiz-account-list-meta">${
+                            entry.resultType === 'unanswered'
+                                ? 'Veel vastamata'
+                                : entry.resultType === 'correct'
+                                    ? `${Math.max(1, Number(entry.attemptCount) || 1)} katsega õigeks`
+                                    : entry.resultType === 'partial'
+                                        ? `Osaline · ${Math.max(1, Number(entry.attemptCount) || 1)} katset`
+                                        : `Vale · ${Math.max(1, Number(entry.attemptCount) || 1)} katset`
+                        }</span>
+                    </span>
+                </button>
+            `;
+        }).join('')
+        : `<div class="quiz-account-empty">${escapeHtml(emptyText)}</div>`;
+
+    return `
+        <section class="quiz-account-section">
+            <div class="quiz-account-section-title">${escapeHtml(listTitle)}</div>
+            <div class="quiz-account-list">${itemsMarkup}</div>
+        </section>
+    `;
+}
+
+function jumpToQuestionById(questionId) {
+    const targetId = String(questionId || '');
+    if (!targetId) return;
+
+    const nextIndex = questions.findIndex((question) => String(question?.id || '') === targetId);
+    if (nextIndex === -1) return;
+
+    currentIndex = nextIndex;
+    displayQuestion();
+    document.getElementById('quiz')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function renderQuizAccountStrip(snapshot) {
@@ -54,16 +179,16 @@ function renderQuizAccountStrip(snapshot) {
     }
 
     const stats = getQuizAccountStatsSnapshot(snapshot);
+    const lookup = getQuizQuestionLookup();
+    const toughestQuestions = getToughestQuestionEntries(stats.questionProgress);
+    const strongestQuestions = getStrongestQuestionEntries(stats.questionProgress);
+    const unansweredQuestions = getUnansweredQuestionEntries(stats.questionProgress);
     strip.hidden = false;
     strip.innerHTML = `
-        <div class="quiz-account-strip-shell">
-            <span class="quiz-account-strip-avatar" data-quiz-account-avatar data-avatar-size="42" aria-hidden="true"></span>
-            <div class="quiz-account-strip-copy">
-                <div class="quiz-account-strip-title-row">
-                    <span class="quiz-account-strip-title">Sinu statistika</span>
-                    <span class="quiz-account-strip-user">Püsiv konto</span>
-                </div>
-                <div class="quiz-account-strip-stats">
+        <div class="quiz-account-strip-shell" data-open="${quizAccountStripExpanded ? 'true' : 'false'}">
+            <button type="button" class="quiz-account-strip-toggle" aria-expanded="${quizAccountStripExpanded ? 'true' : 'false'}">
+                <span class="quiz-account-strip-avatar" data-quiz-account-avatar data-avatar-size="42" aria-hidden="true"></span>
+                <span class="quiz-account-strip-stats">
                     <span class="quiz-account-chip">
                         <span class="quiz-account-chip-label">Vastatud</span>
                         <span class="quiz-account-chip-value">${stats.answeredCount}</span>
@@ -80,10 +205,47 @@ function renderQuizAccountStrip(snapshot) {
                         <span class="quiz-account-chip-label">Valed</span>
                         <span class="quiz-account-chip-value">${stats.incorrectCount}</span>
                     </span>
+                </span>
+                <span class="quiz-account-strip-chevron" aria-hidden="true">${quizAccountStripExpanded ? '−' : '+'}</span>
+            </button>
+            <div class="quiz-account-strip-panel" ${quizAccountStripExpanded ? '' : 'hidden'}>
+                <div class="quiz-account-summary-grid">
+                    <div class="quiz-account-summary-card">
+                        <span class="quiz-account-summary-label">Praegune õigete seeria</span>
+                        <span class="quiz-account-summary-value">${stats.currentCorrectStreak}</span>
+                    </div>
+                    <div class="quiz-account-summary-card">
+                        <span class="quiz-account-summary-label">Parim õigete seeria</span>
+                        <span class="quiz-account-summary-value">${stats.bestCorrectStreak}</span>
+                    </div>
+                    <div class="quiz-account-summary-card">
+                        <span class="quiz-account-summary-label">Veel vastamata</span>
+                        <span class="quiz-account-summary-value">${Math.max(0, questionPool.length - stats.answeredCount)}</span>
+                    </div>
+                    <div class="quiz-account-summary-card">
+                        <span class="quiz-account-summary-label">Läbitud osa</span>
+                        <span class="quiz-account-summary-value">${questionPool.length > 0 ? Math.round((stats.answeredCount / questionPool.length) * 100) : 0}%</span>
+                    </div>
+                </div>
+                <div class="quiz-account-section-grid">
+                    ${renderQuizQuestionList('Praegu keerulisemad', toughestQuestions, lookup, 'Praegu ei paista ühtki keerulist kohta.')}
+                    ${renderQuizQuestionList('Kõige kindlamad', strongestQuestions, lookup, 'Ühtegi kindlat lemmikut veel pole.')}
+                    ${renderQuizQuestionList('Veel vastamata', unansweredQuestions, lookup, 'Kõik küsimused on juba vähemalt korra vastatud.')}
                 </div>
             </div>
         </div>
     `;
+
+    strip.querySelector('.quiz-account-strip-toggle')?.addEventListener('click', () => {
+        quizAccountStripExpanded = !quizAccountStripExpanded;
+        renderQuizAccountStrip(snapshot);
+    });
+
+    strip.querySelectorAll('[data-quiz-account-question-id]').forEach((button) => {
+        button.addEventListener('click', () => {
+            jumpToQuestionById(button.dataset.quizAccountQuestionId || '');
+        });
+    });
 
     const avatarHost = strip.querySelector('[data-quiz-account-avatar]');
     if (!avatarHost) return;

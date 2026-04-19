@@ -788,9 +788,40 @@ function getEmptyQuizStats() {
     correctCount: 0,
     partialCount: 0,
     incorrectCount: 0,
+    currentCorrectStreak: 0,
+    bestCorrectStreak: 0,
     lastQuestionId: '',
     lastResultType: '',
-    lastAnsweredAt: ''
+    lastAnsweredAt: '',
+    questionProgress: []
+  };
+}
+
+function calculateCorrectStreaks(eventRows) {
+  let currentCorrectStreak = 0;
+  let bestCorrectStreak = 0;
+  let rolling = 0;
+
+  eventRows.forEach((row) => {
+    if (String(row?.resultType || '') === 'correct') {
+      rolling += 1;
+      bestCorrectStreak = Math.max(bestCorrectStreak, rolling);
+    } else {
+      rolling = 0;
+    }
+  });
+
+  for (let index = eventRows.length - 1; index >= 0; index -= 1) {
+    if (String(eventRows[index]?.resultType || '') !== 'correct') {
+      break;
+    }
+
+    currentCorrectStreak += 1;
+  }
+
+  return {
+    currentCorrectStreak,
+    bestCorrectStreak
   };
 }
 
@@ -799,7 +830,7 @@ async function getQuizProgressSummary(googleSub) {
     return getEmptyQuizStats();
   }
 
-  const [countRows, latestRows] = await Promise.all([
+  const [countRows, latestRows, progressRows, eventRows] = await Promise.all([
     sql`
       SELECT
         COUNT(*)::INT AS "answeredCount",
@@ -818,13 +849,37 @@ async function getQuizProgressSummary(googleSub) {
       WHERE google_sub = ${googleSub}
       ORDER BY updated_at DESC
       LIMIT 1
+    `,
+    sql`
+      SELECT
+        question_id AS "questionId",
+        result_type AS "resultType",
+        attempt_count AS "attemptCount",
+        selected_correct_count AS "selectedCorrectCount",
+        missed_correct_count AS "missedCorrectCount",
+        incorrect_selected_count AS "incorrectSelectedCount",
+        COALESCE(updated_at::TEXT, '') AS "updatedAt"
+      FROM quiz_question_progress
+      WHERE google_sub = ${googleSub}
+      ORDER BY updated_at DESC
+    `,
+    sql`
+      SELECT
+        result_type AS "resultType"
+      FROM quiz_answer_events
+      WHERE google_sub = ${googleSub}
+      ORDER BY created_at ASC
     `
   ]);
+
+  const streaks = calculateCorrectStreaks(eventRows || []);
 
   return {
     ...getEmptyQuizStats(),
     ...(countRows[0] || {}),
-    ...(latestRows[0] || {})
+    ...(latestRows[0] || {}),
+    ...streaks,
+    questionProgress: Array.isArray(progressRows) ? progressRows : []
   };
 }
 
