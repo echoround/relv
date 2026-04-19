@@ -10,8 +10,37 @@
     quizEngaged: false,
     quizIgnored: false,
     quizClosed: false,
-    homeMobileInteracted: false
+    homeMobileInteracted: false,
+    authSnapshot: null
   };
+
+  function getSiteAuth() {
+    return window.RELV_SITE_AUTH || null;
+  }
+
+  function getAuthSnapshot() {
+    return getSiteAuth()?.getState?.() || null;
+  }
+
+  function hasAuthToken() {
+    return Boolean(getSiteAuth()?.readAuthToken?.());
+  }
+
+  function isSignedIn(snapshot = state.authSnapshot) {
+    return Boolean(snapshot?.user?.sub);
+  }
+
+  function isNewsletterSubscribed(snapshot = state.authSnapshot) {
+    return Boolean(snapshot?.preferences?.newsletterSubscribed);
+  }
+
+  function hasPendingSignedInAuth(snapshot = state.authSnapshot) {
+    return Boolean(
+      hasAuthToken() &&
+      !isSignedIn(snapshot) &&
+      snapshot?.authConfig?.status === 'loading'
+    );
+  }
 
   function getApiUrl(path) {
     if (typeof window.relvApiUrl === 'function') {
@@ -277,6 +306,96 @@
     state.quizIgnored = false;
   }
 
+  function ensureQuizConsentControls(widget) {
+    if (!widget || widget.dataset.mailingWidget !== 'quiz' || widget._quizConsentBuilt) return;
+
+    const form = widget.querySelector('[data-mailing-list-form]');
+    const feedback = widget.querySelector('[data-mailing-feedback]');
+    if (!form || !feedback) return;
+
+    const consent = document.createElement('label');
+    consent.className = 'mailing-widget-consent';
+    consent.dataset.mailingQuizConsent = '';
+    consent.hidden = true;
+    consent.innerHTML = `
+      <input class="mailing-widget-consent-checkbox" type="checkbox" data-mailing-quiz-consent-toggle>
+      <span class="mailing-widget-consent-copy">
+        <span class="mailing-widget-consent-title">Kasuta minu Google e-posti</span>
+        <span class="mailing-widget-consent-note">Märgi see ja liitud uudiskirjaga ühe puudutusega.</span>
+      </span>
+    `;
+
+    form.insertBefore(consent, feedback);
+
+    const toggle = consent.querySelector('[data-mailing-quiz-consent-toggle]');
+    toggle?.addEventListener('change', async () => {
+      if (!toggle.checked) {
+        return;
+      }
+
+      const auth = getSiteAuth();
+      if (!auth?.setNewsletterSubscribed) {
+        toggle.checked = false;
+        setFeedback(widget, 'error', 'Liitumine ei ole hetkel saadaval.');
+        return;
+      }
+
+      toggle.disabled = true;
+      setFeedback(widget, 'success', 'Liitun...');
+
+      try {
+        const snapshot = await auth.setNewsletterSubscribed(true);
+        state.authSnapshot = snapshot;
+        handleSuccess(widget, 'Aitäh! Oled nüüd meililistis.');
+      } catch (error) {
+        toggle.checked = false;
+        toggle.disabled = false;
+        setFeedback(widget, 'error', error.message || 'Liitumine ebaõnnestus.');
+      }
+    });
+
+    widget._quizConsentBuilt = true;
+  }
+
+  function setQuizWidgetMode(widget, mode) {
+    if (!widget || widget.dataset.mailingWidget !== 'quiz') return;
+
+    ensureQuizConsentControls(widget);
+
+    const form = widget.querySelector('[data-mailing-list-form]');
+    const emailRow = form?.querySelector('.mailing-widget-row');
+    const honeypots = form ? [...form.querySelectorAll('.mailing-widget-honeypot')] : [];
+    const consent = form?.querySelector('[data-mailing-quiz-consent]');
+    const consentToggle = consent?.querySelector('[data-mailing-quiz-consent-toggle]');
+
+    widget.dataset.accountMode = mode;
+
+    if (mode === 'consent') {
+      if (emailRow) emailRow.hidden = true;
+      honeypots.forEach((input) => {
+        input.disabled = true;
+        input.hidden = true;
+      });
+      if (consent) consent.hidden = false;
+      if (consentToggle) {
+        consentToggle.checked = false;
+        consentToggle.disabled = false;
+      }
+      return;
+    }
+
+    if (emailRow) emailRow.hidden = false;
+    honeypots.forEach((input) => {
+      input.disabled = false;
+      input.hidden = false;
+    });
+    if (consent) consent.hidden = true;
+    if (consentToggle) {
+      consentToggle.checked = false;
+      consentToggle.disabled = false;
+    }
+  }
+
   function ensureCloseButton(widget) {
     if (widget.querySelector('[data-mailing-dismiss]')) return;
 
@@ -317,6 +436,30 @@
       dismissWidget(widget);
       return;
     }
+
+    if (hasPendingSignedInAuth()) {
+      hideWidget(widget);
+      return;
+    }
+
+    if (isSignedIn()) {
+      if (isNewsletterSubscribed()) {
+        hideWidget(widget);
+        return;
+      }
+
+      setQuizWidgetMode(widget, 'consent');
+
+      if (answeredCount >= 5) {
+        showWidget(widget);
+        return;
+      }
+
+      hideWidget(widget);
+      return;
+    }
+
+    setQuizWidgetMode(widget, 'email');
 
     if (!state.quizEngaged && answeredCount >= 7) {
       state.quizIgnored = true;
@@ -431,9 +574,45 @@
 
     widgets.forEach(initWidget);
 
+    const auth = getSiteAuth();
+    if (auth?.subscribe && auth?.getState) {
+      const syncFromAuth = (snapshot) => {
+        state.authSnapshot = snapshot;
+
+        const homeWidget = document.querySelector('[data-mailing-widget="home"]');
+        if (homeWidget) {
+          if (isSignedIn(snapshot) || hasPendingSignedInAuth(snapshot)) {
+            hideWidget(homeWidget);
+          } else if (!homeWidget.dataset.dismissed || homeWidget.dataset.dismissed !== 'true') {
+            if (isMobileViewport()) {
+              waitForHomeMobileInteraction(homeWidget);
+            } else {
+              setHomeMobileCollapsed(homeWidget, false);
+              showWidget(homeWidget);
+            }
+          }
+        }
+
+        if (document.querySelector('[data-mailing-widget="quiz"]')) {
+          updateQuizWidget(Number(window.RELV_QUIZ_ANSWERED_COUNT || 0));
+        }
+      };
+
+      auth.subscribe(syncFromAuth);
+      syncFromAuth(auth.getState());
+
+      if (auth.readAuthToken?.()) {
+        auth.ready?.()
+          .then(syncFromAuth)
+          .catch(() => syncFromAuth(auth.getState()));
+      }
+    }
+
     const homeWidget = document.querySelector('[data-mailing-widget="home"]');
     if (homeWidget) {
-      if (isMobileViewport()) {
+      if (isSignedIn() || hasPendingSignedInAuth()) {
+        hideWidget(homeWidget);
+      } else if (isMobileViewport()) {
         homeWidget.dataset.dismissed = 'true';
         hideWidget(homeWidget);
       } else {

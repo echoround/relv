@@ -650,6 +650,17 @@
     return payload;
   }
 
+  async function setNewsletterSubscribed(nextValue) {
+    const payload = await saveAccountPreferences({
+      newsletterSubscribed: Boolean(nextValue)
+    });
+
+    applyAccountState(payload);
+    updateNewsletterControls();
+    notifySubscribers();
+    return getStateSnapshot();
+  }
+
   function logout() {
     writeAuthToken('');
     resetAccountState();
@@ -969,6 +980,7 @@
     logout,
     readAuthToken,
     ready,
+    setNewsletterSubscribed,
     subscribe
   };
 

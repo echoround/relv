@@ -2539,6 +2539,44 @@ body.theme-quiz .quiz-account-strip-toggle:focus-visible{
   gap: 10px;
 }
 
+.mailing-widget-consent{
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  cursor: pointer;
+}
+
+.mailing-widget-consent-checkbox{
+  flex: 0 0 auto;
+  margin: 2px 0 0;
+  accent-color: rgb(165, 216, 202);
+}
+
+.mailing-widget-consent-copy{
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.mailing-widget-consent-title{
+  color: rgba(255,255,255,0.92);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.mailing-widget-consent-note{
+  color: rgba(255,255,255,0.68);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .mailing-widget-row{
   display: grid;
   grid-template-columns: 1fr auto;
@@ -3839,6 +3877,19 @@ body.theme-quiz .grid-item.current{
 .mailing-widget[data-mailing-widget="quiz"] .mailing-widget-submit{
   background: linear-gradient(135deg, rgba(169,205,177,0.96), rgba(116,154,126,0.92)) !important;
   border-color: rgba(217,232,220,0.42) !important;
+}
+
+.mailing-widget[data-mailing-widget="quiz"] .mailing-widget-consent{
+  background: rgba(250,253,250,0.08) !important;
+  border-color: rgba(205,226,210,0.34) !important;
+}
+
+.mailing-widget[data-mailing-widget="quiz"] .mailing-widget-consent-title{
+  color: rgba(236,244,237,0.96) !important;
+}
+
+.mailing-widget[data-mailing-widget="quiz"] .mailing-widget-consent-note{
+  color: rgba(221,233,224,0.72) !important;
 }
 
 .mailing-widget[data-mailing-widget="home"] .mailing-widget-pointer{
