@@ -26,13 +26,9 @@
     <filter id="soft" x="-25%" y="-25%" width="150%" height="150%">
       <feGaussianBlur stdDeviation="4.5"/>
     </filter>
-
-    <clipPath id="circle">
-      <circle cx="64" cy="64" r="64"/>
-    </clipPath>
   </defs>
 
-  <g clip-path="url(#circle)">
+  <g>
     <rect width="128" height="128" fill="url(#bg)"/>
 
     <circle cx="40" cy="38" r="34" fill="url(#orb-left)"/>
