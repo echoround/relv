@@ -51,7 +51,7 @@
         <span class="brand-text">Relvaload.ee</span>
       </a>
 
-      <nav class="site-nav" aria-label="Primary">
+      <nav class="site-nav" aria-label="Põhinavigatsioon">
         <a href="index.html" class="nav-link">Avaleht</a>
         <a href="quiz.html" class="nav-link">Teooria test</a>
         <a href="kuidas.html" class="nav-link">Kuidas saada relvaluba?</a>
@@ -73,7 +73,7 @@
         </div>
       </div>
 
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <button class="nav-toggle" aria-label="Ava menüü" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -135,28 +135,8 @@
     </section>
   </main>
 
-  <script>
-    const toggle = document.querySelector('.nav-toggle');
-    const nav = document.querySelector('.site-nav');
-
-    if (toggle && nav) {
-      const closeNav = () => {
-        nav.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
-      };
-
-      toggle.addEventListener('click', () => {
-        const isOpen = nav.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', String(isOpen));
-      });
-
-      nav.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', closeNav);
-      });
-    }
-  </script>
-
   <script src="site-auth.js"></script>
+  <script src="nav.js"></script>
   <script src="forum.js"></script>
   <script src="scroll.js"></script>
 </body>

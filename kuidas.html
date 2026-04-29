@@ -21,106 +21,80 @@
   <meta name="twitter:title" content="Relvaload.ee - Kuidas saada relvaluba?" />
   <meta name="twitter:description" content="Kuidas saada relvaluba Eestis? Selge ja lihtne juhend: koolitused, tervisetõend, PPA taotlus, hoiutingimused ja eksam." />
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "name": "Kuidas saada relvaluba?",
+        "url": "https://relvaload.ee/kuidas.html",
+        "inLanguage": "et",
+        "dateModified": "2026-04-29",
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Relvaload.ee",
+          "url": "https://relvaload.ee/"
+        },
+        "citation": [
+          "https://www.riigiteataja.ee/akt/112122024003",
+          "https://www.politsei.ee/et/juhend/relvaluba-fueuesilisele-isikule/relvaluba"
+        ]
+      },
+      {
+        "@type": "HowTo",
+        "name": "Relvaloa taotlemise sammud Eestis",
+        "inLanguage": "et",
+        "step": [
+          { "@type": "HowToStep", "name": "Selgita välja relva otstarve ja eeldused" },
+          { "@type": "HowToStep", "name": "Läbi esmaabikoolitus ja tervisekontroll" },
+          { "@type": "HowToStep", "name": "Esita taotlus PPA-le" },
+          { "@type": "HowToStep", "name": "Valmista hoiutingimused ette" },
+          { "@type": "HowToStep", "name": "Soorita relvaeksam" },
+          { "@type": "HowToStep", "name": "Taotle vajadusel soetamisluba ja registreeri relv" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "inLanguage": "et",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Mitu küsimust on relvaeksami teooriaosas?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Teooriaeksamil vastatakse 30 minuti jooksul 10 valikvastustega küsimusele."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Kui mitu õiget vastust on vaja?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Teooriaeksam on sooritatud, kui õigesti on vastatud vähemalt 8 küsimusele."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Kust relvaloa taotlus esitada?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Relvaloa taotluse saab esitada PPA iseteeninduses või PPA teeninduses."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   
   <link rel="preload" href="fonts/montserrat-v31-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/montserrat-v31-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="fonts.css" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="page-styles.css" />
       <link rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg">
-          
-          <!-- Page palette (different from quiz) -->
-          <style>
-              body.theme-kuidas{
-                  --accentA:#f59e0b; /* amber */
-                  --accentB:#60a5fa; /* blue */
-                  --accentC:#fb7185; /* rose */
-              }
-              .page-wrap{ max-width:1100px; margin:0 auto; padding: 0 18px 70px; }
-              .hero-kicker{ color: var(--accentB); }
-              
-              .steps{
-                  display:grid;
-                  grid-template-columns: 1fr;
-                  gap: 12px;
-                  margin-top: 18px;
-              }
-              .step-card{
-                  background: rgba(255,255,255,0.06);
-                  border: 1px solid rgba(255,255,255,0.10);
-                  border-radius: 18px;
-                  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
-                  overflow: hidden;
-              }
-              .step-inner{
-                  display:grid;
-                  grid-template-columns: 56px 1fr;
-                  gap: 14px;
-                  padding: 18px;
-                  align-items:start;
-              }
-              .step-num{
-                  width: 46px; height: 46px;
-                  border-radius: 14px;
-                  display:flex; align-items:center; justify-content:center;
-                  font-weight: 900;
-                  letter-spacing: .08em;
-                  background: linear-gradient(135deg, rgba(245,158,11,.95), rgba(96,165,250,.85));
-                  border: 1px solid rgba(255,255,255,0.14);
-                  box-shadow: 0 14px 40px rgba(245,158,11,0.16);
-              }
-              .step-title{
-                  margin: 0 0 6px;
-                  color: rgba(255,255,255,0.92);
-                  font-size: 18px;
-                  font-weight: 800;
-                  letter-spacing: .06em;
-                  text-transform: uppercase;
-              }
-              .step-text{
-                  margin: 0;
-                  color: rgba(255,255,255,0.74);
-                  line-height: 1.6;
-                  font-size: 15px;
-              }
-              .step-stack{
-                  display:grid;
-                  gap: 12px;
-              }
-              .step-list{
-                  margin: 2px 0 0 18px;
-                  padding: 0;
-                  color: rgba(255,255,255,0.74);
-                  line-height: 1.6;
-                  font-size: 15px;
-              }
-              .step-list li + li{
-                  margin-top: 6px;
-              }
-              .step-key{
-                  font-weight: 800;
-                  color: rgba(255,255,255,0.92);
-              }
-              .step-key--blue{
-                  color: rgba(96,165,250,0.98);
-              }
-              .step-key--amber{
-                  color: rgba(245,158,11,0.98);
-              }
-              .step-key--rose{
-                  color: rgba(251,113,133,0.98);
-              }
-              .step-key--mint{
-                  color: rgba(134,239,172,0.98);
-              }
-              .content-card{
-                  background: rgba(255,255,255,0.06);
-                  border: 1px solid rgba(255,255,255,0.10);
-                  border-radius: 18px;
-                  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
-                  padding: 18px;
-                  margin-top: 18px;
-              }
-          </style>
           
           <!-- Privacy-friendly analytics by Plausible -->
           <script async src="https://plausible.io/js/pa-a6NEhSQ-ObCwewtlzhwai.js"></script>
@@ -150,7 +124,7 @@
         <span class="brand-text">Relvaload.ee</span>
       </a>
 
-      <nav class="site-nav" aria-label="Primary">
+      <nav class="site-nav" aria-label="Põhinavigatsioon">
         <a href="index.html" class="nav-link">Avaleht</a>
         <a href="quiz.html" class="nav-link">Teooria test</a>
         <a href="kuidas.html" class="nav-link is-active">Kuidas saada relvaluba?</a>
@@ -172,14 +146,14 @@
         </div>
       </div>
 
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <button class="nav-toggle" aria-label="Ava menüü" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
   <main class="page-wrap">
-    <section style="padding:52px 0 10px;">
+    <section class="page-hero page-hero--compact">
       <p class="hero-kicker">Teekond</p>
       <h1 class="hero-title">Kuidas saada<br>relvaluba?</h1>
       <p class="hero-subtitle">
@@ -190,19 +164,27 @@
         <a class="btn btn-primary" href="quiz.html">Alusta testi</a>
         <a class="btn btn-ghost" href="#steps">Vaata samme</a>
       </div>
+      <div class="source-strip" aria-label="Ametlikud allikad">
+        <span>Allikad</span>
+        <a href="https://www.riigiteataja.ee/akt/112122024003" target="_blank" rel="noopener noreferrer">Relvaseadus</a>
+        <span class="source-separator">/</span>
+        <a href="https://www.politsei.ee/et/juhend/relvaluba-fueuesilisele-isikule/relvaluba" target="_blank" rel="noopener noreferrer">PPA juhend</a>
+        <span class="source-separator">/</span>
+        <span>kontrollitud 29.04.2026</span>
+      </div>
     </section>
 
     <section class="content-card">
-      <h2 style="margin:0 0 10px; letter-spacing:.08em; text-transform:uppercase; font-weight:800;">
+      <h2 class="content-card-title">
         Ülevaade
       </h2>
-      <p style="margin:0; color:rgba(255,255,255,.74); line-height:1.6;">
+      <p class="content-card-copy">
         Relvaloa taotlemine Eestis hõlmab mitut sammu: vajalikud koolitused ja tõendid, <a href="https://relvataotlus.politsei.ee/#/login">taotlus PPA-le</a>, hoiutingimuste kontroll ning eksam.
         Allpool on protsess esitatud lihtsas järjestuses.
       </p>
     </section>
 
-    <section id="steps" class="steps" aria-label="Steps">
+    <section id="steps" class="steps" aria-label="Sammud">
       <article class="step-card">
         <div class="step-inner">
           <div class="step-num">1</div>
@@ -420,28 +402,8 @@
     </section>
   </main>
 
-  <script>
-    const toggle = document.querySelector('.nav-toggle');
-    const nav = document.querySelector('.site-nav');
-
-    if (toggle && nav) {
-      const closeNav = () => {
-        nav.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
-      };
-
-      toggle.addEventListener('click', () => {
-        const isOpen = nav.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', String(isOpen));
-      });
-
-      nav.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', closeNav);
-      });
-    }
-  </script>
-
   <script src="site-auth.js"></script>
+  <script src="nav.js"></script>
   <script src="scroll.js"></script>
 </body>
 </html>

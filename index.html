@@ -26,6 +26,7 @@
   <link rel="preload" href="fonts/montserrat-v31-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="fonts.css" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="page-styles.css" />
       <link rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg">
           
           <!-- Privacy-friendly analytics by Plausible -->
@@ -51,57 +52,6 @@
 </head>
 
 
-<script>
-  function fitHeroTitleLine() {
-    const el = document.querySelector('[data-autofit]');
-    if (!el) return;
-
-    // Reset any previous inline sizing
-    el.style.fontSize = '';
-    el.style.letterSpacing = '';
-
-    const computed = getComputedStyle(el);
-    const maxSize = parseFloat(computed.fontSize);
-    const minSize = 26; // lower bound so it doesn't get tiny
-    const baseTracking = 0.06; // em
-
-    // Apply baseline tracking first (affects measured width)
-    el.style.letterSpacing = baseTracking + 'em';
-
-    const parent = el.parentElement;
-    if (!parent) return;
-
-    // Small safety padding so it doesn't kiss the edges
-    const available = parent.clientWidth - 2;
-    const needed = el.scrollWidth; // overflow detection :contentReference[oaicite:5]{index=5}
-
-    if (needed <= available) return;
-
-    const ratio = available / needed;
-    const target = Math.max(minSize, Math.min(maxSize, maxSize * ratio));
-
-    el.style.fontSize = target.toFixed(2) + 'px';
-  }
-
-  const runFit = () => {
-    fitHeroTitleLine();
-    // Run again next frame in case layout shifts slightly
-    requestAnimationFrame(fitHeroTitleLine);
-  };
-
-  // Wait for fonts so widths are correct :contentReference[oaicite:6]{index=6}
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(runFit);
-  } else {
-    window.addEventListener('load', runFit);
-  }
-
-  window.addEventListener('resize', runFit);
-  window.addEventListener('orientationchange', runFit);
-</script>
-
-
-
 <body class="theme-hero">
   <header class="site-header">
     <div class="header-container">
@@ -110,7 +60,7 @@
         <span class="brand-text">Relvaload.ee</span>
       </a>
 
-      <nav class="site-nav" aria-label="Primary">
+      <nav class="site-nav" aria-label="Põhinavigatsioon">
         <a href="index.html" class="nav-link is-active">Avaleht</a>
         <a href="quiz.html" class="nav-link">Teooria test</a>
         <a href="kuidas.html" class="nav-link">Kuidas saada relvaluba?</a>
@@ -132,7 +82,7 @@
         </div>
       </div>
 
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <button class="nav-toggle" aria-label="Ava menüü" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -157,7 +107,7 @@
           <a class="btn btn-ghost" href="kuidas.html">Vaata samme</a>
         </div>
 
-        <div class="hero-pills" aria-label="Highlights">
+        <div class="hero-pills" aria-label="Põhieelised">
           <span class="pill">
             <svg class="pill-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
               <path d="M3.5 8.25 6.45 11.2 12.5 4.95" />
@@ -177,6 +127,15 @@
             <span class="pill-label">Küsimused eksamiks</span>
           </span>
         </div>
+
+        <div class="source-strip" aria-label="Ametlikud allikad">
+          <span>Allikad</span>
+          <a href="https://www.riigiteataja.ee/akt/112122024003" target="_blank" rel="noopener noreferrer">Relvaseadus</a>
+          <span class="source-separator">/</span>
+          <a href="https://www.politsei.ee/et/juhend/relvaluba-fueuesilisele-isikule/relvaluba" target="_blank" rel="noopener noreferrer">PPA juhend</a>
+          <span class="source-separator">/</span>
+          <span>kontrollitud 29.04.2026</span>
+        </div>
       </div>
 
       <div class="hero-side" aria-hidden="true">
@@ -184,15 +143,15 @@
           <div class="glow-card-inner">
             <div class="mini-stat">
               <div class="mini-stat-label">Test</div>
-              <div class="mini-stat-value">10 küsimust</div>
+              <div class="mini-stat-value">71 küsimust</div>
             </div>
             <div class="mini-stat">
               <div class="mini-stat-label">Lävend</div>
               <div class="mini-stat-value">8 / 10</div>
             </div>
             <div class="mini-stat">
-              <div class="mini-stat-label">Aeg</div>
-              <div class="mini-stat-value">30 min</div>
+              <div class="mini-stat-label">Tugi</div>
+              <div class="mini-stat-value">selgitused</div>
             </div>
           </div>
         </div>
@@ -236,29 +195,9 @@
   </aside>
 
   <script src="site-auth.js"></script>
+  <script src="nav.js"></script>
   <script src="scroll.js"></script>
   <script src="mailing-list.js"></script>
-  <script>
-    // Mobile menu toggle (no frameworks)
-    const toggle = document.querySelector('.nav-toggle');
-    const nav = document.querySelector('.site-nav');
-
-    if (toggle && nav) {
-        const closeNav = () => {
-          nav.classList.remove('is-open');
-          toggle.setAttribute('aria-expanded', 'false');
-        };
-
-        toggle.addEventListener('click', () => {
-          const isOpen = nav.classList.toggle('is-open');
-          toggle.setAttribute('aria-expanded', String(isOpen));
-        });
-
-        // Close after selecting a link (feels native on mobile)
-        nav.querySelectorAll('.nav-link').forEach(link => {
-          link.addEventListener('click', closeNav);
-        });
-    }
-  </script>
+  <script src="hero-fit.js"></script>
 </body>
 </html>

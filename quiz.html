@@ -42,88 +42,8 @@
   <link rel="preload" href="fonts/montserrat-v31-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="fonts.css" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="page-styles.css" />
       <link rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg">
-          
-          <!-- Page palette (change these 3 to get a totally different vibe) -->
-          <style>
-              body.theme-quiz{
-                  --accentA:#06b6d4; /* cyan */
-                  --accentB:#22c55e; /* green */
-                  --accentC:#a78bfa; /* violet */
-              }
-              
-              /* Layout helpers for the quiz page (keeps your existing IDs + script.js working) */
-              .page-wrap{ max-width:1100px; margin:0 auto; padding: 0 18px 60px; }
-              .page-hero{ padding: 52px 0 22px; }
-              .page-hero-inner{
-                  display:grid;
-                  grid-template-columns: 1.2fr 0.8fr;
-                  gap: 22px;
-                  align-items: center;
-              }
-              .hero-kicker{ color: var(--accentB); }
-              
-              .quiz-layout{
-                  display:grid;
-                  grid-template-columns: 1.05fr 0.95fr;
-                  gap: 18px;
-                  align-items:start;
-                  margin-top: 16px;
-              }
-              .glass-card{
-                  background: rgba(255,255,255,0.06);
-                  border: 1px solid rgba(255,255,255,0.10);
-                  border-radius: 18px;
-                  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
-                  overflow: hidden;
-              }
-              .card-pad{ padding: 18px; }
-              
-              .legend{
-                  display:flex; flex-wrap:wrap; gap:10px;
-                  margin-top: 12px;
-                  color: rgba(255,255,255,0.72);
-                  font-size: 13px;
-              }
-              .legend .dot{
-                  width: 10px; height: 10px; border-radius: 999px; display:inline-block; margin-right: 6px;
-                  border: 1px solid rgba(255,255,255,0.18);
-              }
-              .dot.ok{ background: var(--color-correct); }
-              .dot.bad{ background: var(--color-incorrect); }
-              .dot.mid{ background: var(--color-partial); }
-              .dot.none{ background: rgba(255,255,255,0.18); }
-              
-              /* Make your option rows feel more “modern card” without breaking JS */
-              .option{
-                  display:flex;
-                  align-items:flex-start;
-                  gap: 12px;
-                  padding: 12px 12px;
-                  border-radius: 14px;
-                  background: rgba(0,0,0,0.18);
-                  border: 1px solid rgba(255,255,255,0.10);
-                  transition: transform .14s ease, background .14s ease, border-color .14s ease;
-                  margin-bottom: 10px;
-              }
-              .option:hover{
-                  transform: translateY(-1px);
-                  background: rgba(255,255,255,0.06);
-                  border-color: rgba(255,255,255,0.14);
-              }
-              .option input{ margin-top: 2px; }
-              
-              /* Sidebar glow blobs */
-              .orb{ position:absolute; border-radius:999px; filter: blur(24px); opacity:.55; pointer-events:none; }
-              .orb.a{ width:160px;height:160px;background: rgba(6,182,212,.30); top:-30px; right:-30px; }
-              .orb.b{ width:220px;height:220px;background: rgba(34,197,94,.22); bottom:-60px; left:-50px; }
-              .orb.c{ width:140px;height:140px;background: rgba(167,139,250,.18); bottom:70px; right:-20px; }
-              
-              @media (max-width: 980px){
-                  .page-hero-inner{ grid-template-columns: 1fr; }
-                  .quiz-layout{ grid-template-columns: 1fr; }
-              }
-          </style>
           
           <!-- Privacy-friendly analytics by Plausible -->
           <script async src="https://plausible.io/js/pa-a6NEhSQ-ObCwewtlzhwai.js"></script>
@@ -155,7 +75,7 @@
         <span class="brand-text">Relvaload.ee</span>
       </a>
 
-      <nav class="site-nav" aria-label="Primary">
+      <nav class="site-nav" aria-label="Põhinavigatsioon">
         <a href="index.html" class="nav-link">Avaleht</a>
         <a href="quiz.html" class="nav-link is-active">Teooria test</a>
         <a href="kuidas.html" class="nav-link">Kuidas saada relvaluba?</a>
@@ -177,7 +97,7 @@
         </div>
       </div>
 
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <button class="nav-toggle" aria-label="Ava menüü" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -193,11 +113,19 @@
             <a class="btn btn-primary" href="#quiz">Alusta</a>
             <a class="btn btn-ghost" href="kuidas.html">Eksam ja sammud</a>
           </div>
+          <div class="source-strip" aria-label="Ametlikud allikad">
+            <span>Allikad</span>
+            <a href="https://www.riigiteataja.ee/akt/112122024003" target="_blank" rel="noopener noreferrer">Relvaseadus</a>
+            <span class="source-separator">/</span>
+            <a href="https://www.politsei.ee/et/juhend/relvaluba-fueuesilisele-isikule/relvaluba" target="_blank" rel="noopener noreferrer">PPA juhend</a>
+            <span class="source-separator">/</span>
+            <span>kontrollitud 29.04.2026</span>
+          </div>
         </div>
 
-        <div class="glass-card" style="position:relative;">
+        <div class="glass-card quiz-card-isolated">
             <div class="card-pad">
-              <div class="quiz-hud" aria-label="Progress">
+              <div class="quiz-hud" aria-label="Edenemine">
                 <div class="quiz-hud-top">
                   <div class="mini-stat-label">Vastatud</div>
                   <div class="quiz-hud-count"><span id="hud-answered">0</span> / <span id="hud-total">71</span></div>
@@ -229,7 +157,7 @@
                   </div>
                 </div>
 
-                <div class="legend" aria-label="Legend">
+                <div class="legend" aria-label="Selgitus">
                   <span><span class="dot ok"></span>Õige</span>
                   <span><span class="dot bad"></span>Vale</span>
                   <span><span class="dot mid"></span>Osaline</span>
@@ -278,15 +206,21 @@
     </section>
 
     <section id="quiz" class="quiz-layout">
-      <!-- Keep IDs exactly the same so script.js keeps working -->
       <div class="glass-card">
-        <div id="quiz-container" class="card-pad" style="margin:0; max-width:none; width:auto; box-shadow:none; background:transparent; border:none;">
+        <div id="quiz-container" class="card-pad quiz-shell">
           <div id="progress"></div>
           <div id="quiz-account-strip" hidden></div>
+          <div class="quiz-modebar" aria-label="Harjutusrežiim">
+            <button type="button" class="quiz-mode-option is-active" data-quiz-mode="all">Kõik</button>
+            <button type="button" class="quiz-mode-option" data-quiz-mode="exam">Eksam 10</button>
+            <button type="button" class="quiz-mode-option" data-quiz-mode="weak">Nõrgad</button>
+            <button type="button" class="quiz-mode-option" data-quiz-mode="unanswered">Vastamata</button>
+          </div>
+          <div id="quiz-mode-status" class="quiz-mode-status" aria-live="polite"></div>
           <div id="question-text"></div>
           <div id="options"></div>
 
-          <button id="submit-btn">Submit</button>
+          <button id="submit-btn">Kontrolli</button>
 
           <div id="feedback">
             <div id="feedback-message"></div>
@@ -298,7 +232,7 @@
                       aria-expanded="false"
                       aria-controls="explain-panel">
                 <span class="explain-icon">?</span>
-                <span class="explain-label">Explanation</span>
+                <span class="explain-label">Selgitus</span>
               </button>
 
               <div id="explain-panel" class="explain-panel" hidden>
@@ -309,23 +243,23 @@
 
 
           <div id="navigation">
-            <button id="prev-btn">Previous</button>
-            <button id="next-btn">Next</button>
+            <button id="prev-btn">Eelmine</button>
+            <button id="next-btn">Järgmine</button>
           </div>
         </div>
       </div>
 
       <aside class="glass-card">
         <div class="card-pad">
-          <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px;">
+          <div class="quiz-grid-head">
             <div class="mini-stat-label">Küsimuste ruudustik</div>
-            <div style="color:rgba(255,255,255,.60); font-size:12px; letter-spacing:.14em; text-transform:uppercase; font-weight:700;">
+            <div class="quiz-grid-hint">
               kliki numbril
             </div>
           </div>
         </div>
 
-        <div id="question-grid" style="margin:0; max-width:none; width:auto; box-shadow:none; background:transparent;"></div>
+        <div id="question-grid" class="quiz-grid-reset"></div>
       </aside>
     </section>
 
@@ -337,28 +271,8 @@
     </section>
   </main>
 
-  <script>
-    const toggle = document.querySelector('.nav-toggle');
-    const nav = document.querySelector('.site-nav');
-    if (toggle && nav) {
-        const closeNav = () => {
-          nav.classList.remove('is-open');
-          toggle.setAttribute('aria-expanded', 'false');
-        };
-
-        toggle.addEventListener('click', () => {
-          const isOpen = nav.classList.toggle('is-open');
-          toggle.setAttribute('aria-expanded', String(isOpen));
-        });
-
-        // Close after selecting a link (feels native on mobile)
-        nav.querySelectorAll('.nav-link').forEach(link => {
-          link.addEventListener('click', closeNav);
-        });
-    }
-  </script>
-
   <script src="site-auth.js"></script>
+  <script src="nav.js"></script>
   <script src="script.js"></script>
   <script src="mailing-list.js"></script>
   <script src="scroll.js"></script>
