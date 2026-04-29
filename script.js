@@ -13,12 +13,6 @@ let quizCardsRenderQueued = false;
 let quizCardsRendered = false;
 let quizAvatarModulePromise = null;
 let quizAccountStripExpanded = false;
-let quizMode = 'all';
-let latestAuthSnapshot = null;
-let quizAccountStripBound = false;
-let quizModeControlsBound = false;
-
-const QUIZ_MODES = new Set(['all', 'exam', 'weak', 'unanswered']);
 
 function shouldShowQuizAccountStripLoading(snapshot) {
     const auth = window.RELV_SITE_AUTH;
@@ -317,153 +311,11 @@ function setupQuizAccountStrip() {
         return;
     }
 
-    if (!quizAccountStripBound) {
-        quizAccountStripBound = true;
-        auth.subscribe((snapshot) => {
-            latestAuthSnapshot = snapshot;
-            renderQuizAccountStrip(snapshot);
-            updateQuizModeControls();
-        });
-    }
-
-    latestAuthSnapshot = auth.getState();
-    renderQuizAccountStrip(latestAuthSnapshot);
-}
-
-function getLocalProgressEntries() {
-    return (Array.isArray(questions) ? questions : [])
-        .map((question, index) => {
-            const answer = userAnswers[index];
-            if (!question || !answer?.submitted) return null;
-
-            const review = getQuizAnswerReview(question, answer.selected || []);
-            return {
-                questionId: review.questionId,
-                resultType: review.resultType,
-                attemptCount: 1,
-                updatedAt: 'local-session'
-            };
-        })
-        .filter(Boolean);
-}
-
-function getMergedProgressEntries(localEntries = []) {
-    const entries = new Map();
-    const accountEntries = getQuizAccountStatsSnapshot(latestAuthSnapshot).questionProgress;
-
-    accountEntries.forEach((entry) => {
-        const questionId = String(entry?.questionId || '');
-        if (questionId) entries.set(questionId, entry);
+    auth.subscribe((snapshot) => {
+        renderQuizAccountStrip(snapshot);
     });
 
-    localEntries.forEach((entry) => {
-        const questionId = String(entry?.questionId || '');
-        if (questionId) entries.set(questionId, entry);
-    });
-
-    return [...entries.values()];
-}
-
-function resolveQuizSession(mode, localEntries = []) {
-    const safeMode = QUIZ_MODES.has(mode) ? mode : 'all';
-    const progressEntries = getMergedProgressEntries(localEntries);
-    const byId = new Map(
-        questionPool
-            .filter((question) => question && question.id != null)
-            .map((question) => [String(question.id), question])
-    );
-
-    if (safeMode === 'exam') {
-        return {
-            questions: shuffleQuestions(questionPool).slice(0, 10),
-            status: 'Eksamirežiim: 10 juhuslikku küsimust.'
-        };
-    }
-
-    if (safeMode === 'weak') {
-        const weakIds = progressEntries
-            .filter((entry) => entry && entry.resultType !== 'correct')
-            .map((entry) => String(entry.questionId || ''))
-            .filter(Boolean);
-        const weakQuestions = [...new Set(weakIds)]
-            .map((id) => byId.get(id))
-            .filter(Boolean);
-
-        if (weakQuestions.length > 0) {
-            return {
-                questions: shuffleQuestions(weakQuestions),
-                status: `Nõrgad kohad: ${weakQuestions.length} küsimust.`
-            };
-        }
-
-        return {
-            questions: shuffleQuestions(questionPool),
-            status: 'Nõrku kohti pole veel teada, näitan kõiki küsimusi.'
-        };
-    }
-
-    if (safeMode === 'unanswered') {
-        const answeredIds = new Set(
-            progressEntries
-                .map((entry) => String(entry?.questionId || ''))
-                .filter(Boolean)
-        );
-        const unansweredQuestions = questionPool.filter((question) => {
-            if (!question || question.id == null) return false;
-            return !answeredIds.has(String(question.id));
-        });
-
-        if (unansweredQuestions.length > 0) {
-            return {
-                questions: shuffleQuestions(unansweredQuestions),
-                status: `Vastamata: ${unansweredQuestions.length} küsimust.`
-            };
-        }
-
-        return {
-            questions: shuffleQuestions(questionPool),
-            status: 'Kõik küsimused on vähemalt korra vastatud.'
-        };
-    }
-
-    return {
-        questions: shuffleQuestions(questionPool),
-        status: ''
-    };
-}
-
-function updateQuizModeControls(statusText = '') {
-    document.querySelectorAll('[data-quiz-mode]').forEach((button) => {
-        const isActive = button.dataset.quizMode === quizMode;
-        button.classList.toggle('is-active', isActive);
-        button.setAttribute('aria-pressed', String(isActive));
-    });
-
-    const status = document.getElementById('quiz-mode-status');
-    if (status) {
-        status.textContent = statusText;
-        status.hidden = !statusText;
-    }
-}
-
-function setupQuizModeControls() {
-    if (quizModeControlsBound) return;
-
-    const buttons = document.querySelectorAll('[data-quiz-mode]');
-    if (!buttons.length) return;
-
-    quizModeControlsBound = true;
-
-    buttons.forEach((button) => {
-        button.addEventListener('click', () => {
-            const nextMode = button.dataset.quizMode || 'all';
-            if (!QUIZ_MODES.has(nextMode)) return;
-
-            const localEntries = getLocalProgressEntries();
-            quizMode = nextMode;
-            initializeQuizSession({ localEntries });
-        });
-    });
+    renderQuizAccountStrip(auth.getState());
 }
 
 function getQuizAnswerReview(question, selectedOptions) {
@@ -614,9 +466,8 @@ function shuffleQuestions(items) {
   return shuffled;
 }
 
-function initializeQuizSession(options = {}) {
-  const session = resolveQuizSession(quizMode, options.localEntries || []);
-  questions = session.questions;
+function initializeQuizSession() {
+  questions = shuffleQuestions(questionPool);
   currentIndex = 0;
   userAnswers = Array(questions.length).fill(null).map(() => ({
     selected: [],
@@ -627,9 +478,7 @@ function initializeQuizSession(options = {}) {
   }));
 
   setupExplanationUI();
-  setupQuizModeControls();
   setupQuizAccountStrip();
-  updateQuizModeControls(session.status);
   displayQuestion();
   createQuestionGrid();
   scheduleQuestionCardsRender();
@@ -686,7 +535,7 @@ fetch('questions.json')
 
     if (questionPool.length === 0) {
         console.error('No questions found in questions.json');
-        alert('Küsimusi ei laaditud. Palun kontrolli questions.json faili.');
+        alert('No questions loaded. Please check questions.json and ensure it is properly formatted.');
         return;
     }
 
@@ -694,7 +543,7 @@ fetch('questions.json')
 })
 .catch(error => {
     console.error('Error loading quiz questions:', error);
-    alert(`Küsimuste laadimine ebaõnnestus: ${error.message}`);
+    alert(`Failed to load questions: ${error.message}`);
 });
 
 function syncOptionSelectionState(container) {
@@ -712,13 +561,13 @@ function syncOptionSelectionState(container) {
 function displayQuestion() {
     if (currentIndex < 0 || currentIndex >= questions.length || !questions[currentIndex]) {
         console.error('Invalid currentIndex or question not found:', currentIndex);
-        alert('Küsimust ei leitud. Palun kontrolli questions.json faili.');
+        alert('Error: Question not found. Please check questions.json for proper formatting.');
         return; // Prevent out-of-bounds access or undefined questions
     }
 
     const question = questions[currentIndex];
     document.getElementById('progress').textContent = `${currentIndex + 1} / ${questions.length}`;
-    document.getElementById('question-text').textContent = question.text || 'Küsimuse tekst puudub';
+    document.getElementById('question-text').textContent = question.text || 'Question text not available';
     const optionsDiv = document.getElementById('options');
     optionsDiv.innerHTML = '';
 
@@ -864,30 +713,30 @@ function displayFeedback(question) {
 
   if (isCorrect) {
     feedbackMessage.textContent = question.multiple
-      ? 'Õige. Kõik õiged vastused on all märgitud.'
-      : 'Õige.';
+      ? 'Correct. All correct answers are marked below.'
+      : 'Correct.';
     feedbackMessage.classList.add('is-correct');
   } else if (isPartial) {
     const summaryBits = [];
 
     if (selectedCorrectCount > 0) {
-      summaryBits.push(`${selectedCorrectCount} õiget valikut märgitud`);
+      summaryBits.push(`${selectedCorrectCount} correct ${selectedCorrectCount === 1 ? 'choice is' : 'choices are'} selected`);
     }
 
     if (missedCorrectCount > 0) {
-      summaryBits.push(`${missedCorrectCount} õiget vastust jäi märkimata`);
+      summaryBits.push(`${missedCorrectCount} correct ${missedCorrectCount === 1 ? 'answer was' : 'answers were'} missed`);
     }
 
     if (incorrectSelectedCount > 0) {
-      summaryBits.push(`${incorrectSelectedCount} vale valikut märgitud`);
+      summaryBits.push(`${incorrectSelectedCount} incorrect ${incorrectSelectedCount === 1 ? 'choice was' : 'choices were'} selected`);
     }
 
-    feedbackMessage.textContent = `Osaliselt õige. ${summaryBits.join(', ')}.`;
+    feedbackMessage.textContent = `Partially correct. ${summaryBits.join(', ')}.`;
     feedbackMessage.classList.add('is-partial');
   } else {
     feedbackMessage.textContent = question.multiple
-      ? 'Vale. Õiged vastused on all märgitud.'
-      : 'Vale. Õige vastus on all märgitud.';
+      ? 'Incorrect. The correct answers are marked below.'
+      : 'Incorrect. The correct answer is marked below.';
     feedbackMessage.classList.add('is-incorrect');
   }
 
@@ -919,19 +768,19 @@ function displayFeedback(question) {
     if (selectedThis && correctThis) {
       optionDiv.classList.add('has-review', 'answer-correct-picked');
       if (reviewTag) {
-        reviewTag.textContent = 'Õige valik';
+        reviewTag.textContent = 'Correct choice';
         reviewTag.hidden = false;
       }
     } else if (correctThis) {
       optionDiv.classList.add('has-review', 'answer-correct-missed');
       if (reviewTag) {
-        reviewTag.textContent = 'Õige vastus';
+        reviewTag.textContent = 'Correct answer';
         reviewTag.hidden = false;
       }
     } else if (selectedThis) {
       optionDiv.classList.add('has-review', 'answer-incorrect-picked');
       if (reviewTag) {
-        reviewTag.textContent = 'Vale valik';
+        reviewTag.textContent = 'Incorrect choice';
         reviewTag.hidden = false;
       }
     }
@@ -1009,7 +858,7 @@ document.getElementById('next-btn').addEventListener('click', () => {
                 score++;
             }
         }
-        alert(`Valmis! Tulemus: ${score} / ${questions.length}`);
+        alert(`Quiz completed! Your score: ${score} out of ${questions.length}`);
     }
 });
 
@@ -1023,7 +872,7 @@ function createQuestionGrid() {
     if (!gridDiv) return;
 
     if (!gridDiv.querySelector('.grid-container')) {
-        gridDiv.innerHTML = '<div class="grid-container" aria-label="Küsimuste ruudustik"></div>';
+        gridDiv.innerHTML = '<div class="grid-container" aria-label="Question navigator"></div>';
     }
 
     const gridContainer = gridDiv.querySelector('.grid-container');
@@ -1036,7 +885,7 @@ function createQuestionGrid() {
         item.type = 'button';
         item.className = 'grid-item unanswered';
         item.textContent = i + 1;
-        item.setAttribute('aria-label', `Mine küsimuse ${i + 1} juurde`);
+        item.setAttribute('aria-label', `Go to question ${i + 1}`);
 
         item.addEventListener('click', () => {
             currentIndex = i;

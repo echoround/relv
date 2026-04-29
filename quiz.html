@@ -75,7 +75,7 @@
         <span class="brand-text">Relvaload.ee</span>
       </a>
 
-      <nav class="site-nav" aria-label="Põhinavigatsioon">
+      <nav class="site-nav" aria-label="Primary">
         <a href="index.html" class="nav-link">Avaleht</a>
         <a href="quiz.html" class="nav-link is-active">Teooria test</a>
         <a href="kuidas.html" class="nav-link">Kuidas saada relvaluba?</a>
@@ -97,7 +97,7 @@
         </div>
       </div>
 
-      <button class="nav-toggle" aria-label="Ava menüü" aria-expanded="false">
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -113,19 +113,11 @@
             <a class="btn btn-primary" href="#quiz">Alusta</a>
             <a class="btn btn-ghost" href="kuidas.html">Eksam ja sammud</a>
           </div>
-          <div class="source-strip" aria-label="Ametlikud allikad">
-            <span>Allikad</span>
-            <a href="https://www.riigiteataja.ee/akt/112122024003" target="_blank" rel="noopener noreferrer">Relvaseadus</a>
-            <span class="source-separator">/</span>
-            <a href="https://www.politsei.ee/et/juhend/relvaluba-fueuesilisele-isikule/relvaluba" target="_blank" rel="noopener noreferrer">PPA juhend</a>
-            <span class="source-separator">/</span>
-            <span>kontrollitud 29.04.2026</span>
-          </div>
         </div>
 
         <div class="glass-card quiz-card-isolated">
             <div class="card-pad">
-              <div class="quiz-hud" aria-label="Edenemine">
+              <div class="quiz-hud" aria-label="Progress">
                 <div class="quiz-hud-top">
                   <div class="mini-stat-label">Vastatud</div>
                   <div class="quiz-hud-count"><span id="hud-answered">0</span> / <span id="hud-total">71</span></div>
@@ -157,7 +149,7 @@
                   </div>
                 </div>
 
-                <div class="legend" aria-label="Selgitus">
+                <div class="legend" aria-label="Legend">
                   <span><span class="dot ok"></span>Õige</span>
                   <span><span class="dot bad"></span>Vale</span>
                   <span><span class="dot mid"></span>Osaline</span>
@@ -210,17 +202,10 @@
         <div id="quiz-container" class="card-pad quiz-shell">
           <div id="progress"></div>
           <div id="quiz-account-strip" hidden></div>
-          <div class="quiz-modebar" aria-label="Harjutusrežiim">
-            <button type="button" class="quiz-mode-option is-active" data-quiz-mode="all">Kõik</button>
-            <button type="button" class="quiz-mode-option" data-quiz-mode="exam">Eksam 10</button>
-            <button type="button" class="quiz-mode-option" data-quiz-mode="weak">Nõrgad</button>
-            <button type="button" class="quiz-mode-option" data-quiz-mode="unanswered">Vastamata</button>
-          </div>
-          <div id="quiz-mode-status" class="quiz-mode-status" aria-live="polite"></div>
           <div id="question-text"></div>
           <div id="options"></div>
 
-          <button id="submit-btn">Kontrolli</button>
+          <button id="submit-btn">Submit</button>
 
           <div id="feedback">
             <div id="feedback-message"></div>
@@ -232,7 +217,7 @@
                       aria-expanded="false"
                       aria-controls="explain-panel">
                 <span class="explain-icon">?</span>
-                <span class="explain-label">Selgitus</span>
+                <span class="explain-label">Explanation</span>
               </button>
 
               <div id="explain-panel" class="explain-panel" hidden>
@@ -243,8 +228,8 @@
 
 
           <div id="navigation">
-            <button id="prev-btn">Eelmine</button>
-            <button id="next-btn">Järgmine</button>
+            <button id="prev-btn">Previous</button>
+            <button id="next-btn">Next</button>
           </div>
         </div>
       </div>
