@@ -653,6 +653,33 @@ body.scrolling{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) r
   line-height: 1.15;
 }
 
+.source-strip{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px 10px;
+  margin-top:16px;
+  color:rgba(255,255,255,0.58);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.source-strip a{
+  color:rgba(255,255,255,0.78);
+  text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,0.18);
+}
+
+.source-strip a:hover,
+.source-strip a:focus-visible{
+  color:rgba(255,255,255,0.94);
+  border-bottom-color:rgba(255,255,255,0.46);
+}
+
+.source-separator{
+  opacity:.45;
+}
+
 .hero-side{
   position: relative;
   min-height: 380px;
