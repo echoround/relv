@@ -506,7 +506,7 @@ function ensureExplanationsLoaded() {
         return explanationsLoadPromise;
     }
 
-    explanationsLoadPromise = fetch('explanations.json')
+    explanationsLoadPromise = fetch('explanations.min.json')
         .then(response => {
             if (!response.ok) throw new Error('Failed to load explanations.json');
             return response.json();
@@ -525,7 +525,7 @@ function ensureExplanationsLoaded() {
 }
 
 // Load quiz questions up front; load explanations only when needed.
-fetch('questions.json')
+fetch('questions.min.json')
     .then(response => {
         if (!response.ok) throw new Error('Failed to load questions.json');
         return response.json();

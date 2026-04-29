@@ -24,28 +24,22 @@
   
   <link rel="preload" href="fonts/montserrat-v31-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/montserrat-v31-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="fonts.css" />
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="page-styles.css" />
+  <link rel="dns-prefetch" href="//plausible.io">
+  <link rel="dns-prefetch" href="//www.googletagmanager.com">
+  <link rel="dns-prefetch" href="//relv-backend.vercel.app">
+  <link rel="stylesheet" href="fonts.min.css" />
+  <link rel="stylesheet" href="styles.min.css" />
+  <link rel="stylesheet" href="page-styles.min.css" />
       <link rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg">
           
-          <!-- Privacy-friendly analytics by Plausible -->
-          <script async src="https://plausible.io/js/pa-a6NEhSQ-ObCwewtlzhwai.js"></script>
           <script>
-              window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-              plausible.init()
-          </script>
-          
-          <!-- Google tag (gtag.js) -->
-          <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17823746681"></script>
-          <script>
-              window.dataLayer = window.dataLayer || [];
+              window.RELV_CONFIG=Object.assign({apiBase:'https://relv-backend.vercel.app/api'},window.RELV_CONFIG||{});
+              window.relvApiUrl=function(path){const base=String(window.RELV_CONFIG.apiBase||'').replace(/\/$/,'');const cleanPath=String(path||'').startsWith('/')?path:`/${path||''}`;return base?`${base}${cleanPath}`:''};
+              window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)};
+              window.dataLayer=window.dataLayer||[];
               function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'AW-17823746681');
+              (function(){let loaded=false;const loadAnalytics=()=>{if(loaded)return;loaded=true;plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();const plausibleScript=document.createElement('script');plausibleScript.async=true;plausibleScript.src='https://plausible.io/js/pa-a6NEhSQ-ObCwewtlzhwai.js';document.head.appendChild(plausibleScript);gtag('js',new Date());gtag('config','AW-17823746681');const googleScript=document.createElement('script');googleScript.async=true;googleScript.src='https://www.googletagmanager.com/gtag/js?id=AW-17823746681';document.head.appendChild(googleScript)};const scheduleAnalytics=()=>{'requestIdleCallback'in window?window.requestIdleCallback(loadAnalytics,{timeout:2500}):window.setTimeout(loadAnalytics,1600)};window.addEventListener('load',scheduleAnalytics,{once:true})})();
           </script>
-          
-          <script src="online.js"></script>
 
 </head>
 
@@ -327,9 +321,9 @@
     </section>
   </main>
 
-  <script src="site-auth.js"></script>
-  <script src="nav.js"></script>
-  <script src="scroll.js"></script>
+  <script src="site-auth-lazy.min.js"></script>
+  <script src="nav.min.js"></script>
+  <script src="scroll.min.js"></script>
 </body>
 </html>
 
