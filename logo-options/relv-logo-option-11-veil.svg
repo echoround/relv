@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 11</title>
+  <desc id="desc">A soft veil-like circular abstract mark in Estonian-inspired tones.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+    <linearGradient id="sky" x1="13" y1="10" x2="116" y2="123" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d9e8ef"/>
+      <stop offset=".5" stop-color="#86b5d5"/>
+      <stop offset="1" stop-color="#2d5578"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+  </defs>
+  <g clip-path="url(#circle)">
+    <rect width="128" height="128" fill="url(#sky)"/>
+    <path fill="#f8faf8" opacity=".54" filter="url(#soft)" d="M-17 17c35 4 64 19 86 45 17 20 29 45 35 76H69C61 81 32 46-17 35Z"/>
+    <path fill="#151c24" opacity=".78" d="M28-13c32 20 54 47 66 81 7 21 10 44 8 68H70c2-42-10-76-35-102C23 21 8 11-17 3Z"/>
+    <path fill="#eff5f6" opacity=".78" d="M77-8c-13 25-17 48-11 70 5 22 20 42 45 60l-19 12C64 116 47 94 42 67c-5-25 1-50 17-75Z"/>
+    <path fill="#5f91b6" opacity=".58" d="M-10 98c28-19 57-24 88-15 22 7 42 20 60 40v16H-10Z"/>
+    <path fill="#121821" opacity=".28" d="M-10 106c31-12 61-12 90 0 20 9 37 20 58 21v14H-10Z"/>
+  </g>
+</svg>

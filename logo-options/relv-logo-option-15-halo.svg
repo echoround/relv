@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 15</title>
+  <desc id="desc">A rounded halo-style abstract logo in softened blue, charcoal, and white.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+    <linearGradient id="base" x1="11" y1="10" x2="116" y2="119" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#bed9ea"/>
+      <stop offset=".48" stop-color="#7ba9ca"/>
+      <stop offset="1" stop-color="#314e69"/>
+    </linearGradient>
+    <filter id="blur" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+  </defs>
+  <g clip-path="url(#circle)">
+    <circle cx="64" cy="64" r="64" fill="url(#base)"/>
+    <circle cx="64" cy="64" r="53" fill="none" stroke="#f7f8f5" stroke-width="20" stroke-linecap="round" opacity=".28"/>
+    <circle cx="64" cy="64" r="38" fill="none" stroke="#121922" stroke-width="18" stroke-linecap="round" opacity=".5"/>
+    <path fill="none" stroke="#eef5f6" stroke-width="16" stroke-linecap="round" opacity=".62" filter="url(#blur)" d="M27 85c14 17 35 24 56 18 16-5 30-18 37-36"/>
+    <path fill="none" stroke="#1a242e" stroke-width="17" stroke-linecap="round" opacity=".72" d="M15 55c13-20 35-31 59-28 18 2 34 12 44 28"/>
+    <path fill="none" stroke="#8fb9d5" stroke-width="14" stroke-linecap="round" opacity=".84" d="M37 31c16-8 35-8 51 0 13 7 24 18 30 33"/>
+    <circle cx="64" cy="64" r="15" fill="#f8faf7" opacity=".66"/>
+    <circle cx="64" cy="64" r="8" fill="#22303d" opacity=".7"/>
+  </g>
+</svg>

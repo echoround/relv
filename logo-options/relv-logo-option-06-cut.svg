@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 06</title>
+  <desc id="desc">A high-contrast abstract circular mark made for strong favicon and Google avatar crops.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#circle)">
+    <rect width="128" height="128" fill="#05070a"/>
+    <path fill="#0072ce" d="M0 0h128v58c-21 14-43 20-65 18C40 73 19 62 0 43Z"/>
+    <path fill="#fff" d="M0 92c18-14 37-21 58-22 25-1 49 7 70 25v33H0Z"/>
+    <path fill="#05070a" d="M93 0 40 128h-33L60 0Z" opacity=".98"/>
+    <path fill="#fff" d="M112 0 58 128H43L97 0Z" opacity=".96"/>
+    <path fill="#0072ce" d="M126 0 72 128H59L113 0Z"/>
+    <path fill="#05070a" d="M69 39c11 7 18 16 21 29 3 14 0 27-9 39l-11-10c6-8 8-17 6-26-2-8-7-15-15-20Z" opacity=".92"/>
+  </g>
+</svg>

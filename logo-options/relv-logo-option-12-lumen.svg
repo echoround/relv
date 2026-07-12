@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 12</title>
+  <desc id="desc">A luminous soft abstract circle built from Estonian flag color references.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+    <radialGradient id="base" cx="50" cy="36" r="83" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#eef5f7"/>
+      <stop offset=".36" stop-color="#9ec5de"/>
+      <stop offset=".74" stop-color="#5f89ad"/>
+      <stop offset="1" stop-color="#223951"/>
+    </radialGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+  </defs>
+  <g clip-path="url(#circle)">
+    <circle cx="64" cy="64" r="64" fill="url(#base)"/>
+    <path fill="#111820" opacity=".72" d="M-11 51c28-20 55-26 81-17 25 8 43 30 70 33v73H-11Z"/>
+    <path fill="#f7f8f3" opacity=".82" d="M-6 78c28-12 55-13 82-1 22 10 41 26 63 29v35H-6Z"/>
+    <path fill="#7aaed3" opacity=".75" filter="url(#blur)" d="M19 10c26 15 44 35 53 61 6 18 8 37 5 57H55c4-40-9-73-38-99Z"/>
+    <path fill="#253647" opacity=".68" d="M73-9c7 24 9 46 4 67-6 25-21 48-45 69H12c29-25 45-50 49-76 3-18 0-38-9-60Z"/>
+    <path fill="#f8faf8" opacity=".6" d="M89 0c-7 32-4 59 11 82 8 13 20 25 37 35v22h-12c-25-13-42-30-51-50C63 62 62 33 72 0Z"/>
+  </g>
+</svg>

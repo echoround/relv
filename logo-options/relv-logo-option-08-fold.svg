@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 08</title>
+  <desc id="desc">A muted folded abstract circle using softened Estonian blue, black, and white.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+    <linearGradient id="blue" x1="19" y1="0" x2="110" y2="129" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9bc4df"/>
+      <stop offset=".55" stop-color="#6f9fc4"/>
+      <stop offset="1" stop-color="#315a7f"/>
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#circle)">
+    <rect width="128" height="128" fill="#edf2f3"/>
+    <path fill="url(#blue)" d="M0 0h128v128H0Z"/>
+    <path fill="#f7f7f3" opacity=".82" d="M-14 20c35 12 58 35 70 68 5 14 8 28 8 44H30C29 85 14 54-14 38Z"/>
+    <path fill="#171d25" opacity=".83" d="M53-7c27 19 45 44 55 74 7 21 9 43 6 67H79c2-34-4-64-19-90C51 27 39 13 24 0Z"/>
+    <path fill="#dce8ef" opacity=".9" d="M81-9c-19 29-26 56-22 82 3 21 13 40 31 59H64c-17-16-27-35-30-56-4-30 5-58 28-85Z"/>
+    <path fill="#22303b" opacity=".62" d="M-12 99c23-13 48-18 76-14 26 4 49 15 72 33v18H-12Z"/>
+    <path fill="#f8faf8" opacity=".5" d="M-8 78c20-8 39-9 57-1 21 9 35 27 72 25l-7 18c-31 0-50-10-66-22-18-13-36-13-56-3Z"/>
+  </g>
+</svg>

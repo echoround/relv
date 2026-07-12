@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 18</title>
+  <desc id="desc">A rounded dew-like abstract logo in soft Estonian flag color tones.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+    <radialGradient id="base" cx="44" cy="25" r="89" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f4f8f8"/>
+      <stop offset=".39" stop-color="#a3c8de"/>
+      <stop offset=".77" stop-color="#638baa"/>
+      <stop offset="1" stop-color="#2c4358"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.1"/>
+    </filter>
+  </defs>
+  <g clip-path="url(#circle)">
+    <circle cx="64" cy="64" r="64" fill="url(#base)"/>
+    <ellipse cx="59" cy="67" rx="35" ry="62" fill="#f7f9f5" opacity=".55" transform="rotate(-14 59 67)"/>
+    <ellipse cx="76" cy="69" rx="32" ry="64" fill="#131b24" opacity=".56" transform="rotate(19 76 69)"/>
+    <ellipse cx="65" cy="68" rx="19" ry="48" fill="#74a4c7" opacity=".66" transform="rotate(6 65 68)"/>
+    <ellipse cx="57" cy="44" rx="34" ry="18" fill="#f8faf7" opacity=".34" filter="url(#soft)" transform="rotate(-12 57 44)"/>
+    <path fill="#f8faf7" opacity=".63" d="M-8 93c18-12 40-15 64-9 21 6 38 19 58 22 10 1 19 0 28-4v35H-8Z"/>
+    <path fill="#111820" opacity=".28" d="M-9 105c27-9 54-8 80 2 20 8 39 15 68 11v20H-9Z"/>
+  </g>
+</svg>

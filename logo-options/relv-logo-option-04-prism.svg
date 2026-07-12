@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 04</title>
+  <desc id="desc">A bold circular prism logo in Estonian flag colors.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#circle)">
+    <rect width="128" height="128" fill="#0072ce"/>
+    <path fill="#05070a" d="M0 0h128L84 62 128 128H0l45-65Z" opacity=".97"/>
+    <path fill="#fff" d="M0 95 61 41l67 54v33H0Z"/>
+    <path fill="#0072ce" d="M25 128 64 54l40 74Z" opacity=".96"/>
+    <path fill="#05070a" d="M64 20 90 58 64 95 38 58Z"/>
+    <path fill="#fff" d="M64 37 78 59 64 80 50 59Z" opacity=".96"/>
+    <path fill="#0072ce" d="M64 49 70 60 64 71 58 60Z"/>
+  </g>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 10</title>
+  <desc id="desc">A calm abstract echo logo in softened Estonian flag tones.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+    <radialGradient id="blue" cx="35" cy="26" r="89" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c1d9ea"/>
+      <stop offset=".48" stop-color="#7eaed1"/>
+      <stop offset="1" stop-color="#365d82"/>
+    </radialGradient>
+  </defs>
+  <g clip-path="url(#circle)">
+    <circle cx="64" cy="64" r="64" fill="url(#blue)"/>
+    <path fill="#151c24" opacity=".78" d="M-18 47c29-13 57-12 83 4 24 15 41 39 80 35v47H-18Z"/>
+    <path fill="#f7f8f5" opacity=".77" d="M-8 82c22-9 43-8 63 3 20 11 37 31 81 22v25H-8Z"/>
+    <path fill="none" stroke="#f7f9f7" stroke-width="14" stroke-linecap="round" opacity=".62" d="M27 98c23-13 36-31 39-53 2-16-2-32-12-49"/>
+    <path fill="none" stroke="#1d2731" stroke-width="15" stroke-linecap="round" opacity=".7" d="M51 122c28-20 43-46 42-77 0-18-6-34-18-51"/>
+    <path fill="none" stroke="#8fbada" stroke-width="10" stroke-linecap="round" opacity=".86" d="M67 125c24-22 35-48 30-78-3-18-12-34-26-49"/>
+    <circle cx="64" cy="64" r="13" fill="#f8faf8" opacity=".72"/>
+    <circle cx="64" cy="64" r="6" fill="#283644" opacity=".78"/>
+  </g>
+</svg>

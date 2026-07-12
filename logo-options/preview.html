@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relvaload Logo Options</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101418;
+      --panel: #171d23;
+      --line: #2c3540;
+      --text: #f5f7fa;
+      --muted: #a9b4c0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    main {
+      width: min(1120px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 32px 0;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    p {
+      max-width: 760px;
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .option {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 16px;
+    }
+
+    .option:nth-child(n + 13) {
+      order: -3;
+    }
+
+    .option:nth-child(n + 7):nth-child(-n + 12) {
+      order: -2;
+    }
+
+    .option h2 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-height: 116px;
+    }
+
+    .large {
+      width: 96px;
+      height: 96px;
+      display: block;
+      flex: 0 0 auto;
+    }
+
+    .google-stack {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .google-circle {
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #fff;
+      border: 2px solid #6f7780;
+      overflow: hidden;
+    }
+
+    .google-circle img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+    .size-64 {
+      width: 64px;
+      height: 64px;
+    }
+
+    .size-40 {
+      width: 40px;
+      height: 40px;
+      border-width: 1px;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 14px;
+      color: #8dccff;
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Relvaload Logo Options</h1>
+    <p>These are not wired into the site. The white-ring previews approximate how the same SVG behaves when Google places it inside a circular avatar or favicon frame. Options 07-12 are softer and more abstract, while 13-18 push the shapes rounder and more liquid.</p>
+    <section class="grid" aria-label="Logo options">
+      <article class="option">
+        <h2>01 Orbit</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-01-orbit.svg" alt="Logo option 01">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-01-orbit.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-01-orbit.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-01-orbit.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>02 Ridge</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-02-ridge.svg" alt="Logo option 02">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-02-ridge.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-02-ridge.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-02-ridge.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>03 Signal</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-03-signal.svg" alt="Logo option 03">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-03-signal.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-03-signal.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-03-signal.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>04 Prism</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-04-prism.svg" alt="Logo option 04">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-04-prism.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-04-prism.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-04-prism.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>05 Bloom</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-05-bloom.svg" alt="Logo option 05">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-05-bloom.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-05-bloom.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-05-bloom.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>06 Cut</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-06-cut.svg" alt="Logo option 06">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-06-cut.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-06-cut.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-06-cut.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>07 Mist</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-07-mist.svg" alt="Logo option 07">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-07-mist.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-07-mist.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-07-mist.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>08 Fold</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-08-fold.svg" alt="Logo option 08">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-08-fold.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-08-fold.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-08-fold.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>09 Glass</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-09-glass.svg" alt="Logo option 09">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-09-glass.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-09-glass.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-09-glass.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>10 Echo</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-10-echo.svg" alt="Logo option 10">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-10-echo.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-10-echo.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-10-echo.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>11 Veil</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-11-veil.svg" alt="Logo option 11">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-11-veil.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-11-veil.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-11-veil.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>12 Lumen</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-12-lumen.svg" alt="Logo option 12">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-12-lumen.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-12-lumen.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-12-lumen.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>13 Drift</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-13-drift.svg" alt="Logo option 13">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-13-drift.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-13-drift.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-13-drift.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>14 Cloud</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-14-cloud.svg" alt="Logo option 14">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-14-cloud.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-14-cloud.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-14-cloud.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>15 Halo</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-15-halo.svg" alt="Logo option 15">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-15-halo.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-15-halo.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-15-halo.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>16 Silk</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-16-silk.svg" alt="Logo option 16">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-16-silk.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-16-silk.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-16-silk.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>17 Ripple</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-17-ripple.svg" alt="Logo option 17">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-17-ripple.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-17-ripple.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-17-ripple.svg">Open SVG</a>
+      </article>
+      <article class="option">
+        <h2>18 Dew</h2>
+        <div class="row">
+          <img class="large" src="relv-logo-option-18-dew.svg" alt="Logo option 18">
+          <div class="google-stack">
+            <span class="google-circle size-64"><img src="relv-logo-option-18-dew.svg" alt=""></span>
+            <span class="google-circle size-40"><img src="relv-logo-option-18-dew.svg" alt=""></span>
+          </div>
+        </div>
+        <a href="relv-logo-option-18-dew.svg">Open SVG</a>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

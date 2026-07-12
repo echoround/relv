@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 07</title>
+  <desc id="desc">A soft abstract circular logo inspired by Estonian flag colors.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+    <linearGradient id="base" x1="16" y1="7" x2="112" y2="121" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a7cbe7"/>
+      <stop offset=".54" stop-color="#6ea7d4"/>
+      <stop offset="1" stop-color="#416f9b"/>
+    </linearGradient>
+    <radialGradient id="light" cx="39" cy="28" r="84" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f6f8f8" stop-opacity=".82"/>
+      <stop offset=".46" stop-color="#eef3f6" stop-opacity=".26"/>
+      <stop offset="1" stop-color="#eef3f6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soften" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+  </defs>
+  <g clip-path="url(#circle)">
+    <circle cx="64" cy="64" r="64" fill="url(#base)"/>
+    <circle cx="38" cy="29" r="76" fill="url(#light)"/>
+    <path fill="#18202a" opacity=".82" filter="url(#soften)" d="M-15 59c25-13 48-15 69-5 23 10 39 33 76 27v58H-15Z"/>
+    <path fill="#eff4f6" opacity=".78" d="M-8 88c21-12 43-13 65-3 20 10 37 28 79 20v33H-8Z"/>
+    <path fill="#27435c" opacity=".42" d="M87-8c-18 23-23 46-15 69 6 18 20 34 41 48l-17 24C68 114 51 92 47 68 43 42 52 16 77-8Z"/>
+    <path fill="#f8faf9" opacity=".66" d="M43 11c21 17 32 37 33 58 1 18-6 35-21 51l-13-13c12-13 18-26 17-40-1-16-10-30-28-44Z"/>
+  </g>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 02</title>
+  <desc id="desc">A full circular Estonian flag color logo with layered abstract ridges.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#circle)">
+    <rect width="128" height="128" fill="#fff"/>
+    <path fill="#0072ce" d="M0 0h128v64H0Z"/>
+    <path fill="#05070a" d="M0 43c16-7 30-7 44 0 14 8 27 23 43 27 13 4 27-1 41-13v42H0Z"/>
+    <path fill="#fff" d="M0 78c17-11 34-10 50 2 14 10 25 21 41 21 12 0 24-7 37-20v47H0Z"/>
+    <path fill="#0072ce" d="M77 0c-15 19-21 39-17 60 3 19 14 36 31 51l24-16c-17-14-27-28-30-44-3-17 4-34 21-51Z" opacity=".96"/>
+    <path fill="#05070a" d="M39 0c24 15 38 34 42 57 4 25-5 48-27 71H25c27-23 39-46 35-69C57 40 44 25 20 11Z" opacity=".91"/>
+    <path fill="#fff" d="M60 0c15 15 24 32 25 51 1 21-8 41-27 60l-9-14c14-15 21-31 20-47-1-15-8-28-21-40Z" opacity=".92"/>
+  </g>
+</svg>

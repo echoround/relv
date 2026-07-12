@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 03</title>
+  <desc id="desc">An abstract signal mark designed to fill a circular Google logo crop.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+    <radialGradient id="blue" cx="34" cy="20" r="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2a93e8"/>
+      <stop offset="0.58" stop-color="#0072ce"/>
+      <stop offset="1" stop-color="#003e78"/>
+    </radialGradient>
+  </defs>
+  <g clip-path="url(#circle)">
+    <rect width="128" height="128" fill="url(#blue)"/>
+    <path fill="#fff" d="M-1 92c20-18 43-27 68-27 23 0 43 7 62 20v43H-1Z" opacity=".97"/>
+    <path fill="#05070a" d="M-1 53c21 11 41 15 61 12 26-3 47-17 69-44v44c-23 19-45 30-69 32-21 2-41-2-61-12Z" opacity=".97"/>
+    <path fill="#fff" d="M28 8c11 9 19 20 23 35 4 15 3 30-4 45l-14-9c5-11 5-22 2-32-3-11-9-20-18-27Z" opacity=".95"/>
+    <path fill="#05070a" d="M63 15c14 8 25 21 31 37 5 17 4 35-4 52l-14-8c7-13 8-27 4-40-4-12-12-22-24-29Z" opacity=".92"/>
+    <path fill="#0072ce" d="M43 88c9-20 13-41 9-62l17 7c3 22-2 44-13 65Z"/>
+    <circle cx="64" cy="64" r="10" fill="#fff"/>
+    <circle cx="64" cy="64" r="5" fill="#05070a"/>
+  </g>
+</svg>

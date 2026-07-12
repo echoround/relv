@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 05</title>
+  <desc id="desc">An abstract circular bloom mark with full-bleed Estonian blue, black, and white.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+    <linearGradient id="blue" x1="64" y1="0" x2="64" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1684dc"/>
+      <stop offset="1" stop-color="#0062b4"/>
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#circle)">
+    <rect width="128" height="128" fill="url(#blue)"/>
+    <path fill="#fff" d="M64-8c17 18 27 39 27 62 0 25-10 49-27 74-17-25-27-49-27-74 0-23 10-44 27-62Z"/>
+    <path fill="#05070a" d="M-9 64c18-17 39-27 62-27 25 0 49 10 74 27-25 17-49 27-74 27-23 0-44-10-62-27Z" opacity=".97"/>
+    <path fill="#0072ce" d="M64 16c13 14 20 30 20 48s-7 34-20 48c-13-14-20-30-20-48s7-34 20-48Z"/>
+    <path fill="#05070a" d="M64 34c8 9 12 19 12 30s-4 21-12 30c-8-9-12-19-12-30s4-21 12-30Z"/>
+    <path fill="#fff" d="M64 48c5 5 7 11 7 16s-2 11-7 16c-5-5-7-11-7-16s2-11 7-16Z"/>
+  </g>
+</svg>

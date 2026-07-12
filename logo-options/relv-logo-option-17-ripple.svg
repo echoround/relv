@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Relvaload abstract logo option 17</title>
+  <desc id="desc">A soft ripple mark with rounded strokes and Estonian-inspired colors.</desc>
+  <defs>
+    <clipPath id="circle">
+      <circle cx="64" cy="64" r="64"/>
+    </clipPath>
+    <linearGradient id="bg" x1="13" y1="3" x2="112" y2="125" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d6e8ef"/>
+      <stop offset=".52" stop-color="#83b0cf"/>
+      <stop offset="1" stop-color="#2e4c67"/>
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#circle)">
+    <circle cx="64" cy="64" r="64" fill="url(#bg)"/>
+    <path fill="#121922" opacity=".58" d="M-9 86c18-18 40-25 64-18 20 6 34 23 54 25 10 1 20-2 30-9v50H-9Z"/>
+    <path fill="#f8faf7" opacity=".64" d="M-9 101c20-12 42-14 64-6 20 7 37 22 84 14v25H-9Z"/>
+    <path fill="none" stroke="#f7f9f6" stroke-width="14" stroke-linecap="round" opacity=".56" d="M10 63c17-18 38-27 62-25 20 2 37 12 49 30"/>
+    <path fill="none" stroke="#17212b" stroke-width="14" stroke-linecap="round" opacity=".63" d="M1 80c19-19 42-27 67-23 19 3 35 13 47 29"/>
+    <path fill="none" stroke="#91bbd7" stroke-width="12" stroke-linecap="round" opacity=".86" d="M18 45c16-12 34-16 54-12 17 3 32 12 43 26"/>
+    <path fill="none" stroke="#f8faf7" stroke-width="7" stroke-linecap="round" opacity=".72" d="M41 74c9-9 21-12 34-10 11 2 20 8 27 17"/>
+  </g>
+</svg>

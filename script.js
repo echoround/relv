@@ -508,7 +508,7 @@ function ensureExplanationsLoaded() {
 
     explanationsLoadPromise = fetch('explanations.min.json')
         .then(response => {
-            if (!response.ok) throw new Error('Failed to load explanations.json');
+            if (!response.ok) throw new Error('Selgituste laadimine ebaõnnestus.');
             return response.json();
         })
         .then(explanationsData => {
@@ -527,7 +527,7 @@ function ensureExplanationsLoaded() {
 // Load quiz questions up front; load explanations only when needed.
 fetch('questions.min.json')
     .then(response => {
-        if (!response.ok) throw new Error('Failed to load questions.json');
+        if (!response.ok) throw new Error('Küsimuste laadimine ebaõnnestus.');
         return response.json();
     })
     .then((questionsData) => {
@@ -535,7 +535,7 @@ fetch('questions.min.json')
 
     if (questionPool.length === 0) {
         console.error('No questions found in questions.json');
-        alert('No questions loaded. Please check questions.json and ensure it is properly formatted.');
+        alert('Küsimusi ei laaditud. Palun kontrolli questions.json faili.');
         return;
     }
 
@@ -543,7 +543,7 @@ fetch('questions.min.json')
 })
 .catch(error => {
     console.error('Error loading quiz questions:', error);
-    alert(`Failed to load questions: ${error.message}`);
+    alert(`Küsimuste laadimine ebaõnnestus: ${error.message}`);
 });
 
 function syncOptionSelectionState(container) {
@@ -561,13 +561,13 @@ function syncOptionSelectionState(container) {
 function displayQuestion() {
     if (currentIndex < 0 || currentIndex >= questions.length || !questions[currentIndex]) {
         console.error('Invalid currentIndex or question not found:', currentIndex);
-        alert('Error: Question not found. Please check questions.json for proper formatting.');
+        alert('Viga: küsimust ei leitud. Palun kontrolli questions.json faili.');
         return; // Prevent out-of-bounds access or undefined questions
     }
 
     const question = questions[currentIndex];
     document.getElementById('progress').textContent = `${currentIndex + 1} / ${questions.length}`;
-    document.getElementById('question-text').textContent = question.text || 'Question text not available';
+    document.getElementById('question-text').textContent = question.text || 'Küsimuse tekst puudub';
     const optionsDiv = document.getElementById('options');
     optionsDiv.innerHTML = '';
 
@@ -713,30 +713,30 @@ function displayFeedback(question) {
 
   if (isCorrect) {
     feedbackMessage.textContent = question.multiple
-      ? 'Correct. All correct answers are marked below.'
-      : 'Correct.';
+      ? 'Õige. Kõik õiged vastused on all märgitud.'
+      : 'Õige.';
     feedbackMessage.classList.add('is-correct');
   } else if (isPartial) {
     const summaryBits = [];
 
     if (selectedCorrectCount > 0) {
-      summaryBits.push(`${selectedCorrectCount} correct ${selectedCorrectCount === 1 ? 'choice is' : 'choices are'} selected`);
+      summaryBits.push(`${selectedCorrectCount} ${selectedCorrectCount === 1 ? 'õige valik on' : 'õiget valikut on'} valitud`);
     }
 
     if (missedCorrectCount > 0) {
-      summaryBits.push(`${missedCorrectCount} correct ${missedCorrectCount === 1 ? 'answer was' : 'answers were'} missed`);
+      summaryBits.push(`${missedCorrectCount} ${missedCorrectCount === 1 ? 'õige vastus jäi' : 'õiget vastust jäi'} valimata`);
     }
 
     if (incorrectSelectedCount > 0) {
-      summaryBits.push(`${incorrectSelectedCount} incorrect ${incorrectSelectedCount === 1 ? 'choice was' : 'choices were'} selected`);
+      summaryBits.push(`${incorrectSelectedCount} ${incorrectSelectedCount === 1 ? 'vale valik on' : 'valet valikut on'} valitud`);
     }
 
-    feedbackMessage.textContent = `Partially correct. ${summaryBits.join(', ')}.`;
+    feedbackMessage.textContent = `Osaliselt õige. ${summaryBits.join(', ')}.`;
     feedbackMessage.classList.add('is-partial');
   } else {
     feedbackMessage.textContent = question.multiple
-      ? 'Incorrect. The correct answers are marked below.'
-      : 'Incorrect. The correct answer is marked below.';
+      ? 'Vale. Õiged vastused on all märgitud.'
+      : 'Vale. Õige vastus on all märgitud.';
     feedbackMessage.classList.add('is-incorrect');
   }
 
@@ -768,19 +768,19 @@ function displayFeedback(question) {
     if (selectedThis && correctThis) {
       optionDiv.classList.add('has-review', 'answer-correct-picked');
       if (reviewTag) {
-        reviewTag.textContent = 'Correct choice';
+        reviewTag.textContent = 'Õige valik';
         reviewTag.hidden = false;
       }
     } else if (correctThis) {
       optionDiv.classList.add('has-review', 'answer-correct-missed');
       if (reviewTag) {
-        reviewTag.textContent = 'Correct answer';
+        reviewTag.textContent = 'Õige vastus';
         reviewTag.hidden = false;
       }
     } else if (selectedThis) {
       optionDiv.classList.add('has-review', 'answer-incorrect-picked');
       if (reviewTag) {
-        reviewTag.textContent = 'Incorrect choice';
+        reviewTag.textContent = 'Vale valik';
         reviewTag.hidden = false;
       }
     }
@@ -858,7 +858,7 @@ document.getElementById('next-btn').addEventListener('click', () => {
                 score++;
             }
         }
-        alert(`Quiz completed! Your score: ${score} out of ${questions.length}`);
+        alert(`Test tehtud! Sinu tulemus: ${score} / ${questions.length}`);
     }
 });
 
@@ -872,7 +872,7 @@ function createQuestionGrid() {
     if (!gridDiv) return;
 
     if (!gridDiv.querySelector('.grid-container')) {
-        gridDiv.innerHTML = '<div class="grid-container" aria-label="Question navigator"></div>';
+        gridDiv.innerHTML = '<div class="grid-container" aria-label="Küsimuste valija"></div>';
     }
 
     const gridContainer = gridDiv.querySelector('.grid-container');
@@ -885,7 +885,7 @@ function createQuestionGrid() {
         item.type = 'button';
         item.className = 'grid-item unanswered';
         item.textContent = i + 1;
-        item.setAttribute('aria-label', `Go to question ${i + 1}`);
+        item.setAttribute('aria-label', `Mine küsimuse ${i + 1} juurde`);
 
         item.addEventListener('click', () => {
             currentIndex = i;
