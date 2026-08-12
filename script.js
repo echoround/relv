@@ -11,6 +11,8 @@ let quizCardsObserver = null;
 let quizCardsIdleHandle = null;
 let quizCardsRenderQueued = false;
 let quizCardsRendered = false;
+let quizCardsExpanded = false;
+let quizCardsDisclosureBound = false;
 let quizAvatarModulePromise = null;
 let quizAccountStripExpanded = false;
 
@@ -412,6 +414,67 @@ function cleanupQuestionCardsScheduling() {
   }
 }
 
+function setQuestionCardsLoadingVisible(isVisible) {
+  const grid = document.getElementById('all-questions-grid');
+  if (!grid) return;
+
+  grid.setAttribute('aria-busy', isVisible ? 'true' : 'false');
+
+  if (isVisible) {
+    grid.innerHTML = getQuestionCardsLoadingMarkup();
+  } else if (!quizCardsRendered) {
+    grid.innerHTML = '';
+  }
+}
+
+function updateQuestionCardsDisclosure() {
+  const section = document.querySelector('[data-quiz-cards-section]');
+  const panel = document.getElementById('all-questions-panel');
+  const toggle = document.querySelector('[data-quiz-cards-toggle]');
+  const label = document.querySelector('[data-quiz-cards-toggle-label]');
+
+  if (!section || !panel || !toggle) return;
+
+  section.classList.toggle('is-open', quizCardsExpanded);
+  section.classList.toggle('is-collapsed', !quizCardsExpanded);
+  panel.hidden = !quizCardsExpanded;
+  toggle.setAttribute('aria-expanded', String(quizCardsExpanded));
+
+  if (label) {
+    label.textContent = quizCardsExpanded ? 'Sulge' : 'Ava';
+  }
+
+  if (quizCardsExpanded) {
+    if (quizCardsRendered) {
+      window.requestAnimationFrame(syncFlipCardHeights);
+    } else {
+      scheduleQuestionCardsRender();
+    }
+    return;
+  }
+
+  cleanupQuestionCardsScheduling();
+  quizCardsRenderQueued = false;
+  setQuestionCardsLoadingVisible(false);
+}
+
+function setupQuestionCardsDisclosure() {
+  const toggle = document.querySelector('[data-quiz-cards-toggle]');
+  if (!toggle) return;
+
+  quizCardsExpanded = false;
+
+  if (!quizCardsDisclosureBound) {
+    quizCardsDisclosureBound = true;
+    toggle.addEventListener('click', () => {
+      quizCardsExpanded = !quizCardsExpanded;
+      updateQuestionCardsDisclosure();
+    });
+  }
+
+  updateQuestionCardsDisclosure();
+}
+
 function renderQuestionCardsNow() {
   if (quizCardsRendered || questionPool.length === 0) return;
 
@@ -423,7 +486,7 @@ function renderQuestionCardsNow() {
 
 function scheduleQuestionCardsRender() {
   const section = document.querySelector('.quiz-cards-section');
-  if (!section || questionPool.length === 0) return;
+  if (!section || !quizCardsExpanded || questionPool.length === 0) return;
 
   cleanupQuestionCardsScheduling();
   quizCardsRendered = false;
@@ -479,9 +542,9 @@ function initializeQuizSession() {
 
   setupExplanationUI();
   setupQuizAccountStrip();
+  setupQuestionCardsDisclosure();
   displayQuestion();
   createQuestionGrid();
-  scheduleQuestionCardsRender();
 }
 
 function setExplanations(explanationItems) {
@@ -1012,6 +1075,9 @@ function createQuestionCards() {
 }
 
 function syncFlipCardHeights() {
+    const panel = document.getElementById('all-questions-panel');
+    if (panel?.hidden) return;
+
     const cards = document.querySelectorAll('.flip-card');
     if (!cards.length) return;
 

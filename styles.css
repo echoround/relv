@@ -1323,8 +1323,10 @@ body.theme-quiz .quiz-cards-section{
 }
 
 body.theme-quiz .quiz-cards-head{
-  display: grid;
-  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
   margin-bottom: 16px;
 }
 
@@ -1340,6 +1342,58 @@ body.theme-quiz .quiz-cards-title{
   margin: 0;
   font-size: clamp(22px, 3.2vw, 34px);
   letter-spacing: 0.02em;
+}
+
+body.theme-quiz .quiz-cards-toggle{
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 42px;
+  min-width: 112px;
+  padding: 10px 15px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.9);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+
+body.theme-quiz .quiz-cards-toggle:hover,
+body.theme-quiz .quiz-cards-toggle:focus-visible{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 12px 34px rgba(0,0,0,0.28);
+}
+
+body.theme-quiz .quiz-cards-toggle-icon{
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform .16s ease;
+}
+
+body.theme-quiz .quiz-cards-section.is-open .quiz-cards-toggle-icon{
+  transform: rotate(225deg) translateY(-1px);
+}
+
+body.theme-quiz .quiz-cards-section.is-collapsed .quiz-cards-head{
+  margin-bottom: 0;
+}
+
+body.theme-quiz .quiz-cards-panel[hidden]{
+  display: none !important;
 }
 
 body.theme-quiz .quiz-cards-subtitle{
@@ -2060,6 +2114,15 @@ body.theme-quiz #next-btn{
 
 /* Stack on small screens (keeps buttons big) */
 @media (max-width: 720px){
+  body.theme-quiz .quiz-cards-head{
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  body.theme-quiz .quiz-cards-toggle{
+    width: 100%;
+  }
+
   body.theme-quiz #navigation{
     flex-direction: column;
   }

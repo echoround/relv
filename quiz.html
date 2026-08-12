@@ -241,11 +241,22 @@
       </aside>
     </section>
 
-    <section class="quiz-cards-section" aria-label="Kõik küsimused">
+    <section class="quiz-cards-section is-collapsed" aria-labelledby="quiz-cards-title" data-quiz-cards-section>
       <div class="quiz-cards-head">
-        <h2 class="quiz-cards-title">Kõik küsimused</h2>
+        <h2 id="quiz-cards-title" class="quiz-cards-title">Kõik küsimused</h2>
+        <button
+          type="button"
+          class="quiz-cards-toggle"
+          aria-expanded="false"
+          aria-controls="all-questions-panel"
+          data-quiz-cards-toggle>
+          <span data-quiz-cards-toggle-label>Ava</span>
+          <span class="quiz-cards-toggle-icon" aria-hidden="true"></span>
+        </button>
       </div>
-      <div id="all-questions-grid" class="flip-grid"></div>
+      <div id="all-questions-panel" class="quiz-cards-panel" hidden>
+        <div id="all-questions-grid" class="flip-grid"></div>
+      </div>
     </section>
   </main>
 

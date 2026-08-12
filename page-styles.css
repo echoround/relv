@@ -261,6 +261,43 @@ body.theme-kuidas{
   margin-top:6px;
 }
 
+.exam-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+  color:rgba(255,255,255,0.74);
+  font-size:15px;
+}
+
+.exam-table th,
+.exam-table td{
+  padding:10px 12px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+  text-align:left;
+  vertical-align:top;
+  line-height:1.55;
+}
+
+.exam-table th{
+  color:rgba(255,255,255,0.92);
+  font-weight:800;
+}
+
+.exam-table th:first-child{
+  width:160px;
+}
+
+.exam-table thead th{
+  color:rgba(255,255,255,0.58);
+  font-size:12px;
+  text-transform:uppercase;
+}
+
+.exam-table tbody tr:last-child th,
+.exam-table tbody tr:last-child td{
+  border-bottom:0;
+}
+
 .step-key{
   font-weight:800;
   color:rgba(255,255,255,0.92);
@@ -275,5 +312,29 @@ body.theme-kuidas{
   .page-hero-inner,
   .quiz-layout{
     grid-template-columns:1fr;
+  }
+}
+
+@media (max-width:600px){
+  body.theme-kuidas .hero-title{
+    font-size:40px;
+    letter-spacing:0;
+    overflow-wrap:normal;
+    word-break:normal;
+  }
+
+  .exam-table th:first-child{
+    width:104px;
+  }
+
+  .exam-table th,
+  .exam-table td{
+    padding:8px;
+  }
+}
+
+@media (max-width:360px){
+  body.theme-kuidas .hero-title{
+    font-size:36px;
   }
 }
