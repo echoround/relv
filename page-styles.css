@@ -37,9 +37,21 @@ body.theme-kuidas{
   align-items:center;
 }
 
+.page-hero-inner > *,
+.quiz-layout > *{
+  min-width:0;
+}
+
 .theme-quiz .hero-kicker,
 .theme-kuidas .hero-kicker{
   color:var(--accentB);
+}
+
+body.theme-quiz .page-hero .hero-title{
+  font-size:clamp(42px, 5vw, 72px);
+  letter-spacing:.08em;
+  overflow-wrap:normal;
+  word-break:normal;
 }
 
 .quiz-layout{
@@ -53,6 +65,8 @@ body.theme-kuidas{
 .glass-card,
 .content-card,
 .step-card{
+  box-sizing:border-box;
+  max-width:100%;
   background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.10);
   border-radius:18px;
@@ -191,12 +205,14 @@ body.theme-kuidas{
   letter-spacing:.08em;
   text-transform:uppercase;
   font-weight:800;
+  overflow-wrap:break-word;
 }
 
 .content-card-copy{
   margin:0;
   color:rgba(255,255,255,.74);
   line-height:1.6;
+  overflow-wrap:break-word;
 }
 
 .steps{
@@ -235,6 +251,7 @@ body.theme-kuidas{
   font-weight:800;
   letter-spacing:.06em;
   text-transform:uppercase;
+  overflow-wrap:break-word;
 }
 
 .step-text{
@@ -242,11 +259,13 @@ body.theme-kuidas{
   color:rgba(255,255,255,0.74);
   line-height:1.6;
   font-size:15px;
+  overflow-wrap:break-word;
 }
 
 .step-stack{
   display:grid;
   gap:12px;
+  min-width:0;
 }
 
 .step-list{
@@ -316,6 +335,11 @@ body.theme-kuidas{
 }
 
 @media (max-width:600px){
+  body.theme-quiz .page-hero .hero-title{
+    font-size:clamp(28px, 8.5vw, 36px);
+    letter-spacing:.02em;
+  }
+
   body.theme-kuidas .hero-title{
     font-size:40px;
     letter-spacing:0;

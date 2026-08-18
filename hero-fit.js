@@ -1,8 +1,5 @@
 (function () {
-  function fitHeroTitleLine() {
-    const el = document.querySelector('[data-autofit]');
-    if (!el) return;
-
+  function fitHeroTitleLine(el) {
     el.style.fontSize = '';
     el.style.letterSpacing = '';
 
@@ -28,8 +25,9 @@
   }
 
   const runFit = () => {
-    fitHeroTitleLine();
-    requestAnimationFrame(fitHeroTitleLine);
+    const lines = document.querySelectorAll('[data-autofit]');
+    lines.forEach(fitHeroTitleLine);
+    requestAnimationFrame(() => lines.forEach(fitHeroTitleLine));
   };
 
   if (document.fonts && document.fonts.ready) {

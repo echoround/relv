@@ -5,16 +5,21 @@ let userAnswers = [];
 let explanations = [];
 let explanationsById = new Map();
 let explanationsLoadPromise = null;
-let flipResizeTimer = null;
-let flipResizeBound = false;
-let quizCardsObserver = null;
-let quizCardsIdleHandle = null;
-let quizCardsRenderQueued = false;
-let quizCardsRendered = false;
-let quizCardsExpanded = false;
-let quizCardsDisclosureBound = false;
+let questionReviewObserver = null;
+let questionReviewIdleHandle = null;
+let questionReviewRenderQueued = false;
+let questionReviewRendered = false;
+let questionReviewExpanded = false;
+let questionReviewDisclosureBound = false;
 let quizAvatarModulePromise = null;
 let quizAccountStripExpanded = false;
+
+const QUESTION_REVIEW_STATUSES = {
+  unanswered: 'Vastamata',
+  correct: 'Õige',
+  partial: 'Osaline',
+  incorrect: 'Vale'
+};
 
 function shouldShowQuizAccountStripLoading(snapshot) {
     const auth = window.RELV_SITE_AUTH;
@@ -380,142 +385,142 @@ async function trackQuizAnswerProgress(question, selectedOptions) {
     }
 }
 
-function getQuestionCardsLoadingMarkup() {
+function getQuestionReviewLoadingMarkup() {
   return `
-    <div class="quiz-cards-loading" role="status" aria-live="polite">
-      <span class="quiz-cards-loading-spinner" aria-hidden="true"></span>
-      <span class="quiz-cards-loading-label">Laen küsimuste kaarte...</span>
+    <div class="question-review-loading" role="status" aria-live="polite">
+      <span class="question-review-loading-spinner" aria-hidden="true"></span>
+      <span class="question-review-loading-label">Laen küsimusi...</span>
     </div>
   `;
 }
 
-function showQuestionCardsLoading() {
-  const grid = document.getElementById('all-questions-grid');
-  if (!grid) return;
+function showQuestionReviewLoading() {
+  const list = document.getElementById('all-questions-list');
+  if (!list) return;
 
-  grid.setAttribute('aria-busy', 'true');
-  grid.innerHTML = getQuestionCardsLoadingMarkup();
+  list.setAttribute('aria-busy', 'true');
+  list.innerHTML = getQuestionReviewLoadingMarkup();
 }
 
-function cleanupQuestionCardsScheduling() {
-  if (quizCardsObserver) {
-    quizCardsObserver.disconnect();
-    quizCardsObserver = null;
+function cleanupQuestionReviewScheduling() {
+  if (questionReviewObserver) {
+    questionReviewObserver.disconnect();
+    questionReviewObserver = null;
   }
 
-  if (quizCardsIdleHandle !== null) {
+  if (questionReviewIdleHandle !== null) {
     if (typeof window.cancelIdleCallback === 'function') {
-      window.cancelIdleCallback(quizCardsIdleHandle);
+      window.cancelIdleCallback(questionReviewIdleHandle);
     } else {
-      window.clearTimeout(quizCardsIdleHandle);
+      window.clearTimeout(questionReviewIdleHandle);
     }
 
-    quizCardsIdleHandle = null;
+    questionReviewIdleHandle = null;
   }
 }
 
-function setQuestionCardsLoadingVisible(isVisible) {
-  const grid = document.getElementById('all-questions-grid');
-  if (!grid) return;
+function setQuestionReviewLoadingVisible(isVisible) {
+  const list = document.getElementById('all-questions-list');
+  if (!list) return;
 
-  grid.setAttribute('aria-busy', isVisible ? 'true' : 'false');
+  list.setAttribute('aria-busy', isVisible ? 'true' : 'false');
 
   if (isVisible) {
-    grid.innerHTML = getQuestionCardsLoadingMarkup();
-  } else if (!quizCardsRendered) {
-    grid.innerHTML = '';
+    list.innerHTML = getQuestionReviewLoadingMarkup();
+  } else if (!questionReviewRendered) {
+    list.innerHTML = '';
   }
 }
 
-function updateQuestionCardsDisclosure() {
-  const section = document.querySelector('[data-quiz-cards-section]');
+function updateQuestionReviewDisclosure() {
+  const section = document.querySelector('[data-question-review-section]');
   const panel = document.getElementById('all-questions-panel');
-  const toggle = document.querySelector('[data-quiz-cards-toggle]');
-  const label = document.querySelector('[data-quiz-cards-toggle-label]');
+  const toggle = document.querySelector('[data-question-review-toggle]');
+  const label = document.querySelector('[data-question-review-toggle-label]');
 
   if (!section || !panel || !toggle) return;
 
-  section.classList.toggle('is-open', quizCardsExpanded);
-  section.classList.toggle('is-collapsed', !quizCardsExpanded);
-  panel.hidden = !quizCardsExpanded;
-  toggle.setAttribute('aria-expanded', String(quizCardsExpanded));
+  section.classList.toggle('is-open', questionReviewExpanded);
+  section.classList.toggle('is-collapsed', !questionReviewExpanded);
+  panel.hidden = !questionReviewExpanded;
+  toggle.setAttribute('aria-expanded', String(questionReviewExpanded));
 
   if (label) {
-    label.textContent = quizCardsExpanded ? 'Sulge' : 'Ava';
+    label.textContent = questionReviewExpanded ? 'Sulge' : 'Ava';
   }
 
-  if (quizCardsExpanded) {
-    if (quizCardsRendered) {
-      window.requestAnimationFrame(syncFlipCardHeights);
+  if (questionReviewExpanded) {
+    if (questionReviewRendered) {
+      updateQuestionReviewStatuses();
     } else {
-      scheduleQuestionCardsRender();
+      scheduleQuestionReviewRender();
     }
     return;
   }
 
-  cleanupQuestionCardsScheduling();
-  quizCardsRenderQueued = false;
-  setQuestionCardsLoadingVisible(false);
+  cleanupQuestionReviewScheduling();
+  questionReviewRenderQueued = false;
+  setQuestionReviewLoadingVisible(false);
 }
 
-function setupQuestionCardsDisclosure() {
-  const toggle = document.querySelector('[data-quiz-cards-toggle]');
+function setupQuestionReviewDisclosure() {
+  const toggle = document.querySelector('[data-question-review-toggle]');
   if (!toggle) return;
 
-  quizCardsExpanded = false;
+  questionReviewExpanded = false;
 
-  if (!quizCardsDisclosureBound) {
-    quizCardsDisclosureBound = true;
+  if (!questionReviewDisclosureBound) {
+    questionReviewDisclosureBound = true;
     toggle.addEventListener('click', () => {
-      quizCardsExpanded = !quizCardsExpanded;
-      updateQuestionCardsDisclosure();
+      questionReviewExpanded = !questionReviewExpanded;
+      updateQuestionReviewDisclosure();
     });
   }
 
-  updateQuestionCardsDisclosure();
+  updateQuestionReviewDisclosure();
 }
 
-function renderQuestionCardsNow() {
-  if (quizCardsRendered || questionPool.length === 0) return;
+function renderQuestionReviewNow() {
+  if (questionReviewRendered || questionPool.length === 0) return;
 
-  cleanupQuestionCardsScheduling();
-  quizCardsRenderQueued = false;
-  quizCardsRendered = true;
-  createQuestionCards();
+  cleanupQuestionReviewScheduling();
+  questionReviewRenderQueued = false;
+  questionReviewRendered = true;
+  createQuestionReviewList();
 }
 
-function scheduleQuestionCardsRender() {
-  const section = document.querySelector('.quiz-cards-section');
-  if (!section || !quizCardsExpanded || questionPool.length === 0) return;
+function scheduleQuestionReviewRender() {
+  const section = document.querySelector('.question-review-section');
+  if (!section || !questionReviewExpanded || questionPool.length === 0) return;
 
-  cleanupQuestionCardsScheduling();
-  quizCardsRendered = false;
-  quizCardsRenderQueued = true;
-  showQuestionCardsLoading();
+  cleanupQuestionReviewScheduling();
+  questionReviewRendered = false;
+  questionReviewRenderQueued = true;
+  showQuestionReviewLoading();
 
   if ('IntersectionObserver' in window) {
-    quizCardsObserver = new IntersectionObserver((entries) => {
+    questionReviewObserver = new IntersectionObserver((entries) => {
       if (entries.some((entry) => entry.isIntersecting)) {
-        renderQuestionCardsNow();
+        renderQuestionReviewNow();
       }
     }, {
       rootMargin: '320px 0px'
     });
 
-    quizCardsObserver.observe(section);
+    questionReviewObserver.observe(section);
   }
 
   const idleRender = () => {
-    if (!quizCardsRenderQueued || quizCardsRendered) return;
-    renderQuestionCardsNow();
+    if (!questionReviewRenderQueued || questionReviewRendered) return;
+    renderQuestionReviewNow();
   };
 
   if (typeof window.requestIdleCallback === 'function') {
-    quizCardsIdleHandle = window.requestIdleCallback(idleRender, { timeout: 1600 });
+    questionReviewIdleHandle = window.requestIdleCallback(idleRender, { timeout: 1600 });
     return;
   }
 
-  quizCardsIdleHandle = window.setTimeout(idleRender, 300);
+  questionReviewIdleHandle = window.setTimeout(idleRender, 300);
 }
 
 function shuffleQuestions(items) {
@@ -540,9 +545,10 @@ function initializeQuizSession() {
     celebrated: false
   }));
 
+  resetQuestionReviewList();
   setupExplanationUI();
   setupQuizAccountStrip();
-  setupQuestionCardsDisclosure();
+  setupQuestionReviewDisclosure();
   displayQuestion();
   createQuestionGrid();
 }
@@ -961,145 +967,352 @@ function createQuestionGrid() {
     updateQuestionGrid();
 }
 
-function createQuestionCards() {
-    const grid = document.getElementById('all-questions-grid');
-    if (!grid) return;
+function normalizeQuestionReviewText(value) {
+    return String(value || '')
+        .toLocaleLowerCase('et-EE')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
 
-    grid.setAttribute('aria-busy', 'false');
-    grid.innerHTML = '';
+function getQuestionReviewExplanation(question) {
+    const short = String(question?.explanation || '').trim();
+    const extra = getExplanationText(question?.id);
+
+    if (extra && short && extra !== short) return `${short}\n\n${extra}`;
+    return extra || short;
+}
+
+function getQuestionReviewSessionMap() {
+    const sessionById = new Map();
+
+    questions.forEach((question, index) => {
+        if (question?.id == null) return;
+        sessionById.set(String(question.id), index);
+    });
+
+    return sessionById;
+}
+
+function getQuestionReviewSessionIndex(question, sessionById) {
+    if (question?.id != null && sessionById.has(String(question.id))) {
+        return sessionById.get(String(question.id));
+    }
+
+    const fallbackIndex = questions.indexOf(question);
+    return fallbackIndex >= 0 ? fallbackIndex : null;
+}
+
+function getQuestionReviewStatus(question, sessionIndex) {
+    const answer = sessionIndex == null ? null : userAnswers[sessionIndex];
+    const selected = Array.isArray(answer?.selected) ? answer.selected : [];
+
+    if (!answer?.submitted || selected.length === 0) return 'unanswered';
+    return getQuizAnswerReview(question, selected).resultType;
+}
+
+function resetQuestionReviewList() {
+    cleanupQuestionReviewScheduling();
+    questionReviewRenderQueued = false;
+    questionReviewRendered = false;
+
+    const list = document.getElementById('all-questions-list');
+    const search = document.querySelector('[data-question-review-search]');
+    const filter = document.querySelector('[data-question-review-filter]');
+    const count = document.querySelector('[data-question-review-count]');
+    const empty = document.querySelector('[data-question-review-empty]');
+    const expandAll = document.querySelector('[data-question-review-expand-all]');
+
+    if (list) {
+        list.setAttribute('aria-busy', 'false');
+        list.innerHTML = '';
+    }
+    if (search) search.value = '';
+    if (filter) filter.value = 'all';
+    if (count) count.textContent = '';
+    if (empty) empty.hidden = true;
+    if (expandAll) {
+        expandAll.textContent = 'Ava kõik';
+        expandAll.disabled = false;
+    }
+}
+
+function updateQuestionReviewExpandAll() {
+    const button = document.querySelector('[data-question-review-expand-all]');
+    const items = Array.from(document.querySelectorAll('[data-question-review-item]'))
+        .filter(item => !item.hidden);
+
+    if (!button) return;
+
+    const allOpen = items.length > 0 && items.every(item => item.open);
+    button.textContent = allOpen ? 'Sulge kõik' : 'Ava kõik';
+    button.disabled = items.length === 0;
+}
+
+function applyQuestionReviewFilters() {
+    const list = document.getElementById('all-questions-list');
+    if (!list) return;
+
+    const search = document.querySelector('[data-question-review-search]');
+    const filter = document.querySelector('[data-question-review-filter]');
+    const count = document.querySelector('[data-question-review-count]');
+    const empty = document.querySelector('[data-question-review-empty]');
+    const query = normalizeQuestionReviewText(search?.value);
+    const statusFilter = filter?.value || 'all';
+    const items = Array.from(list.querySelectorAll('[data-question-review-item]'));
+    let visibleCount = 0;
+
+    items.forEach((item) => {
+        const matchesQuery = !query || String(item.dataset.search || '').includes(query);
+        const matchesStatus = statusFilter === 'all' || item.dataset.status === statusFilter;
+        const isVisible = matchesQuery && matchesStatus;
+
+        item.hidden = !isVisible;
+        if (isVisible) visibleCount += 1;
+    });
+
+    if (count) {
+        const isFiltered = Boolean(query) || statusFilter !== 'all';
+        count.textContent = isFiltered
+            ? `Leitud ${visibleCount} / ${items.length}`
+            : `${items.length} küsimust`;
+    }
+
+    if (empty) empty.hidden = visibleCount > 0;
+    updateQuestionReviewExpandAll();
+}
+
+function setupQuestionReviewControls() {
+    const search = document.querySelector('[data-question-review-search]');
+    const filter = document.querySelector('[data-question-review-filter]');
+    const expandAll = document.querySelector('[data-question-review-expand-all]');
+
+    if (search && search.dataset.bound !== 'true') {
+        search.dataset.bound = 'true';
+        search.addEventListener('input', applyQuestionReviewFilters);
+    }
+
+    if (filter && filter.dataset.bound !== 'true') {
+        filter.dataset.bound = 'true';
+        filter.addEventListener('change', applyQuestionReviewFilters);
+    }
+
+    if (expandAll && expandAll.dataset.bound !== 'true') {
+        expandAll.dataset.bound = 'true';
+        expandAll.addEventListener('click', () => {
+            const visibleItems = Array.from(document.querySelectorAll('[data-question-review-item]'))
+                .filter(item => !item.hidden);
+            const shouldOpen = visibleItems.some(item => !item.open);
+
+            visibleItems.forEach((item) => {
+                item.open = shouldOpen;
+            });
+
+            updateQuestionReviewExpandAll();
+        });
+    }
+}
+
+function populateQuestionReviewExplanations() {
+    document.querySelectorAll('[data-question-review-explanation]').forEach((block) => {
+        const item = block.closest('[data-question-review-item]');
+        const questionIndex = Number(item?.dataset.questionIndex);
+        const question = Number.isInteger(questionIndex) ? questionPool[questionIndex] : null;
+        const text = getQuestionReviewExplanation(question);
+        const textElement = block.querySelector('[data-question-review-explanation-text]');
+
+        block.hidden = !text;
+        if (textElement) textElement.textContent = text;
+
+        if (item) {
+            item.dataset.search = normalizeQuestionReviewText(
+                `${item.dataset.searchBase || ''} ${text}`
+            );
+        }
+    });
+
+    applyQuestionReviewFilters();
+}
+
+function updateQuestionReviewStatuses() {
+    if (!questionReviewRendered) return;
+
+    const list = document.getElementById('all-questions-list');
+    if (!list) return;
+
+    const sessionById = getQuestionReviewSessionMap();
+
+    list.querySelectorAll('[data-question-review-item]').forEach((item) => {
+        const questionIndex = Number(item.dataset.questionIndex);
+        const question = Number.isInteger(questionIndex) ? questionPool[questionIndex] : null;
+        if (!question) return;
+
+        const sessionIndex = getQuestionReviewSessionIndex(question, sessionById);
+        const answer = sessionIndex == null ? null : userAnswers[sessionIndex];
+        const selected = Array.isArray(answer?.selected) ? answer.selected : [];
+        const correct = Array.isArray(question.correct) ? question.correct : [];
+        const status = getQuestionReviewStatus(question, sessionIndex);
+        const statusElement = item.querySelector('[data-question-review-status]');
+        const statusLabel = item.querySelector('[data-question-review-status-label]');
+
+        item.dataset.status = status;
+
+        if (statusElement) {
+            statusElement.className = `question-review-status is-${status}`;
+        }
+        if (statusLabel) {
+            statusLabel.textContent = QUESTION_REVIEW_STATUSES[status] || QUESTION_REVIEW_STATUSES.unanswered;
+        }
+
+        item.querySelectorAll('[data-question-review-answer]').forEach((answerItem) => {
+            const optionIndex = Number(answerItem.dataset.optionIndex);
+            const isCorrect = correct.includes(optionIndex);
+            const isSelected = selected.includes(optionIndex);
+            const state = answerItem.querySelector('[data-question-review-answer-state]');
+
+            answerItem.classList.toggle('is-correct', isCorrect);
+            answerItem.classList.toggle('is-selected-correct', isCorrect && isSelected);
+            answerItem.classList.toggle('is-selected-wrong', !isCorrect && isSelected);
+
+            if (!state) return;
+
+            if (isCorrect && isSelected) {
+                state.textContent = 'Sinu õige valik';
+                state.hidden = false;
+            } else if (isCorrect) {
+                state.textContent = 'Õige vastus';
+                state.hidden = false;
+            } else if (isSelected) {
+                state.textContent = 'Sinu vale valik';
+                state.hidden = false;
+            } else {
+                state.textContent = '';
+                state.hidden = true;
+            }
+        });
+    });
+
+    applyQuestionReviewFilters();
+}
+
+function createQuestionReviewList() {
+    const list = document.getElementById('all-questions-list');
+    if (!list) return;
+
+    list.setAttribute('aria-busy', 'false');
+    list.innerHTML = '';
 
     const fragment = document.createDocumentFragment();
 
     questionPool.forEach((question, index) => {
         if (!question) return;
 
-        const card = document.createElement('article');
-        card.className = 'flip-card';
-
-        const inner = document.createElement('div');
-        inner.className = 'flip-card-inner';
-
-        const front = document.createElement('div');
-        front.className = 'flip-card-face flip-card-front';
-
-        const frontTop = document.createElement('div');
-        frontTop.className = 'flip-card-top';
         const questionNumber = question.id != null ? question.id : index + 1;
-        frontTop.textContent = `Küsimus ${questionNumber}`;
+        const options = Array.isArray(question.options) ? question.options : [];
+        const item = document.createElement('details');
+        item.className = 'question-review-item';
+        item.dataset.questionReviewItem = '';
+        item.dataset.questionIndex = String(index);
+        item.dataset.status = 'unanswered';
+        item.dataset.searchBase = normalizeQuestionReviewText(
+            [question.text, ...options].filter(Boolean).join(' ')
+        );
+        item.dataset.search = item.dataset.searchBase;
 
-        const frontQuestion = document.createElement('div');
-        frontQuestion.className = 'flip-card-question';
-        frontQuestion.textContent = question.text || 'Küsimus puudub';
+        const summary = document.createElement('summary');
+        summary.className = 'question-review-summary';
 
-        const frontBtn = document.createElement('button');
-        frontBtn.type = 'button';
-        frontBtn.className = 'flip-card-toggle';
-        frontBtn.textContent = 'Vaata vastuseid';
+        const number = document.createElement('span');
+        number.className = 'question-review-number';
+        number.textContent = `Küsimus ${questionNumber}`;
 
-        const backId = `flip-card-${index + 1}-back`;
-        frontBtn.setAttribute('aria-controls', backId);
-        frontBtn.setAttribute('aria-expanded', 'false');
+        const questionText = document.createElement('span');
+        questionText.className = 'question-review-question';
+        questionText.textContent = question.text || 'Küsimuse tekst puudub';
 
-        front.append(frontTop, frontQuestion, frontBtn);
+        const status = document.createElement('span');
+        status.className = 'question-review-status is-unanswered';
+        status.dataset.questionReviewStatus = '';
 
-        const back = document.createElement('div');
-        back.className = 'flip-card-face flip-card-back';
-        back.id = backId;
+        const statusDot = document.createElement('span');
+        statusDot.className = 'question-review-status-dot';
+        statusDot.setAttribute('aria-hidden', 'true');
 
-        const backTop = document.createElement('div');
-        backTop.className = 'flip-card-top';
-        backTop.textContent = 'Vastused';
+        const statusLabel = document.createElement('span');
+        statusLabel.dataset.questionReviewStatusLabel = '';
+        statusLabel.textContent = QUESTION_REVIEW_STATUSES.unanswered;
+
+        const chevron = document.createElement('span');
+        chevron.className = 'question-review-chevron';
+        chevron.setAttribute('aria-hidden', 'true');
+
+        status.append(statusDot, statusLabel);
+        summary.append(number, questionText, status, chevron);
+
+        const body = document.createElement('div');
+        body.className = 'question-review-body';
 
         const answersList = document.createElement('ol');
-        answersList.className = 'flip-card-answers';
-
-        const options = Array.isArray(question.options) ? question.options : [];
-        const correct = Array.isArray(question.correct) ? question.correct : [];
+        answersList.className = 'question-review-answers';
 
         if (options.length === 0) {
-            const empty = document.createElement('li');
-            empty.textContent = 'Vastused puuduvad';
-            answersList.appendChild(empty);
+            const emptyAnswer = document.createElement('li');
+            emptyAnswer.className = 'question-review-answer-empty';
+            emptyAnswer.textContent = 'Vastused puuduvad';
+            answersList.appendChild(emptyAnswer);
         } else {
-            options.forEach((option, optIndex) => {
+            options.forEach((option, optionIndex) => {
                 if (option === null || option === undefined) return;
-                const li = document.createElement('li');
-                li.textContent = option;
-                if (correct.includes(optIndex)) li.classList.add('is-correct');
-                answersList.appendChild(li);
+
+                const answerItem = document.createElement('li');
+                answerItem.className = 'question-review-answer';
+                answerItem.dataset.questionReviewAnswer = '';
+                answerItem.dataset.optionIndex = String(optionIndex);
+
+                const marker = document.createElement('span');
+                marker.className = 'question-review-answer-marker';
+                marker.textContent = optionIndex < 26
+                    ? String.fromCharCode(65 + optionIndex)
+                    : String(optionIndex + 1);
+
+                const answerText = document.createElement('span');
+                answerText.className = 'question-review-answer-text';
+                answerText.textContent = String(option);
+
+                const answerState = document.createElement('span');
+                answerState.className = 'question-review-answer-state';
+                answerState.dataset.questionReviewAnswerState = '';
+                answerState.hidden = true;
+
+                answerItem.append(marker, answerText, answerState);
+                answersList.appendChild(answerItem);
             });
         }
 
-        const backBtn = document.createElement('button');
-        backBtn.type = 'button';
-        backBtn.className = 'flip-card-toggle flip-card-toggle--back';
-        backBtn.textContent = 'Tagasi küsimuse juurde';
-        backBtn.setAttribute('aria-expanded', 'false');
+        const explanation = document.createElement('div');
+        explanation.className = 'question-review-explanation';
+        explanation.dataset.questionReviewExplanation = '';
+        explanation.hidden = true;
 
-        back.append(backTop, answersList, backBtn);
+        const explanationLabel = document.createElement('strong');
+        explanationLabel.className = 'question-review-explanation-label';
+        explanationLabel.textContent = 'Selgitus';
 
-        inner.append(front, back);
-        card.appendChild(inner);
+        const explanationText = document.createElement('p');
+        explanationText.className = 'question-review-explanation-text';
+        explanationText.dataset.questionReviewExplanationText = '';
 
-        const setFlipped = (next) => {
-            card.classList.toggle('is-flipped', next);
-            frontBtn.setAttribute('aria-expanded', String(next));
-            backBtn.setAttribute('aria-expanded', String(next));
-        };
-
-        frontBtn.addEventListener('click', () => setFlipped(true));
-        backBtn.addEventListener('click', () => setFlipped(false));
-        card.addEventListener('click', (event) => {
-            if (event.target.closest('.flip-card-toggle')) return;
-            setFlipped(!card.classList.contains('is-flipped'));
-        });
-
-        fragment.appendChild(card);
+        explanation.append(explanationLabel, explanationText);
+        body.append(answersList, explanation);
+        item.append(summary, body);
+        item.addEventListener('toggle', updateQuestionReviewExpandAll);
+        fragment.appendChild(item);
     });
 
-    grid.appendChild(fragment);
-
-    syncFlipCardHeights();
-
-    if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(syncFlipCardHeights).catch(() => {});
-    }
-
-    if (!flipResizeBound) {
-        flipResizeBound = true;
-        window.addEventListener('resize', () => {
-            if (flipResizeTimer) clearTimeout(flipResizeTimer);
-            flipResizeTimer = setTimeout(syncFlipCardHeights, 120);
-        });
-    }
-}
-
-function syncFlipCardHeights() {
-    const panel = document.getElementById('all-questions-panel');
-    if (panel?.hidden) return;
-
-    const cards = document.querySelectorAll('.flip-card');
-    if (!cards.length) return;
-
-    cards.forEach(card => {
-        card.style.height = 'auto';
-    });
-
-    if (window.innerWidth <= 720) {
-        return;
-    }
-
-    let maxHeight = 0;
-
-    cards.forEach(card => {
-        maxHeight = Math.max(maxHeight, card.offsetHeight);
-    });
-
-    const finalHeight = Math.ceil(maxHeight + 8);
-
-    cards.forEach(card => {
-        card.style.height = `${finalHeight}px`;
-    });
+    list.appendChild(fragment);
+    setupQuestionReviewControls();
+    updateQuestionReviewStatuses();
+    populateQuestionReviewExplanations();
+    ensureExplanationsLoaded().then(populateQuestionReviewExplanations);
 }
 
 function updateQuestionGrid() {
@@ -1139,6 +1352,7 @@ function updateQuestionGrid() {
         }
     }
     updateProgressHUD();
+    updateQuestionReviewStatuses();
 }
 
 
