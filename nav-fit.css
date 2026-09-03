@@ -1,0 +1,108 @@
+/* Tablet navigation for the five-link site header. */
+.site-nav .nav-link[href="pood.html"]{
+  --nav-link-accent: 176, 184, 151;
+  --nav-link-accent-strong: 222, 226, 205;
+}
+
+@media (min-width: 721px) and (max-width: 980px){
+  .site-nav{
+    display: none !important;
+    position: fixed !important;
+    left: 18px !important;
+    right: 18px !important;
+    top: 72px !important;
+    z-index: 999 !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    max-height: calc(100vh - 88px) !important;
+    padding: 4px 0 !important;
+    overflow-x: visible !important;
+    overflow-y: auto !important;
+    border: 1px solid rgba(236,241,246,.14) !important;
+    border-radius: 0 !important;
+    background: linear-gradient(180deg, rgb(58,66,76), rgb(34,40,47)) !important;
+    box-shadow: 0 28px 64px rgba(8,11,15,.44) !important;
+    isolation: isolate;
+  }
+
+  .site-nav.is-open{
+    display: flex !important;
+  }
+
+  .site-nav::before,
+  .site-nav::after{
+    content: none !important;
+  }
+
+  .site-nav .nav-link{
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100% !important;
+    min-height: 62px;
+    padding: 0 18px !important;
+    border-right: 0 !important;
+    border-bottom: 0 !important;
+    border-left: 0 !important;
+    border-top: 1px solid rgba(236,241,246,.1) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .site-nav .nav-link:first-of-type{
+    border-top: 0 !important;
+  }
+
+  .site-nav .nav-link:hover,
+  .site-nav .nav-link:active{
+    border-color: rgba(var(--nav-link-accent-strong),.18) !important;
+    background: rgba(243,247,251,.03) !important;
+    box-shadow: inset 0 0 0 1px rgba(var(--nav-link-accent),.12) !important;
+  }
+
+  .site-nav .nav-link.is-active{
+    border-color: rgba(var(--section-accent-strong),.2) !important;
+    background: rgba(243,247,251,.04) !important;
+    box-shadow: inset 3px 0 0 rgba(var(--nav-link-accent-strong),.84) !important;
+  }
+
+  .nav-toggle{
+    display: inline-block;
+    flex: 0 0 auto;
+  }
+
+  .header-container > .site-auth-host{
+    display: none !important;
+  }
+
+  .site-nav .site-auth-host--mobile{
+    display: flex !important;
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px 18px 14px;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+
+  .site-auth-host--mobile .site-auth-root,
+  .site-auth-host--mobile .site-auth-trigger{
+    width: 100%;
+  }
+
+  .site-auth-host--mobile .site-auth-trigger{
+    min-width: 0;
+    justify-content: space-between;
+  }
+
+  .site-auth-host--mobile .site-auth-panel{
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 12px;
+    background: linear-gradient(180deg, rgb(44,50,58), rgb(31,36,43)) !important;
+    overflow: visible !important;
+  }
+}
