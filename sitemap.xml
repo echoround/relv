@@ -12,10 +12,12 @@
     <loc>https://relvaload.ee/kuidas.html</loc>
     <lastmod>2026-08-16</lastmod>
   </url>
+  <!-- Pood is temporarily hidden; keep this entry for reactivation.
   <url>
     <loc>https://relvaload.ee/pood.html</loc>
     <lastmod>2026-09-03</lastmod>
   </url>
+  -->
   <url>
     <loc>https://relvaload.ee/foorum.html</loc>
   </url>
