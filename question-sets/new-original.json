@@ -1,0 +1,609 @@
+{
+  "metadata": {
+    "name": "Uued originaalküsimused",
+    "language": "et",
+    "status": "review",
+    "reviewedAt": "2026-09-07",
+    "nextReviewBy": "2026-09-29",
+    "questionCount": 30,
+    "notes": "Iseseisvalt koostatud lisaküsimused, mis keskenduvad eksamikorrale, taotlemisele, ohutule hoidmisele ja esmaabile. Need ei pärine PPA ametlikust eksamipangast.",
+    "sources": {
+      "RelvS": "https://www.riigiteataja.ee/akt/112122024004",
+      "Eksam": "https://www.riigiteataja.ee/akt/124032023006",
+      "Hoidmine": "https://www.riigiteataja.ee/akt/120052020027",
+      "Terviseamet": "https://www.terviseamet.ee/tervishoiukorraldus/esmaabi",
+      "ERC2025": "https://www.erc.edu/media/i2vllpae/gl2025-12-faid-e.pdf",
+      "Häirekeskus": "https://www.112.ee/et/juhend/hadaabinumber-112"
+    }
+  },
+  "questions": [
+    {
+      "id": "new-001",
+      "topic": "esmaabikoolituse nõue",
+      "text": "Milline esmaabikoolituse tõend tuleb tavalisel taotlejal relvaloa saamiseks esitada?",
+      "options": [
+        "Ühetunnise veebivideo vaatamise kinnitus",
+        "Aegumatu suuline kinnitus varasema esmaabikogemuse kohta",
+        "Esmaabikoolitust ei ole relvaloa taotlemisel kunagi vaja",
+        "Vähemalt 16-tunnise koolituse tõend, mille andis nõutava ettevalmistusega tervishoiutöötaja"
+      ],
+      "correct": [
+        3
+      ],
+      "multiple": false,
+      "explanation": "Relvaseadus nõuab vähemalt 16-tunnise esmaabikoolituse läbimist ning määrab nõuded selle koolituse andjale. Seaduses nimetatud teenistujatele võivad kehtida erandid.",
+      "references": [
+        "RelvS § 35 lg 2 p 4 ja lg 10"
+      ]
+    },
+    {
+      "id": "new-002",
+      "topic": "tervisekontrolli ajastus",
+      "text": "Kui vara võib nõutava tervisekontrolli läbida enne soetamisloa taotluse esitamist?",
+      "options": [
+        "Alles pärast relva ostmist",
+        "Tervisekontrolli ajale ei ole piirangut",
+        "Kõige varem kolm kuud enne taotluse esitamist",
+        "Ükskõik kui mitu aastat varem"
+      ],
+      "correct": [
+        2
+      ],
+      "multiple": false,
+      "explanation": "Tervisekontroll tuleb läbida kõige varem kolm kuud enne soetamisloa taotlemist või enne relvaloa taotlemist, kui soetamisluba pole eelnevalt vaja.",
+      "references": [
+        "RelvS § 35^1 lg 1^1"
+      ]
+    },
+    {
+      "id": "new-003",
+      "topic": "teooriaeksami formaat",
+      "text": "Milline tulemus tähendab relvaeksami teooriaosa sooritamist?",
+      "options": [
+        "Ajalimiidita vähemalt 7 õiget vastust",
+        "30 minuti jooksul vähemalt 8 õiget vastust 10 küsimusest",
+        "60 minuti jooksul vähemalt 5 õiget vastust 10 küsimusest",
+        "15 minuti jooksul kõik 10 vastust õigesti"
+      ],
+      "correct": [
+        1
+      ],
+      "multiple": false,
+      "explanation": "Teooriaeksamil on kümme valikvastustega küsimust, aega 30 minutit ja sooritamiseks on vaja vähemalt kaheksat õiget vastust.",
+      "references": [
+        "Eksam § 6 lg 2–3"
+      ]
+    },
+    {
+      "id": "new-004",
+      "topic": "eksamiosade järjekord",
+      "text": "Mis juhtub, kui eksamineeritav ei soorita relvaeksami teooriaosa?",
+      "options": [
+        "Teda relva käsitsemise katsele ei lubata",
+        "Ta võib käsitsemise katse siiski samal päeval teha",
+        "Ta saab relvaloa ainult käsitsemise katse alusel",
+        "Teooriaosa loetakse automaatselt sooritatuks pärast laskekatset"
+      ],
+      "correct": [
+        0
+      ],
+      "multiple": false,
+      "explanation": "Eksam toimub järjekorras teooria ja seejärel relva käsitsemise katse. Ebaõnnestunud teooria korral teise ossa ei pääse.",
+      "references": [
+        "Eksam § 5 lg 1–2"
+      ]
+    },
+    {
+      "id": "new-005",
+      "topic": "eksamilt puudumine",
+      "text": "Eksamikandidaat teab ette, et ei saa määratud ajal osaleda. Millal peab ta üldjuhul PPA-d teavitama, et puudumist ei loetaks läbikukkumiseks?",
+      "options": [
+        "Eksami algusest ühe kuu jooksul suuliselt",
+        "Teavitama ei pea",
+        "Ainult samal hommikul tekstisõnumiga",
+        "Vähemalt kolm tööpäeva ette kirjalikku taasesitamist võimaldavas vormis"
+      ],
+      "correct": [
+        3
+      ],
+      "multiple": false,
+      "explanation": "Üldreegel on vähemalt kolm tööpäeva ette teatamine kirjalikku taasesitamist võimaldavas vormis. Määrus arvestab erandina tõendatud ootamatut haigestumist või muud ettenägematut põhjust.",
+      "references": [
+        "Eksam § 2 lg 4–5"
+      ]
+    },
+    {
+      "id": "new-006",
+      "topic": "eksami keel ja abivahendid",
+      "text": "Millised väited relvaeksami sooritamise kohta on õiged?",
+      "options": [
+        "Eksamil võib vabalt kasutada konspekti ja kõrvalise isiku abi",
+        "Õigusteksti võib eksami ajal telefonist otsida",
+        "Eksam sooritatakse eesti keeles",
+        "Teooriaeksam on kirjalik, kuid põhjendatud taotlusel võib PPA lubada suulist vormi"
+      ],
+      "correct": [
+        2,
+        3
+      ],
+      "multiple": true,
+      "explanation": "Relvaeksam toimub eesti keeles. Teooria on üldjuhul kirjalik, põhjendatud juhul suuline; abivahendid ja kõrvaline abi on keelatud.",
+      "references": [
+        "RelvS § 35 lg 7",
+        "Eksam § 5 lg 3",
+        "Eksam § 6 lg 1"
+      ]
+    },
+    {
+      "id": "new-007",
+      "topic": "püstoli või revolvri laskekatse",
+      "text": "Milline kirjeldus vastab püstoli või revolvri relvaeksami laskekatsele?",
+      "options": [
+        "Ajalist piirangut ei ole",
+        "Kolm lasku 15 sekundi jooksul; vähemalt kaks peavad tabama märklehte",
+        "Tavakaugus on 15 meetrit, kuid alla 63,5 mm rauaga relval 10 meetrit",
+        "Kõik kolm lasku peavad tabama ringe 7–10"
+      ],
+      "correct": [
+        1,
+        2
+      ],
+      "multiple": true,
+      "explanation": "Püstoli või revolvriga lastakse käskluse peale kolm lasku 15 sekundiga ning vähemalt kaks peavad tabama märklehte. Lühikese rauaga relval on kaugus 10 meetrit.",
+      "references": [
+        "Eksam § 7 lg 7 p 2"
+      ]
+    },
+    {
+      "id": "new-008",
+      "topic": "püssi laskekatse",
+      "text": "Milline tulemus on püssiga sooritataval relvaeksami laskekatsel nõutav?",
+      "options": [
+        "25 meetrilt kolm lasku ning kõik tabavad märklehe ringe 7–10",
+        "15 meetrilt kaks tabamust kolmest ükskõik kuhu märklehel",
+        "50 meetrilt üks tabamus viiest",
+        "Ainult relva laadimise näitamine, laskmist ei toimu"
+      ],
+      "correct": [
+        0
+      ],
+      "multiple": false,
+      "explanation": "Püssikatse tehakse püsti, toeta, 25 meetrilt. Kõik kolm lasku peavad tabama ringe 7–10.",
+      "references": [
+        "Eksam § 7 lg 7 p 1"
+      ]
+    },
+    {
+      "id": "new-009",
+      "topic": "käsitsemise katse kordamine",
+      "text": "Kandidaat läbis teooria, kuid kukkus relva käsitsemise katsel läbi. Millal võib ta katset korrata nii, et teooriat ei pea uuesti tegema?",
+      "options": [
+        "Järgmisel päeval ning ajalise ülempiirita",
+        "Alles ühe aasta pärast",
+        "Käsitsemise katset ei saa korrata",
+        "Mitte varem kui viie päeva pärast ja hiljemalt kahe kuu jooksul teooria sooritamisest"
+      ],
+      "correct": [
+        3
+      ],
+      "multiple": false,
+      "explanation": "Korduskatse saab teha kõige varem viie päeva pärast ja hiljemalt kahe kuu jooksul. Hiljem tuleb uuesti läbida ka teooria.",
+      "references": [
+        "Eksam § 7 lg 9"
+      ]
+    },
+    {
+      "id": "new-010",
+      "topic": "eksamitulemuse vaidlustamine",
+      "text": "Kui kandidaat soovib relvaeksami tulemust vaidlustada, kui kaua on tal aega esitada vaie PPA-le?",
+      "options": [
+        "Üks aasta",
+        "Tulemust ei saa vaidlustada",
+        "30 päeva tulemuse teatamisest",
+        "Kolm tööpäeva"
+      ],
+      "correct": [
+        2
+      ],
+      "multiple": false,
+      "explanation": "Eksamitulemuse peale võib 30 päeva jooksul esitada vaide PPA-le; pärast vaidemenetlust on võimalik pöörduda halduskohtusse.",
+      "references": [
+        "Eksam § 9"
+      ]
+    },
+    {
+      "id": "new-011",
+      "topic": "relva kasutamise tagajärjest teatamine",
+      "text": "Relva kasutamisega tekkis teisele inimesele tervisekahjustus. Millal peab relva valdaja politseid teavitama?",
+      "options": [
+        "Järgmise relvaloa pikendamise ajal",
+        "Viivitamata",
+        "Seitsme tööpäeva jooksul",
+        "Ainult siis, kui kannatanu seda kirjalikult nõuab"
+      ],
+      "correct": [
+        1
+      ],
+      "multiple": false,
+      "explanation": "Surma, tervisekahjustuse või varalise kahju põhjustanud relva käitlemisest või kasutamisest tuleb politseid viivitamata teavitada.",
+      "references": [
+        "RelvS § 10 lg 1"
+      ]
+    },
+    {
+      "id": "new-012",
+      "topic": "relva kaotsiminek",
+      "text": "Loaomanik avastab, et relv on kadunud. Mis on tema esimene seadusest tulenev kohustus?",
+      "options": [
+        "Teatada juhtumist viivitamata politseile",
+        "Oodata seitse päeva, kas relv ilmub välja",
+        "Osta asendusrelv ja teatada alles pärast seda",
+        "Teavitada ainult kindlustusseltsi"
+      ],
+      "correct": [
+        0
+      ],
+      "multiple": false,
+      "explanation": "Relva kaotsiminekust või hävimisest peab politseid kohe teavitama.",
+      "references": [
+        "RelvS § 10 lg 2",
+        "RelvS § 42 lg 2"
+      ]
+    },
+    {
+      "id": "new-013",
+      "topic": "alaealise relvakäitlemine",
+      "text": "Milline üldreegel kehtib alla 18-aastase isiku suhtes piiramata tsiviilkäibega relvade puhul?",
+      "options": [
+        "Ta võib kõiki selliseid relvi vabalt osta alates 14. eluaastast",
+        "Ta võib neid alati avalikul üritusel kanda",
+        "Vanusepiirang puudub täielikult",
+        "Ta ei või neid üldjuhul soetada, omada, vallata, kanda ega edasi toimetada"
+      ],
+      "correct": [
+        3
+      ],
+      "multiple": false,
+      "explanation": "Üldine vanusepiir on 18 aastat. Seadus teeb piiratud erandi spordiga tegelemiseks vähemalt 10-aastasele isikule kindlate relvaliikide ja järelevalve tingimustel.",
+      "references": [
+        "RelvS § 18 lg 3–4"
+      ]
+    },
+    {
+      "id": "new-014",
+      "topic": "gaasipihusti nõuded",
+      "text": "Milline gaasipihusti võib olla piiramata tsiviilkäibega?",
+      "options": [
+        "Ükskõik millise toimeaine ja kontsentratsiooniga pihusti",
+        "Pihusti, mille toimeaine pole teada",
+        "Pihusti, mis sisaldab üksnes CS-gaasi või pipragaasi kuni 5-protsendise kontsentratsiooniga",
+        "Igasugust närviparalüütilist ainet sisaldav pihusti"
+      ],
+      "correct": [
+        2
+      ],
+      "multiple": false,
+      "explanation": "Piiramata käibega gaasipihusti võib sisaldada ainult CS- või pipragaasi ning kontsentratsioon ei tohi ületada viit protsenti.",
+      "references": [
+        "RelvS § 18 lg 1 p 2 ja lg 5"
+      ]
+    },
+    {
+      "id": "new-015",
+      "topic": "soetamisloa eeltingimus",
+      "text": "Mida peab füüsiline isik omama enne uue relva soetamisloa taotlemist?",
+      "options": [
+        "Rahvusvahelist juhiluba",
+        "Kehtivat relvaluba",
+        "Ainult jahitunnistust sõltumata relva otstarbest",
+        "Relvakaupluse kliendikaarti"
+      ],
+      "correct": [
+        1
+      ],
+      "multiple": false,
+      "explanation": "Kehtiva korra järgi peab soetamisloa taotlejal olema kehtiv relvaluba.",
+      "references": [
+        "RelvS § 35 lg 4"
+      ]
+    },
+    {
+      "id": "new-016",
+      "topic": "taotluse läbivaatamise aeg",
+      "text": "Kui pika aja jooksul vaatab PPA füüsilise isiku soetamis- või relvaloa taotluse üldjuhul läbi?",
+      "options": [
+        "Kahe kuu jooksul kõigi nõutud dokumentide esitamisest ja riigilõivu tasumisest",
+        "Alati ühe tööpäeva jooksul",
+        "Kuue kuu jooksul ainult avalduse esitamisest",
+        "Tähtaega ei ole"
+      ],
+      "correct": [
+        0
+      ],
+      "multiple": false,
+      "explanation": "Kahekuuline tähtaeg hakkab kulgema, kui kõik nõutud dokumendid on esitatud ja riigilõiv tasutud.",
+      "references": [
+        "RelvS § 35 lg 1"
+      ]
+    },
+    {
+      "id": "new-017",
+      "topic": "relvaeksami tulemuse kehtivus",
+      "text": "Kui kaua kehtib edukalt sooritatud relvaeksami tulemus?",
+      "options": [
+        "Kolm kuud",
+        "Viis aastat",
+        "Tähtajatult",
+        "Üks aasta sooritamise päevast"
+      ],
+      "correct": [
+        3
+      ],
+      "multiple": false,
+      "explanation": "Relvaeksami tulemus kehtib ühe aasta alates eksami sooritamisest.",
+      "references": [
+        "RelvS § 35 lg 6"
+      ]
+    },
+    {
+      "id": "new-018",
+      "topic": "tervisetõendi kehtivus",
+      "text": "Kui kaua võib soetamis- või relvaloa taotlejale väljastatud tervisetõend kõige rohkem kehtida?",
+      "options": [
+        "Ainult kuus kuud",
+        "Piiramatult",
+        "Kuni viis aastat",
+        "Kuni kümme aastat"
+      ],
+      "correct": [
+        2
+      ],
+      "multiple": false,
+      "explanation": "Perearsti korraldatud tervisekontrolli alusel antud tõend kehtib kuni viis aastat.",
+      "references": [
+        "RelvS § 35^1 lg 2–2^1"
+      ]
+    },
+    {
+      "id": "new-019",
+      "topic": "relvakapi võti",
+      "text": "Kus peab asuma relvakapi võti?",
+      "options": [
+        "Ükskõik kus, kui kapp ise on lukus",
+        "Relvaomaniku valduses või peidetult nii, et kõrvaline isik seda kätte ei saaks",
+        "Alati relvakapi sees nähtaval kohal",
+        "Välisukse kõrval ühisel nagil"
+      ],
+      "correct": [
+        1
+      ],
+      "multiple": false,
+      "explanation": "Kapi võti peab olema omaniku valduses või kõrvalise isiku eest turvaliselt peidetud.",
+      "references": [
+        "Hoidmine § 8 lg 4",
+        "Hoidmine § 8^1 lg 3"
+      ]
+    },
+    {
+      "id": "new-020",
+      "topic": "laskemoona hoidmine samas kapis",
+      "text": "Relva, laskemoona, sütikuid ja püssirohtu hoitakse samas relvakapis. Milline lisatingimus kehtib?",
+      "options": [
+        "Laskemoona, sütikute ja püssirohu jaoks peab olema eraldi lukustatav osa, mille võtit ei hoita relvakapis",
+        "Kõik esemed võivad olla vabalt samal riiulil",
+        "Eraldi osa on nõutav ainult relvarihmale",
+        "Laskemoon peab olema alati väljaspool hoonet"
+      ],
+      "correct": [
+        0
+      ],
+      "multiple": false,
+      "explanation": "Kui need esemed on relvaga samas kapis, tuleb need paigutada eraldi lukustatavasse ossa ning selle võti ei tohi olla kapis.",
+      "references": [
+        "Hoidmine § 8 lg 3",
+        "Hoidmine § 8^1 lg 3"
+      ]
+    },
+    {
+      "id": "new-021",
+      "topic": "laskemoona lubatud kogus",
+      "text": "Millised laskemoona hoiukogused on füüsilisele isikule seaduses ette nähtud ühe vastava otstarbega tulirelva kohta?",
+      "options": [
+        "Sporditulirelva kohta kuni 5000 padrunit",
+        "Sileraudse jahitulirelva kohta kuni 300 padrunit",
+        "Turvalisuse tagamise relva kohta piiramatult padruneid",
+        "Turvalisuse tagamise relva kohta kuni 200 padrunit"
+      ],
+      "correct": [
+        0,
+        1,
+        3
+      ],
+      "multiple": true,
+      "explanation": "Relvaseadus määrab otstarbe järgi erinevad ülempiirid: 200 turvalisuseks, 300 sileraudse jahitulirelva ja 5000 sporditulirelva kohta.",
+      "references": [
+        "RelvS § 46 lg 5 p 1, 4 ja 5"
+      ]
+    },
+    {
+      "id": "new-022",
+      "topic": "püssirohu kogus",
+      "text": "Kui palju püssirohtu võib füüsiline isik oma tulirelvade kohta hoiustada?",
+      "options": [
+        "Alati täpselt 10 kg",
+        "Kogus ei ole piiratud",
+        "Kuni 1 kg iga tulirelva kohta, kuid kokku mitte üle 5 kg",
+        "Kuni 5 kg iga relva kohta ilma üldise ülempiirita"
+      ],
+      "correct": [
+        2
+      ],
+      "multiple": false,
+      "explanation": "Piir on üks kilogramm iga tulirelva kohta ja kõigi relvade peale kokku viis kilogrammi.",
+      "references": [
+        "RelvS § 46 lg 5 p 6"
+      ]
+    },
+    {
+      "id": "new-023",
+      "topic": "ajutised hoiukohad",
+      "text": "Mitmel eri aadressil võib füüsiline isik lisaks põhihoiukohale relva ajutiselt hoida, kui kohad on PPA-ga kooskõlastatud?",
+      "options": [
+        "Ajutine hoiukoht ei ole kunagi lubatud",
+        "Kuni kahel aadressil",
+        "Ainult ühel aadressil",
+        "Piiramatul arvul aadressidel"
+      ],
+      "correct": [
+        1
+      ],
+      "multiple": false,
+      "explanation": "Lisaks elukohas või määratud aadressil olevale põhihoiukohale võib kasutada kuni kaht PPA-ga kooskõlastatud ajutist hoiukohta.",
+      "references": [
+        "RelvS § 46 lg 1"
+      ]
+    },
+    {
+      "id": "new-024",
+      "topic": "piiratud käibega padrunisalv",
+      "text": "Millal on poolautomaatse kesktule tulirelva padrunisalv piiratud käibega?",
+      "options": [
+        "Püstoli puhul siis, kui see mahutab üle 20 padruni",
+        "Püssi puhul siis, kui see mahutab üle 10 padruni",
+        "Püstoli puhul alates kahest padrunist",
+        "Kõik padrunisalved on alati piiramata käibega"
+      ],
+      "correct": [
+        0,
+        1
+      ],
+      "multiple": true,
+      "explanation": "Piiratud käibega on poolautomaatse kesktule tulirelva salv, mis mahutab püstolil üle 20 või püssil üle 10 padruni.",
+      "references": [
+        "RelvS § 20^1 lg 4"
+      ]
+    },
+    {
+      "id": "new-025",
+      "topic": "tugeva verejooksu esmaabi",
+      "text": "Millised on tugeva välise verejooksu korral sobivad esimesed tegevused, kui sündmuskoht on ohutu?",
+      "options": [
+        "Rakendada haavale tugevat otsest survet",
+        "Oodata sekkumata, kas verejooks peatub ise",
+        "Anda kannatanule süüa ja juua",
+        "Kutsuda või lasta kellelgi kutsuda abi numbril 112"
+      ],
+      "correct": [
+        0,
+        3
+      ],
+      "multiple": true,
+      "explanation": "Eluohtliku verejooksu puhul tuleb kiiresti kutsuda abi ja alustada verejooksu sulgemist otsese survega. Tegemist on õppematerjaliga, mitte praktilise esmaabikoolituse asendusega.",
+      "references": [
+        "Terviseamet: Kuidas peatada tugevat verejooksu?",
+        "ERC2025: Control of life-threatening bleeding"
+      ]
+    },
+    {
+      "id": "new-026",
+      "topic": "abistaja kaitse ja rõhkside",
+      "text": "Millised tegevused vähendavad tugeva verejooksu korral ohtu kannatanule ja abistajale?",
+      "options": [
+        "Paigaldada haavale rõhkside ja hoida survet kuni abi saabumiseni",
+        "Eemaldada side korduvalt, et haava iga minuti järel vaadata",
+        "Võõrast abistades kasutada kindaid või muud verega kokkupuudet vähendavat kaitset",
+        "Asetada kannatanu lamama"
+      ],
+      "correct": [
+        0,
+        2,
+        3
+      ],
+      "multiple": true,
+      "explanation": "Terviseamet soovitab kasutada kaitsevahendit, asetada kannatanu lamama ning sulgeda verejooks surve või rõhksidemega kuni kiirabi saabumiseni.",
+      "references": [
+        "Terviseamet: Kuidas peatada tugevat verejooksu?"
+      ]
+    },
+    {
+      "id": "new-027",
+      "topic": "žguti kasutamine",
+      "text": "Eluohtlik jäsemeverejooks ei peatu tugeva otsese survega. Milline tegevus vastab ERC 2025 juhisele?",
+      "options": [
+        "Vabastada žgutt iga minuti järel",
+        "Paigaldada võimalikult kiiresti žgutt ja märkida paigaldamise aeg",
+        "Lõpetada surve ja oodata kiirabi",
+        "Paigaldada žgutt ümber kaela"
+      ],
+      "correct": [
+        1
+      ],
+      "multiple": false,
+      "explanation": "Kui eluohtlik jäsemeverejooks otsese survega ei peatu, soovitab ERC kasutada žgutti võimalikult kiiresti ja märkida paigaldamise aeg. Õige võte vajab praktilist väljaõpet.",
+      "references": [
+        "ERC2025: Control of life-threatening bleeding"
+      ]
+    },
+    {
+      "id": "new-028",
+      "topic": "teadvusetu, kuid hingav kannatanu",
+      "text": "Kannatanu ei reageeri, kuid hingab normaalselt. Mida teha abi oodates?",
+      "options": [
+        "Asetada ta püsivasse küliliasendisse ja jälgida pidevalt seisundit",
+        "Jätta ta selili ning minna pikaks ajaks ära",
+        "Alustada kohe rindkerevajutusi hoolimata normaalsest hingamisest",
+        "Anda talle teadvusetuna juua"
+      ],
+      "correct": [
+        0
+      ],
+      "multiple": false,
+      "explanation": "Normaalselt hingav teadvuseta inimene pannakse püsivasse küliliasendisse, et hingamisteed püsiksid avatuna, ning tema seisundit jälgitakse.",
+      "references": [
+        "Terviseamet: Kuidas keerata teadvuseta kannatanu püsivasse küliliasendisse?"
+      ]
+    },
+    {
+      "id": "new-029",
+      "topic": "ebanormaalne hingamine ja elustamine",
+      "text": "Kannatanu ei reageeri ja tema hingamine on seiskunud või ebanormaalne. Millised tegevused on õiged?",
+      "options": [
+        "Kasutada võimalusel AED-d ja järgida seadme juhiseid",
+        "Pidada ahmivat hingamist alati normaalseks",
+        "Oodata elustamisega seni, kuni kannatanu ise ärkab",
+        "Alustada kohe elustamist"
+      ],
+      "correct": [
+        0,
+        3
+      ],
+      "multiple": true,
+      "explanation": "Teadvusetu ja ebanormaalselt hingav kannatanu vajab viivitamata elustamist. AED tuleb sisse lülitada ja selle hääljuhiseid järgida.",
+      "references": [
+        "Terviseamet: Kuidas kontrollida kannatanu seisundit?",
+        "Terviseamet: Kuidas teha elustamist?"
+      ]
+    },
+    {
+      "id": "new-030",
+      "topic": "hädaabikõne",
+      "text": "Millised väited hädaabinumbrile 112 helistamise kohta on õiged?",
+      "options": [
+        "Kõne on tasuta ning seda saab teha ka SIM-kaardita telefonist",
+        "112 on ainult tulekahjudest teatamiseks",
+        "Helistada tuleb, kui elu, tervis, vara või keskkond on ohus või on alust arvata, et oht on tekkimas",
+        "Kahtluse korral võib helistada ja päästekorraldaja hindab olukorda"
+      ],
+      "correct": [
+        0,
+        2,
+        3
+      ],
+      "multiple": true,
+      "explanation": "112 on politsei, pääste ja kiirabi ühine hädaabinumber. Päästekorraldaja aitab olukorra kiireloomulisust hinnata.",
+      "references": [
+        "Häirekeskus: Hädaabinumber 112"
+      ]
+    }
+  ]
+}

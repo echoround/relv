@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Küsimustike võrdlus | Relv</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1018;
+      --panel: #121a26;
+      --line: #273449;
+      --text: #eef3fb;
+      --muted: #9ba9bc;
+      --accent: #67d6a3;
+      --accent-soft: #17392e;
+      --warning: #ffd078;
+      --warning-soft: #362d1c;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #162234 0, var(--bg) 32rem);
+      color: var(--text);
+      font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    main { width: min(1320px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 80px; }
+    h1 { margin: 0 0 8px; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; }
+    h2, h3, p { margin-top: 0; }
+    .lede { max-width: 780px; color: var(--muted); }
+    .notice {
+      margin: 28px 0;
+      padding: 14px 16px;
+      border: 1px solid #725d2f;
+      border-radius: 12px;
+      background: var(--warning-soft);
+      color: var(--warning);
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 -8px 28px;
+      padding: 12px 8px;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    button, input {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      color: var(--text);
+      font: inherit;
+    }
+    button { padding: 9px 13px; cursor: pointer; }
+    button[aria-selected="true"] { border-color: var(--accent); background: var(--accent-soft); }
+    input { min-width: min(330px, 100%); padding: 9px 12px; margin-left: auto; }
+
+    .count { color: var(--muted); margin-bottom: 18px; }
+    .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 26px; }
+    .pair-title { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; margin: 12px 0 -4px; }
+    .card {
+      min-width: 0;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--panel) 94%, transparent);
+      box-shadow: 0 10px 30px rgb(0 0 0 / 16%);
+    }
+    .card.rewritten { border-color: #2d5a49; }
+    .card-label, .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #1e2a3b;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+    .rewritten .card-label, .badge.new { background: var(--accent-soft); color: var(--accent); }
+    .question { margin: 12px 0 14px; font-size: 1.08rem; font-weight: 700; }
+    ol { margin: 0; padding-left: 28px; }
+    li { margin: 7px 0; color: #c7d1df; }
+    li.correct { color: var(--accent); font-weight: 650; }
+    li.correct::marker { color: var(--accent); }
+    .explanation { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); }
+    .references { margin: 12px 0 0; color: #91bda9; font-size: .86rem; }
+    .new-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .empty { padding: 32px; border: 1px dashed var(--line); border-radius: 14px; color: var(--muted); text-align: center; }
+    [hidden] { display: none !important; }
+
+    @media (max-width: 800px) {
+      main { width: min(100% - 22px, 680px); padding-top: 28px; }
+      input { order: 3; width: 100%; margin-left: 0; }
+      .comparison, .new-list { grid-template-columns: 1fr; }
+      .pair-title { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Küsimustike võrdlus</h1>
+    <p class="lede">Vasakul on veebilehe praegune küsimus ja paremal sama teema uus, iseseisvalt kirjutatud versioon. Rohelised vastusevariandid on õiged.</p>
+    <p class="notice">Tööversioon: aktiivset veebitesti ei ole muudetud. Relvaseaduse uus redaktsioon jõustub 30.09.2026, seega tuleb küsimused enne seda kuupäeva uuesti kontrollida.</p>
+
+    <div class="toolbar" role="tablist" aria-label="Küsimustike valik">
+      <button id="comparison-tab" type="button" role="tab" aria-selected="true">Vana ↔ ümber kirjutatud</button>
+      <button id="new-tab" type="button" role="tab" aria-selected="false">Täiesti uued</button>
+      <input id="search" type="search" placeholder="Otsi küsimust või teemat…" aria-label="Otsi küsimusi">
+    </div>
+
+    <p id="count" class="count" aria-live="polite"></p>
+    <section id="comparison-view"></section>
+    <section id="new-view" hidden></section>
+  </main>
+
+  <script>
+    const state = { tab: 'comparison', query: '', original: [], rewritten: [], additions: [] };
+    const comparisonTab = document.querySelector('#comparison-tab');
+    const newTab = document.querySelector('#new-tab');
+    const search = document.querySelector('#search');
+    const count = document.querySelector('#count');
+    const comparisonView = document.querySelector('#comparison-view');
+    const newView = document.querySelector('#new-view');
+
+    function element(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    function searchable(question) {
+      return [question.topic, question.text, ...(question.options || []), question.explanation, ...(question.references || [])]
+        .filter(Boolean)
+        .join(' ')
+        .toLocaleLowerCase('et');
+    }
+
+    function card(question, label, variant = '') {
+      const article = element('article', `card ${variant}`.trim());
+      article.append(element('span', 'card-label', label));
+      article.append(element('p', 'question', question.text));
+      const options = element('ol');
+      options.type = 'A';
+      question.options.forEach((option, index) => {
+        options.append(element('li', question.correct.includes(index) ? 'correct' : '', option));
+      });
+      article.append(options);
+      if (question.explanation) article.append(element('p', 'explanation', question.explanation));
+      if (question.references?.length) article.append(element('p', 'references', question.references.join(' · ')));
+      return article;
+    }
+
+    function renderComparison() {
+      comparisonView.replaceChildren();
+      const sourceById = new Map(state.original.map((question) => [question.id, question]));
+      const matches = state.rewritten
+        .slice()
+        .sort((left, right) => left.legacyId - right.legacyId)
+        .filter((question) => {
+          const source = sourceById.get(question.legacyId);
+          return !state.query || searchable(question).includes(state.query) || (source && searchable(source).includes(state.query));
+        });
+
+      for (const question of matches) {
+        const source = sourceById.get(question.legacyId);
+        const pair = element('div', 'comparison');
+        const heading = element('h2', 'pair-title');
+        heading.append(element('span', 'badge', `Algne ID ${question.legacyId}`));
+        heading.append(document.createTextNode(question.topic || ''));
+        pair.append(heading, card(source, 'Praegune'), card(question, 'Uus versioon', 'rewritten'));
+        comparisonView.append(pair);
+      }
+      if (!matches.length) comparisonView.append(element('p', 'empty', 'Selle otsinguga küsimusi ei leitud.'));
+      count.textContent = `${matches.length} võrdluspaari`;
+    }
+
+    function renderNew() {
+      newView.replaceChildren();
+      const matches = state.additions.filter((question) => !state.query || searchable(question).includes(state.query));
+      const list = element('div', 'new-list');
+      for (const question of matches) list.append(card(question, `Uus · ${question.topic}`, 'rewritten'));
+      newView.append(list);
+      if (!matches.length) newView.append(element('p', 'empty', 'Selle otsinguga küsimusi ei leitud.'));
+      count.textContent = `${matches.length} uut küsimust`;
+    }
+
+    function render() {
+      const showComparison = state.tab === 'comparison';
+      comparisonTab.setAttribute('aria-selected', String(showComparison));
+      newTab.setAttribute('aria-selected', String(!showComparison));
+      comparisonView.hidden = !showComparison;
+      newView.hidden = showComparison;
+      if (showComparison) renderComparison(); else renderNew();
+    }
+
+    comparisonTab.addEventListener('click', () => { state.tab = 'comparison'; render(); });
+    newTab.addEventListener('click', () => { state.tab = 'new'; render(); });
+    search.addEventListener('input', (event) => { state.query = event.target.value.trim().toLocaleLowerCase('et'); render(); });
+
+    Promise.all([
+      fetch('../questions.json').then((response) => response.json()),
+      fetch('./current-rewritten.json').then((response) => response.json()),
+      fetch('./new-original.json').then((response) => response.json())
+    ]).then(([original, rewritten, additions]) => {
+      state.original = original.questions;
+      state.rewritten = rewritten.questions;
+      state.additions = additions.questions;
+      render();
+    }).catch((error) => {
+      count.textContent = `Andmete laadimine ebaõnnestus: ${error.message}`;
+    });
+  </script>
+</body>
+</html>
