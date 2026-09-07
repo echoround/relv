@@ -163,6 +163,17 @@ async function ensureDb() {
       `;
 
       await sql`
+        CREATE TABLE IF NOT EXISTS google_accounts (
+          google_sub TEXT PRIMARY KEY,
+          email TEXT NOT NULL,
+          display_name TEXT NOT NULL,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          last_login_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          login_count INTEGER NOT NULL DEFAULT 1
+        )
+      `;
+
+      await sql`
         CREATE TABLE IF NOT EXISTS quiz_answer_events (
           id TEXT PRIMARY KEY,
           google_sub TEXT NOT NULL,
@@ -225,8 +236,55 @@ async function ensureDb() {
       await sql`CREATE UNIQUE INDEX IF NOT EXISTS forum_notify_comment_subject_unique ON forum_notification_subscriptions (comment_id, google_sub) WHERE comment_id IS NOT NULL`;
       await sql`CREATE INDEX IF NOT EXISTS mailing_list_ip_hash_idx ON mailing_list_subscribers (ip_hash, created_at DESC)`;
       await sql`CREATE INDEX IF NOT EXISTS account_preferences_email_idx ON account_preferences (email)`;
+      await sql`CREATE INDEX IF NOT EXISTS google_accounts_created_idx ON google_accounts (created_at DESC)`;
+      await sql`CREATE INDEX IF NOT EXISTS google_accounts_last_login_idx ON google_accounts (last_login_at DESC)`;
       await sql`CREATE INDEX IF NOT EXISTS quiz_answer_events_subject_created_idx ON quiz_answer_events (google_sub, created_at DESC)`;
       await sql`CREATE INDEX IF NOT EXISTS quiz_question_progress_subject_updated_idx ON quiz_question_progress (google_sub, updated_at DESC)`;
+
+      await sql`
+        INSERT INTO google_accounts (
+          google_sub,
+          email,
+          display_name,
+          created_at,
+          last_login_at,
+          login_count
+        )
+        SELECT
+          google_sub,
+          COALESCE(MAX(NULLIF(email, '')), ''),
+          COALESCE(MAX(NULLIF(display_name, '')), 'Google user'),
+          MIN(first_seen_at),
+          MAX(last_seen_at),
+          1
+        FROM (
+          SELECT google_sub, email, '' AS display_name, created_at AS first_seen_at, updated_at AS last_seen_at
+          FROM account_preferences
+          UNION ALL
+          SELECT google_sub, email, display_name, created_at, updated_at
+          FROM quiz_user_stats
+          UNION ALL
+          SELECT google_sub, email, display_name, created_at, updated_at
+          FROM quiz_question_progress
+          UNION ALL
+          SELECT google_sub, email, display_name, created_at, created_at
+          FROM quiz_answer_events
+          UNION ALL
+          SELECT google_sub, email, display_name, created_at, updated_at
+          FROM forum_notification_subscriptions
+          UNION ALL
+          SELECT author_subject, author_email, display_name, created_at, updated_at
+          FROM forum_threads
+          WHERE author_provider = 'google'
+          UNION ALL
+          SELECT author_subject, author_email, display_name, created_at, updated_at
+          FROM forum_comments
+          WHERE author_provider = 'google'
+        ) AS historical_accounts
+        WHERE COALESCE(google_sub, '') <> ''
+        GROUP BY google_sub
+        ON CONFLICT (google_sub) DO NOTHING
+      `;
     })();
   }
 
@@ -413,6 +471,68 @@ async function upsertAccountPreferences({ googleSub, email, avatarId = '' }) {
   `;
 
   return rows[0] || { avatarId: '' };
+}
+
+async function recordGoogleAccountLogin({ googleSub, email, displayName }) {
+  await ensureDb();
+
+  if (!googleSub || !email) {
+    throw new Error('Google account identity is incomplete.');
+  }
+
+  const safeGoogleSub = String(googleSub).trim().slice(0, 255);
+  const safeEmail = String(email).trim().toLowerCase().slice(0, 254);
+  const safeDisplayName = String(displayName || 'Google user').trim().slice(0, 120) || 'Google user';
+
+  const rows = await sql`
+    INSERT INTO google_accounts (
+      google_sub,
+      email,
+      display_name
+    )
+    VALUES (
+      ${safeGoogleSub},
+      ${safeEmail},
+      ${safeDisplayName}
+    )
+    ON CONFLICT (google_sub)
+    DO UPDATE SET
+      email = EXCLUDED.email,
+      display_name = EXCLUDED.display_name,
+      last_login_at = NOW(),
+      login_count = google_accounts.login_count + 1
+    RETURNING google_sub
+  `;
+
+  return Boolean(rows[0]?.google_sub);
+}
+
+async function getGoogleAccountStats() {
+  await ensureDb();
+
+  const rows = await sql`
+    SELECT
+      COUNT(*)::INT AS "totalAccounts",
+      COUNT(*) FILTER (WHERE created_at >= CURRENT_DATE)::INT AS "newAccountsToday",
+      COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '7 days')::INT AS "newAccounts7Days",
+      COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '30 days')::INT AS "newAccounts30Days",
+      COUNT(*) FILTER (WHERE last_login_at >= NOW() - INTERVAL '7 days')::INT AS "activeAccounts7Days",
+      COUNT(*) FILTER (WHERE last_login_at >= NOW() - INTERVAL '30 days')::INT AS "activeAccounts30Days",
+      COUNT(*) FILTER (WHERE login_count > 1)::INT AS "returningAccounts",
+      COALESCE(SUM(login_count), 0)::INT AS "successfulLogins"
+    FROM google_accounts
+  `;
+
+  return rows[0] || {
+    totalAccounts: 0,
+    newAccountsToday: 0,
+    newAccounts7Days: 0,
+    newAccounts30Days: 0,
+    activeAccounts7Days: 0,
+    activeAccounts30Days: 0,
+    returningAccounts: 0,
+    successfulLogins: 0
+  };
 }
 
 async function upsertForumNotificationSubscription({
@@ -1095,8 +1215,10 @@ module.exports = {
   getSubscriberByEmail,
   removeSubscriberByEmail,
   getAccountPreferences,
+  getGoogleAccountStats,
   getQuizUserStats,
   getAccountSnapshot,
+  recordGoogleAccountLogin,
   recordQuizAnswerProgress,
   upsertAccountPreferences,
   countRecentThreadsByIp,

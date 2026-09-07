@@ -12,6 +12,7 @@ Expected environment variables:
 - `ABUSE_SALT`
 - `FORUM_AUTH_SECRET`
 - `GOOGLE_CLIENT_ID`
+- `ADMIN_STATS_SECRET`
 - `RESEND_API_KEY`
 - `NOTIFICATION_FROM_EMAIL`
 - `SITE_URL`
@@ -20,3 +21,11 @@ Expected environment variables:
 Example `ALLOWED_ORIGINS`:
 
 `https://relvaload.ee,http://localhost:3000,http://127.0.0.1:5500`
+
+Google account totals are recorded in `google_accounts` whenever a Google credential is successfully verified. Historical authenticated activity is backfilled the first time the schema initializes.
+
+Aggregate account statistics are available from `GET /api/admin/accounts/stats` with the admin secret:
+
+```sh
+curl -H "Authorization: Bearer $ADMIN_STATS_SECRET" https://relv-backend.vercel.app/api/admin/accounts/stats
+```

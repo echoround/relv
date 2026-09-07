@@ -1,6 +1,6 @@
 const { maybeHandleOptions, methodNotAllowed, readJsonBody, sendJson } = require('../../../lib/http');
 const { createForumSession, verifyGoogleCredential } = require('../../../lib/forumAuth');
-const { getAccountSnapshot } = require('../../../lib/db');
+const { getAccountSnapshot, recordGoogleAccountLogin } = require('../../../lib/db');
 
 module.exports = async function handler(req, res) {
   if (maybeHandleOptions(req, res)) return;
@@ -13,6 +13,11 @@ module.exports = async function handler(req, res) {
     const body = await readJsonBody(req);
     const user = await verifyGoogleCredential(body.credential);
     const session = createForumSession(user);
+    await recordGoogleAccountLogin({
+      googleSub: session.user.sub,
+      email: session.user.email,
+      displayName: session.user.name
+    });
     const account = await getAccountSnapshot({
       googleSub: session.user.sub,
       email: session.user.email

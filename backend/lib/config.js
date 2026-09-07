@@ -24,5 +24,6 @@ module.exports = {
   resendApiKey: process.env.RESEND_API_KEY || '',
   notificationFromEmail: process.env.NOTIFICATION_FROM_EMAIL || '',
   siteUrl: process.env.SITE_URL || 'https://relvaload.ee',
-  publicApiBaseUrl: process.env.PUBLIC_API_BASE_URL || 'https://relv-backend.vercel.app/api'
+  publicApiBaseUrl: process.env.PUBLIC_API_BASE_URL || 'https://relv-backend.vercel.app/api',
+  adminStatsSecret: process.env.ADMIN_STATS_SECRET || ''
 };
