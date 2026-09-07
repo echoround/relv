@@ -2,11 +2,10 @@
   "metadata": {
     "name": "Uued originaalküsimused",
     "language": "et",
-    "status": "review",
-    "reviewedAt": "2026-09-07",
-    "nextReviewBy": "2026-09-29",
+    "status": "rejected-draft",
+    "reviewedAt": "2026-09-08",
     "questionCount": 30,
-    "notes": "Iseseisvalt koostatud lisaküsimused, mis keskenduvad eksamikorrale, taotlemisele, ohutule hoidmisele ja esmaabile. Need ei pärine PPA ametlikust eksamipangast.",
+    "notes": "Tagasilükatud tööversioon. Seda 30 küsimuse komplekti ei laadita aktiivsesse testi, ülevaatelehele ega avaldamiseks mõeldud küsimustikku.",
     "sources": {
       "RelvS": "https://www.riigiteataja.ee/akt/112122024004",
       "Eksam": "https://www.riigiteataja.ee/akt/124032023006",

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Küsimustike võrdlus | Relv</title>
+  <title>Aktiivse küsimustiku ülevaade | Relvaload</title>
   <style>
     :root {
       color-scheme: dark;
@@ -27,10 +27,10 @@
       font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    main { width: min(1320px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 80px; }
+    main { width: min(1080px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 80px; }
     h1 { margin: 0 0 8px; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; }
-    h2, h3, p { margin-top: 0; }
-    .lede { max-width: 780px; color: var(--muted); }
+    p { margin-top: 0; }
+    .lede { max-width: 800px; color: var(--muted); }
     .notice {
       margin: 28px 0;
       padding: 14px 16px;
@@ -45,95 +45,94 @@
       top: 0;
       z-index: 10;
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      align-items: center;
+      gap: 14px;
       margin: 0 -8px 28px;
       padding: 12px 8px;
       background: color-mix(in srgb, var(--bg) 92%, transparent);
       backdrop-filter: blur(12px);
     }
 
-    button, input {
+    input {
+      width: min(480px, 100%);
+      margin-left: auto;
+      padding: 10px 12px;
       border: 1px solid var(--line);
       border-radius: 10px;
       background: var(--panel);
       color: var(--text);
       font: inherit;
     }
-    button { padding: 9px 13px; cursor: pointer; }
-    button[aria-selected="true"] { border-color: var(--accent); background: var(--accent-soft); }
-    input { min-width: min(330px, 100%); padding: 9px 12px; margin-left: auto; }
 
-    .count { color: var(--muted); margin-bottom: 18px; }
-    .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 26px; }
-    .pair-title { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; margin: 12px 0 -4px; }
+    .count { color: var(--muted); white-space: nowrap; }
+    .question-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
     .card {
       min-width: 0;
       padding: 20px;
-      border: 1px solid var(--line);
+      border: 1px solid #2d5a49;
       border-radius: 16px;
       background: color-mix(in srgb, var(--panel) 94%, transparent);
       box-shadow: 0 10px 30px rgb(0 0 0 / 16%);
     }
-    .card.rewritten { border-color: #2d5a49; }
-    .card-label, .badge {
+    .meta { display: flex; flex-wrap: wrap; gap: 7px; }
+    .badge {
       display: inline-flex;
       align-items: center;
       min-height: 24px;
       padding: 2px 8px;
       border-radius: 999px;
-      background: #1e2a3b;
-      color: var(--muted);
-      font-size: .78rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: .76rem;
       font-weight: 700;
       letter-spacing: .03em;
       text-transform: uppercase;
     }
-    .rewritten .card-label, .badge.new { background: var(--accent-soft); color: var(--accent); }
+    .badge.secondary { background: #1e2a3b; color: var(--muted); }
     .question { margin: 12px 0 14px; font-size: 1.08rem; font-weight: 700; }
     ol { margin: 0; padding-left: 28px; }
     li { margin: 7px 0; color: #c7d1df; }
     li.correct { color: var(--accent); font-weight: 650; }
     li.correct::marker { color: var(--accent); }
     .explanation { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); }
-    .references { margin: 12px 0 0; color: #91bda9; font-size: .86rem; }
-    .new-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .references { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 13px; font-size: .86rem; }
+    .references a { color: #91d2b4; text-decoration-thickness: 1px; text-underline-offset: 3px; }
     .empty { padding: 32px; border: 1px dashed var(--line); border-radius: 14px; color: var(--muted); text-align: center; }
-    [hidden] { display: none !important; }
 
-    @media (max-width: 800px) {
+    @media (max-width: 760px) {
       main { width: min(100% - 22px, 680px); padding-top: 28px; }
-      input { order: 3; width: 100%; margin-left: 0; }
-      .comparison, .new-list { grid-template-columns: 1fr; }
-      .pair-title { grid-column: auto; }
+      .toolbar { align-items: stretch; flex-direction: column; }
+      input { width: 100%; margin-left: 0; }
+      .question-list { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <main>
-    <h1>Küsimustike võrdlus</h1>
-    <p class="lede">Vasakul on veebilehe praegune küsimus ja paremal sama teema uus, iseseisvalt kirjutatud versioon. Rohelised vastusevariandid on õiged.</p>
-    <p class="notice">Tööversioon: aktiivset veebitesti ei ole muudetud. Relvaseaduse uus redaktsioon jõustub 30.09.2026, seega tuleb küsimused enne seda kuupäeva uuesti kontrollida.</p>
+    <h1>Aktiivse küsimustiku ülevaade</h1>
+    <p class="lede">Siin on kõik 71 aktiivset, iseseisvalt sõnastatud küsimust koos selgituste ja kontrollitud sätteviidetega. Roheline tähendab selles versioonis õigeks märgitud vastust.</p>
+    <p class="notice">Eraldi koostatud 30 lisaküsimuse tööversioon on tagasi lükatud ning seda ei laadita testi ega sellele lehele.</p>
 
-    <div class="toolbar" role="tablist" aria-label="Küsimustike valik">
-      <button id="comparison-tab" type="button" role="tab" aria-selected="true">Vana ↔ ümber kirjutatud</button>
-      <button id="new-tab" type="button" role="tab" aria-selected="false">Täiesti uued</button>
-      <input id="search" type="search" placeholder="Otsi küsimust või teemat…" aria-label="Otsi küsimusi">
+    <div class="toolbar">
+      <span id="count" class="count" aria-live="polite"></span>
+      <input id="search" type="search" placeholder="Otsi ID, teema või teksti järgi…" aria-label="Otsi küsimusi">
     </div>
 
-    <p id="count" class="count" aria-live="polite"></p>
-    <section id="comparison-view"></section>
-    <section id="new-view" hidden></section>
+    <section id="question-list" class="question-list"></section>
   </main>
 
   <script>
-    const state = { tab: 'comparison', query: '', original: [], rewritten: [], additions: [] };
-    const comparisonTab = document.querySelector('#comparison-tab');
-    const newTab = document.querySelector('#new-tab');
+    const sourceRoots = {
+      RelvS: 'https://www.riigiteataja.ee/akt/112122024004',
+      Eksam: 'https://www.riigiteataja.ee/akt/124032023006',
+      Hoidmine: 'https://www.riigiteataja.ee/akt/120052020027',
+      KarS: 'https://www.riigiteataja.ee/akt/122122025002'
+    };
+
+    const state = { query: '', questions: [] };
     const search = document.querySelector('#search');
     const count = document.querySelector('#count');
-    const comparisonView = document.querySelector('#comparison-view');
-    const newView = document.querySelector('#new-view');
+    const questionList = document.querySelector('#question-list');
 
     function element(tag, className, text) {
       const node = document.createElement(tag);
@@ -143,86 +142,78 @@
     }
 
     function searchable(question) {
-      return [question.topic, question.text, ...(question.options || []), question.explanation, ...(question.references || [])]
-        .filter(Boolean)
+      return [question.id, question.legacyId, question.topic, question.text, ...(question.options || []), question.explanation, ...(question.references || [])]
+        .filter((value) => value !== undefined && value !== null)
         .join(' ')
         .toLocaleLowerCase('et');
     }
 
-    function card(question, label, variant = '') {
-      const article = element('article', `card ${variant}`.trim());
-      article.append(element('span', 'card-label', label));
-      article.append(element('p', 'question', question.text));
+    function referenceUrl(reference) {
+      const source = Object.keys(sourceRoots).find((key) => reference.startsWith(key));
+      if (!source) return null;
+      const provision = reference.match(/§\s*(\d+)(?:\^(\d+))?/);
+      const anchor = provision ? `#para${provision[1]}${provision[2] ? `b${provision[2]}` : ''}` : '';
+      return `${sourceRoots[source]}${anchor}`;
+    }
+
+    function card(question) {
+      const article = element('article', 'card');
+      const meta = element('div', 'meta');
+      meta.append(
+        element('span', 'badge', `${question.id} · küsimus ${question.legacyId}`),
+        element('span', 'badge secondary', question.multiple ? 'Vali kõik õiged vastused' : 'Vali üks vastus')
+      );
+      article.append(meta, element('p', 'question', question.text));
+
       const options = element('ol');
       options.type = 'A';
       question.options.forEach((option, index) => {
         options.append(element('li', question.correct.includes(index) ? 'correct' : '', option));
       });
-      article.append(options);
-      if (question.explanation) article.append(element('p', 'explanation', question.explanation));
-      if (question.references?.length) article.append(element('p', 'references', question.references.join(' · ')));
+      article.append(options, element('p', 'explanation', question.explanation));
+
+      const references = element('div', 'references');
+      for (const reference of question.references) {
+        const url = referenceUrl(reference);
+        if (url) {
+          const link = element('a', '', reference);
+          link.href = url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          references.append(link);
+        } else {
+          references.append(element('span', '', reference));
+        }
+      }
+      article.append(references);
       return article;
     }
 
-    function renderComparison() {
-      comparisonView.replaceChildren();
-      const sourceById = new Map(state.original.map((question) => [question.id, question]));
-      const matches = state.rewritten
-        .slice()
-        .sort((left, right) => left.legacyId - right.legacyId)
-        .filter((question) => {
-          const source = sourceById.get(question.legacyId);
-          return !state.query || searchable(question).includes(state.query) || (source && searchable(source).includes(state.query));
-        });
-
-      for (const question of matches) {
-        const source = sourceById.get(question.legacyId);
-        const pair = element('div', 'comparison');
-        const heading = element('h2', 'pair-title');
-        heading.append(element('span', 'badge', `Algne ID ${question.legacyId}`));
-        heading.append(document.createTextNode(question.topic || ''));
-        pair.append(heading, card(source, 'Praegune'), card(question, 'Uus versioon', 'rewritten'));
-        comparisonView.append(pair);
-      }
-      if (!matches.length) comparisonView.append(element('p', 'empty', 'Selle otsinguga küsimusi ei leitud.'));
-      count.textContent = `${matches.length} võrdluspaari`;
-    }
-
-    function renderNew() {
-      newView.replaceChildren();
-      const matches = state.additions.filter((question) => !state.query || searchable(question).includes(state.query));
-      const list = element('div', 'new-list');
-      for (const question of matches) list.append(card(question, `Uus · ${question.topic}`, 'rewritten'));
-      newView.append(list);
-      if (!matches.length) newView.append(element('p', 'empty', 'Selle otsinguga küsimusi ei leitud.'));
-      count.textContent = `${matches.length} uut küsimust`;
-    }
-
     function render() {
-      const showComparison = state.tab === 'comparison';
-      comparisonTab.setAttribute('aria-selected', String(showComparison));
-      newTab.setAttribute('aria-selected', String(!showComparison));
-      comparisonView.hidden = !showComparison;
-      newView.hidden = showComparison;
-      if (showComparison) renderComparison(); else renderNew();
+      questionList.replaceChildren();
+      const matches = state.questions.filter((question) => !state.query || searchable(question).includes(state.query));
+      for (const question of matches) questionList.append(card(question));
+      if (!matches.length) questionList.append(element('p', 'empty', 'Selle otsinguga küsimusi ei leitud.'));
+      count.textContent = `${matches.length} / ${state.questions.length} küsimust`;
     }
 
-    comparisonTab.addEventListener('click', () => { state.tab = 'comparison'; render(); });
-    newTab.addEventListener('click', () => { state.tab = 'new'; render(); });
-    search.addEventListener('input', (event) => { state.query = event.target.value.trim().toLocaleLowerCase('et'); render(); });
-
-    Promise.all([
-      fetch('../questions.json').then((response) => response.json()),
-      fetch('./current-rewritten.json').then((response) => response.json()),
-      fetch('./new-original.json').then((response) => response.json())
-    ]).then(([original, rewritten, additions]) => {
-      state.original = original.questions;
-      state.rewritten = rewritten.questions;
-      state.additions = additions.questions;
+    search.addEventListener('input', (event) => {
+      state.query = event.target.value.trim().toLocaleLowerCase('et');
       render();
-    }).catch((error) => {
-      count.textContent = `Andmete laadimine ebaõnnestus: ${error.message}`;
     });
+
+    fetch('./current-rewritten.json')
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then((document) => {
+        state.questions = document.questions;
+        render();
+      })
+      .catch((error) => {
+        count.textContent = `Andmete laadimine ebaõnnestus: ${error.message}`;
+      });
   </script>
 </body>
 </html>

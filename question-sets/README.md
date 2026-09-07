@@ -1,39 +1,33 @@
-# Relvaeksami küsimustike tööversioonid
+# Relvaeksami küsimustiku lähtefailid
 
-Selles kaustas olevad küsimustikud on enne avaldamist ülevaatamiseks. Veebilehe aktiivne küsimustik jääb praegu muutmata ja asub failis [`../questions.json`](../questions.json).
+Veebilehe aktiivne test kasutab 71 iseseisvalt sõnastatud küsimust. Nende allikaviidetega lähtefail on [`current-rewritten.json`](current-rewritten.json) ja mugav ülevaade asub lehel [`compare.html`](compare.html).
 
-Kõige mugavam on komplekte vaadata lehel [`compare.html`](compare.html), kus algne ja asendusküsimus on kõrvuti ning täiesti uued küsimused eraldi vahekaardil.
+Brauser laadib sama komplekti failist [`../questions.min.json`](../questions.min.json). Selgitused asuvad ka eraldi failis [`../explanations.min.json`](../explanations.min.json), et neid saaks laadida alles pärast vastamist. Mõlemad käitusfailid luuakse lähtefaili küsimustest ning valideerija kontrollib, et nende sisu ei läheks lahku.
 
-## Komplektid
+## Komplektide olek
 
-| Komplekt | Fail | Eesmärk |
+| Komplekt | Fail | Olek |
 | --- | --- | --- |
-| Praegused algküsimused | [`../questions.json`](../questions.json) | Muutmata võrdlusmaterjal. Need on küsimused, mida veebileht praegu kasutab. |
-| Iseseisvalt ümber kirjutatud asendus | [`current-rewritten.json`](current-rewritten.json) | 71 uut küsimust, millest igaüks on seotud vana küsimusega välja `legacyId` kaudu. Vastused ja selgitused on kontrollitud kehtivate allikate järgi. |
-| Täiesti uued küsimused | [`new-original.json`](new-original.json) | Eraldi lisakomplekt teemadest, mis vanas pangas puuduvad või on liiga nõrgalt kaetud. |
+| Aktiivne 71 küsimuse komplekt | [`current-rewritten.json`](current-rewritten.json) | Kasutusel. Küsimused, vastused, selgitused ja viited on 8. septembril 2026 kehtinud ametlike allikate järgi üle vaadatud. |
+| Eraldi 30 küsimuse tööversioon | `new-original.json` | Tagasi lükatud. Seda ei laadita testi ega ülevaatelehele. |
 
-`legacyId` võimaldab võrrelda asendusküsimust algküsimusega, ilma et kopeeritud algteksti teist korda repositooriumisse lisataks. Mõne vana küsimuse õige vastus oli aegunud või ekslik; sellisel juhul säilitab asendusküsimus teema, mitte vana vale vastuse.
+Varasem küsimustik ei ole enam veebilehel aktiivne. See säilib vajaduse korral Git-ajaloos, kuid seda ei käsitleta vastuste ega õiguse allikana.
 
 ## Allikad ja kehtivus
 
-Küsimused on üle vaadatud 7. septembril 2026 järgmiste ametlike allikate järgi:
-
-- [Relvaseaduse kontrollimisel kasutatud kehtiv redaktsioon](https://www.riigiteataja.ee/akt/112122024004)
+- [Relvaseadus](https://www.riigiteataja.ee/akt/112122024004)
 - [Relvaeksami nõuded ja läbiviimise kord](https://www.riigiteataja.ee/akt/124032023006)
 - [Nõuded relvahoidlale, relvakapile ning püssirohu ja sütiku hoidmisele](https://www.riigiteataja.ee/akt/120052020027)
-- [Karistusseadustiku kontrollimisel kasutatud kehtiv redaktsioon](https://www.riigiteataja.ee/akt/122122025002)
-- [Terviseameti esmaabijuhised](https://www.terviseamet.ee/tervishoiukorraldus/esmaabi)
-- [European Resuscitation Council Guidelines 2025: First Aid](https://www.erc.edu/media/i2vllpae/gl2025-12-faid-e.pdf)
-- [Häirekeskuse 112 juhend](https://www.112.ee/et/juhend/hadaabinumber-112)
+- [Karistusseadustik](https://www.riigiteataja.ee/akt/122122025002)
 
-Relvaseaduse järgmine redaktsioon jõustub 30. septembril 2026. Seetõttu tuleb mõlemad uued komplektid hiljemalt 29. septembril 2026 uuesti üle kontrollida. Küsimused ei ole Politsei- ja Piirivalveameti ametlik eksamipank ega asenda praktilist relva- või esmaabikoolitust.
+Relvaseaduse järgmine redaktsioon jõustub 1. oktoobril 2026. Selles muutub nende küsimuste seisukohalt ebaoluline sõjalise riigikaitse valdkonna ministri nimetus; kontrollitud tsiviilrelvade reeglid ei muutu. Küsimustik ei ole Politsei- ja Piirivalveameti ametlik eksamipank ega asenda praktilist relva- või esmaabikoolitust.
 
-## Vorming
+## Vorming ja kontroll
 
+- `legacyId` säilitab varasema küsimuse numbri ning sellest saab aktiivse küsimuse numbriline `id`.
 - `correct` sisaldab õigete vastusevariantide nullist algavaid järjekorranumbreid.
 - `multiple` on `true`, kui õigeid vastuseid on mitu.
-- `references` viitab küsimuse koostamisel kasutatud sätetele või juhistele.
-- `status: review` tähendab, et komplekti ei laadita veel veebilehe aktiivsesse testi.
+- `references` näitab küsimuse koostamisel kontrollitud sätteid.
 
 Kontrollimiseks käivita repositooriumi juurkaustas:
 

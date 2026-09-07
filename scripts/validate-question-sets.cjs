@@ -2,18 +2,26 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
-const originalPath = path.join(root, 'questions.json');
-const rewrittenPath = path.join(root, 'question-sets', 'current-rewritten.json');
-const newPath = path.join(root, 'question-sets', 'new-original.json');
+const paths = {
+  active: path.join(root, 'questions.json'),
+  activeMin: path.join(root, 'questions.min.json'),
+  explanations: path.join(root, 'explanations.json'),
+  explanationsMin: path.join(root, 'explanations.min.json'),
+  canonical: path.join(root, 'question-sets', 'current-rewritten.json'),
+  rejected: path.join(root, 'question-sets', 'new-original.json')
+};
 
 const readJson = (filePath) => JSON.parse(fs.readFileSync(filePath, 'utf8'));
-const original = readJson(originalPath).questions;
-const rewritten = readJson(rewrittenPath);
-const additions = readJson(newPath);
+const active = readJson(paths.active);
+const activeMin = readJson(paths.activeMin);
+const explanations = readJson(paths.explanations);
+const explanationsMin = readJson(paths.explanationsMin);
+const canonical = readJson(paths.canonical);
+const rejected = readJson(paths.rejected);
 const errors = [];
 
 function normalized(value) {
-  return value
+  return String(value ?? '')
     .toLocaleLowerCase('et')
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -21,38 +29,21 @@ function normalized(value) {
     .trim();
 }
 
-function wordSet(value) {
-  return new Set(normalized(value).split(' ').filter((word) => word.length > 2));
-}
-
-function jaccard(left, right) {
-  const a = wordSet(left);
-  const b = wordSet(right);
-  const intersection = [...a].filter((word) => b.has(word)).length;
-  const union = new Set([...a, ...b]).size;
-  return union ? intersection / union : 0;
-}
-
-function validateSet(document, label) {
-  if (document.metadata?.status !== 'review') {
-    errors.push(`${label}: metadata.status peab olema "review".`);
-  }
-  if (!Array.isArray(document.questions) || document.questions.length === 0) {
+function validateQuestions(questions, label, { requireReferences = false } = {}) {
+  if (!Array.isArray(questions) || questions.length === 0) {
     errors.push(`${label}: questions peab olema mittetühi massiiv.`);
     return;
-  }
-  if (document.metadata?.questionCount !== document.questions.length) {
-    errors.push(`${label}: metadata.questionCount ei vasta küsimuste tegelikule arvule.`);
   }
 
   const ids = new Set();
   const texts = new Set();
-  for (const [index, question] of document.questions.entries()) {
+  for (const [index, question] of questions.entries()) {
     const location = `${label}[${index}]`;
-    if (!question.id || ids.has(question.id)) errors.push(`${location}: puuduv või korduv id.`);
-    ids.add(question.id);
+    const id = String(question.id ?? '');
+    if (!id || ids.has(id)) errors.push(`${location}: puuduv või korduv id.`);
+    ids.add(id);
 
-    const questionText = normalized(question.text || '');
+    const questionText = normalized(question.text);
     if (!questionText || texts.has(questionText)) errors.push(`${location}: puuduv või korduv küsimusetekst.`);
     texts.add(questionText);
 
@@ -72,44 +63,69 @@ function validateSet(document, label) {
       errors.push(`${location}: multiple ei vasta õigete vastuste arvule.`);
     }
     if (!question.explanation?.trim()) errors.push(`${location}: selgitus puudub.`);
-    if (!Array.isArray(question.references) || question.references.length === 0) {
+    if (requireReferences && (!Array.isArray(question.references) || question.references.length === 0)) {
       errors.push(`${location}: allikaviide puudub.`);
     }
   }
 }
 
-validateSet(rewritten, 'rewritten');
-validateSet(additions, 'new');
-
-const originalIds = original.map((question) => question.id).sort((a, b) => a - b);
-const rewrittenLegacyIds = rewritten.questions.map((question) => question.legacyId).sort((a, b) => a - b);
-if (rewritten.questions.length !== original.length) {
-  errors.push(`rewritten: oodati ${original.length} küsimust, leiti ${rewritten.questions.length}.`);
+if (canonical.metadata?.status !== 'active') {
+  errors.push('canonical: metadata.status peab olema "active".');
 }
-if (JSON.stringify(originalIds) !== JSON.stringify(rewrittenLegacyIds)) {
-  errors.push('rewritten: legacyId väärtused ei kattu täpselt algküsimuste id-dega.');
+if (canonical.metadata?.questionCount !== canonical.questions?.length) {
+  errors.push('canonical: metadata.questionCount ei vasta küsimuste tegelikule arvule.');
+}
+if (rejected.metadata?.status !== 'rejected-draft') {
+  errors.push('rejected: metadata.status peab olema "rejected-draft".');
+}
+if (rejected.metadata?.questionCount !== rejected.questions?.length) {
+  errors.push('rejected: metadata.questionCount ei vasta küsimuste tegelikule arvule.');
 }
 
-const originalById = new Map(original.map((question) => [question.id, question]));
-for (const question of rewritten.questions) {
-  const source = originalById.get(question.legacyId);
-  if (source && normalized(source.text) === normalized(question.text)) {
-    errors.push(`rewritten ${question.id}: tekst on algküsimusega identne.`);
-  }
-  if (source && jaccard(source.text, question.text) > 0.78) {
-    errors.push(`rewritten ${question.id}: tekst on algküsimusega liiga sarnane.`);
-  }
-  if (source && jaccard(
-    [source.text, ...source.options].join(' '),
-    [question.text, ...question.options].join(' ')
-  ) > 0.65) {
-    errors.push(`rewritten ${question.id}: küsimus ja vastusevariandid on tervikuna algversiooniga liiga sarnased.`);
-  }
+validateQuestions(canonical.questions, 'canonical', { requireReferences: true });
+validateQuestions(rejected.questions, 'rejected', { requireReferences: true });
+validateQuestions(active.questions, 'active');
+
+if (canonical.questions?.length !== 71 || active.questions?.length !== 71) {
+  errors.push('Aktiivses ja kanoonilises komplektis peab olema täpselt 71 küsimust.');
+}
+
+const expectedActive = {
+  questions: canonical.questions.map((question) => ({
+    id: question.legacyId,
+    text: question.text,
+    options: question.options,
+    correct: question.correct,
+    multiple: question.multiple,
+    explanation: question.explanation
+  }))
+};
+const expectedExplanations = {
+  explanations: canonical.questions.map((question) => ({
+    id: question.legacyId,
+    text: question.explanation
+  }))
+};
+
+if (JSON.stringify(active) !== JSON.stringify(expectedActive)) {
+  errors.push('questions.json ei vasta current-rewritten.json aktiivsele teisendusele.');
+}
+if (JSON.stringify(explanations) !== JSON.stringify(expectedExplanations)) {
+  errors.push('explanations.json ei vasta current-rewritten.json selgitustele.');
+}
+if (JSON.stringify(activeMin) !== JSON.stringify(active)) {
+  errors.push('questions.min.json ei ole questions.json-iga semantiliselt identne.');
+}
+if (JSON.stringify(explanationsMin) !== JSON.stringify(explanations)) {
+  errors.push('explanations.min.json ei ole explanations.json-iga semantiliselt identne.');
+}
+if (active.questions?.some((question) => String(question.id).startsWith('new-'))) {
+  errors.push('Tagasilükatud new-* küsimus on sattunud aktiivsesse komplekti.');
 }
 
 if (errors.length) {
   console.error(errors.join('\n'));
   process.exitCode = 1;
 } else {
-  console.log(`OK: ${original.length} algküsimust, ${rewritten.questions.length} asendusküsimust ja ${additions.questions.length} uut küsimust.`);
+  console.log(`OK: ${active.questions.length} aktiivset küsimust; ${rejected.questions.length} lisaküsimust on eraldatud ja tagasi lükatud.`);
 }

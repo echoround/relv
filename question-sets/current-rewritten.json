@@ -2,12 +2,11 @@
   "metadata": {
     "name": "Praeguse küsimustiku iseseisvalt kirjutatud asendus",
     "language": "et",
-    "status": "review",
-    "reviewedAt": "2026-09-07",
-    "nextReviewBy": "2026-09-29",
-    "comparisonSource": "../questions.json",
+    "status": "active",
+    "reviewedAt": "2026-09-08",
+    "activeSource": "../questions.json",
     "questionCount": 71,
-    "notes": "Iga küsimuse legacyId osutab sama teemat käsitlevale algküsimusele. Vana vastust ei säilitatud, kui see ei olnud enam kehtiva õigusega kooskõlas.",
+    "notes": "Iga küsimuse legacyId säilitab varasema küsimuse numbri. Aktiivsesse testi kuuluvad ainult selle faili 71 iseseisvalt sõnastatud ja 8. septembril 2026 üle vaadatud küsimust.",
     "sources": {
       "RelvS": "https://www.riigiteataja.ee/akt/112122024004",
       "Eksam": "https://www.riigiteataja.ee/akt/124032023006",
@@ -139,7 +138,7 @@
         4
       ],
       "multiple": true,
-      "explanation": "Kõik neli tingimust peavad olema täidetud, kui tootja garantii või nõutud standard puudub.",
+      "explanation": "Kõik neli tingimust peavad olema täidetud, kui tootja ei ole kappi valmistanud vähemalt üheksa relva hoidmiseks või kapp ei vasta standardile EN 1143-1 ega EN 14450.",
       "references": [
         "Hoidmine § 8^1 lg 1–2"
       ]
@@ -212,7 +211,7 @@
       "topic": "ohutu käsitsemine",
       "text": "Milliseid põhimõtteid peab eksamil relva käsitsemise algusest lõpuni järgima?",
       "options": [
-        "Sõrm püsib sirgelt päästikukaitsel, kuni on vaja lasta",
+        "Sõrm on sirgelt relvaraamil, väljaspool päästikukaitset, ning liigub päästikule ainult lasu sooritamise ajaks",
         "Kontrollimata relva võib suunata eksamineerija poole, kui salv on eemaldatud",
         "Relva tuleb käsitada laetuna",
         "Relv peab olema suunatud ohutusse suunda ehk märklehe sektorisse"
@@ -223,9 +222,9 @@
         3
       ],
       "multiple": true,
-      "explanation": "Eksamikord nõuab relva käsitamist laetuna, ohutut suunda ja sõrme hoidmist päästikukaitsel kuni lasu sooritamiseni. Nende nõuete rikkumine tähendab katse ebaõnnestumist.",
+      "explanation": "Eksamikord nõuab relva käsitamist laetuna, ohutut suunda ning sõrme hoidmist sirgelt relvaraamil väljaspool päästikukaitset kuni lasu sooritamiseni. Nende nõuete rikkumine tähendab katse ebaõnnestumist.",
       "references": [
-        "Eksam § 7 lg 3–5"
+        "Eksam § 7 lg 3^1 p 1–4 ja lg 4"
       ]
     },
     {
@@ -252,21 +251,20 @@
       "id": "rw-012",
       "legacyId": 12,
       "topic": "paralleelrelvaluba",
-      "text": "Mida on vaja, et teisele füüsilisele isikule saaks anda omaniku relva kasutamiseks paralleelrelvaloa?",
+      "text": "Relvaomanik soovib, et teine füüsiline isik saaks tema relva kasutada paralleelrelvaloa alusel. Milline omaniku nõusolek on loa andmiseks nõutav?",
       "options": [
-        "Relvaomaniku kirjalikku nõusolekut",
-        "Relvaomaniku suulist nõusolekut ainult tunnistaja juuresolekul",
-        "Paralleelrelvaluba saab sama relva kohta anda kuni kahele füüsilisele isikule",
-        "Paralleelrelvaloa saajate arv ei ole piiratud"
+        "Kirjalik nõusolek, milles on konkreetselt nimetatud relva kasutama hakkav isik",
+        "Suuline nõusolek tunnistaja juuresolekul",
+        "Notariaalne relva omandi üleandmine",
+        "Omaniku nõusolekut pole vaja, kui taotlejal on muu relvaluba"
       ],
       "correct": [
-        0,
-        2
+        0
       ],
-      "multiple": true,
-      "explanation": "Relvaomanik peab andma kirjaliku nõusoleku ning sama relva kohta saab paralleelrelvaloa anda ühele või kahele inimesele.",
+      "multiple": false,
+      "explanation": "Paralleelrelvaloa andmiseks peab omanik kirjalikult nõustuma, et tema relva kasutab nõusolekus konkreetselt nimetatud isik. Lubade arvu käsitleb eraldi küsimus.",
       "references": [
-        "RelvS § 34 lg 3–4"
+        "RelvS § 34 lg 4"
       ]
     },
     {
@@ -289,9 +287,9 @@
       "multiple": true,
       "explanation": "Varjatud kujuga või nõuetekohase markeeringuta tulirelv ja õõnsaotsalise kuuliga püstoli- või revolvripadrun on keelatud. Akustiline relv on piiratud käibega ning ajaloolise traditsiooniga külmrelv võib olla piiramata käibega.",
       "references": [
-        "RelvS § 18 lg 1 p 4",
+        "RelvS § 18 lg 1 p 6",
         "RelvS § 19 lg 1 p 6",
-        "RelvS § 20 lg 2 p 1 ja 5 ning lg 4 p 6"
+        "RelvS § 20 lg 1 p 1 ja 6 ning lg 4 p 5"
       ]
     },
     {
@@ -319,7 +317,7 @@
       "id": "rw-015",
       "legacyId": 15,
       "topic": "loa ja tervisetõendi tähtajad",
-      "text": "Relvaluba pikendatakse viieks aastaks, kuid omaniku tervisetõend kehtib veel kolm aastat. Kui pikaks saab loa kõige rohkem pikendada?",
+      "text": "Relvaomanik taotleb relvaloa pikendamist viieks aastaks. Tema tervisetõend kehtib veel kolm aastat ja muid tähtaega lühendavaid asjaolusid ei ole. Kui pikaks saab loa kõige rohkem pikendada?",
       "options": [
         "Tähtajatult",
         "Kolmeks aastaks",
@@ -338,22 +336,20 @@
     {
       "id": "rw-016",
       "legacyId": 16,
-      "topic": "kriminaalvastutus",
-      "text": "Milline tegu võib kaasa tuua kriminaalvastutuse, mitte üksnes relvaseaduse väärteokaristuse?",
+      "topic": "lohakas hoidmine ja kriminaalvastutus",
+      "text": "Loaomanik jätab tulirelva kõrvalisele isikule kättesaadavaks ning seda relva kasutatakse hiljem kuriteo toimepanemiseks. Millise vastutuse võib lohakas hoidmine kaasa tuua?",
       "options": [
-        "Tulirelva lohakas hoidmine, kui selle tõttu kasutatakse relva kuriteo toimepanemiseks",
-        "Tsiviilkäibes keelatud tulirelva ebaseaduslik käitlemine",
-        "Relvaloa koju unustamine, kui isikut tõendav dokument on kaasas",
-        "Relvakapi võtme korraks lauale jätmine ilma ühegi tagajärjeta"
+        "Kriminaalvastutuse karistusseadustiku § 419 järgi",
+        "Üksnes väärteovastutuse, sest omanik ise relva ei kasutanud",
+        "Vastutus saab tekkida ainult siis, kui relv oli hoidmise ajal laetud",
+        "Kriminaalvastutus saab tekkida ainult relva ebaseaduslikul omanikul"
       ],
       "correct": [
-        0,
-        1
+        0
       ],
-      "multiple": true,
-      "explanation": "Karistusseadustik näeb ette kriminaalvastutuse nii keelatud tulirelva ebaseadusliku käitlemise kui ka tagajärjega lohaka hoidmise eest.",
+      "multiple": false,
+      "explanation": "Tulirelva lohakas hoidmine võib tuua kaasa kriminaalvastutuse, kui selle tagajärjel kasutab teine isik relva kuriteo toimepanemiseks.",
       "references": [
-        "KarS § 418^1",
         "KarS § 419"
       ]
     },
@@ -361,20 +357,21 @@
       "id": "rw-017",
       "legacyId": 17,
       "topic": "laskekõlbmatuks muutmine",
-      "text": "Milline kirjeldus vastab relva laskekõlbmatuks muutmisele?",
+      "text": "Milline tegevuskäik vastab tulirelva nõuetekohasele laskekõlbmatuks muutmisele?",
       "options": [
-        "Relvast eemaldatakse ajutiselt salv",
-        "Relv puhastatakse ja pannakse pikaks ajaks kappi",
-        "Sihik eemaldatakse, kuid relv jääb laskevõimeliseks",
-        "Tulirelva olulist osa töödeldakse mehaaniliselt nii, et relv kaotab lasu sooritamise võime"
+        "Omanik eemaldab relvast luku ja hoiab seda eraldi",
+        "Relvameister töötleb relva omaniku suulisel tellimusel, ilma PPA loata",
+        "Omanik muudab ühe osa ise kasutuskõlbmatuks ja kinnitab tulemuse kirjalikult",
+        "PPA loa alusel töötleb nõutava tegevusloaga isik relva EL-i tehniliste nõuete kohaselt ning PPA tunnistab relva pärast vastavuskontrolli laskekõlbmatuks"
       ],
       "correct": [
         3
       ],
       "multiple": false,
-      "explanation": "Laskekõlbmatuks muutmine tähendab olulise osa mehaanilist töötlemist, mitte relva ajutist tühjendamist või lisaseadme eemaldamist.",
+      "explanation": "Nõuetekohane protsess eeldab PPA luba, tegevusloaga teostajat ja EL-i tehniliste nõuete järgimist. Pärast vastavuskontrolli tunnistab relva laskekõlbmatuks PPA; pelgalt ühe osa eemaldamisest või omaniku kinnitusest ei piisa.",
       "references": [
-        "RelvS § 78 lg 1"
+        "RelvS § 78 lg 1, 2 ja 2^1",
+        "RelvS § 78^2 lg 1"
       ]
     },
     {
@@ -401,7 +398,7 @@
       "id": "rw-019",
       "legacyId": 19,
       "topic": "ühe relva hoidmine",
-      "text": "Millal võib füüsiline isik hoida üht tulirelva ja selle laskemoona ilma relvakapi, lukustatava sahtli või laekata?",
+      "text": "Füüsilise isiku omandis ega valduses ei ole peale ühe tulirelva muid relvi. Millal võib ta seda relva ja laskemoona hoida ilma relvakapi, lukustatava sahtli või laekata?",
       "options": [
         "Ka siis, kui tegu on piiratud käibega padrunisalvega tulirelvaga",
         "Kui hoiukoht on kõrvalisele isikule raskesti avastatav ja kättesaadav ning relval pole piiratud käibega padrunisalve",
@@ -435,8 +432,8 @@
       "multiple": true,
       "explanation": "Lammutamiseks on vaja PPA luba. Selle alusel võib töö teha omanik või valdaja ise või nõutava tegevusloaga teenuseosutaja.",
       "references": [
-        "RelvS § 79 lg 1–3",
-        "RelvS § 80"
+        "RelvS § 79 lg 1–2",
+        "RelvS § 80 lg 1"
       ]
     },
     {
@@ -466,12 +463,12 @@
       "id": "rw-022",
       "legacyId": 22,
       "topic": "müügikeelud",
-      "text": "Millal peab relvakaupleja relva müümisest keelduma?",
+      "text": "Millised järgmistest relvamüügitehingutest on keelatud?",
       "options": [
-        "Alla 18-aastane soovib osta piiramata tsiviilkäibega relva",
-        "Täisealine ostja esitab nõutud dokumendid ja relval on tüübikinnitus",
-        "Ostja ei esita isikut tõendavat dokumenti ja vastava liigi soetamisluba",
-        "Kaupleja teab, et relv on defektne"
+        "Piiramata tsiviilkäibega relva müük alla 18-aastasele",
+        "Piiratud käibega relva müük täisealisele, kes esitab isikut tõendava dokumendi ja vastava soetamisloa",
+        "Piiratud käibega relva müük ostjale, kes ei esita isikut tõendavat dokumenti ega vastavat soetamisluba",
+        "Teadvalt defektse relva müük"
       ],
       "correct": [
         0,
@@ -479,7 +476,7 @@
         3
       ],
       "multiple": true,
-      "explanation": "Dokumentideta müük, teadvalt defektse relva müük ja piiramata käibega relva müük alaealisele on keelatud.",
+      "explanation": "Keelatud on müüa piiramata käibega relva alaealisele, piiratud käibega relva nõutud isikut tõendava dokumendi ja soetamisloata ostjale ning teadvalt defektset relva.",
       "references": [
         "RelvS § 74 lg 2"
       ]
@@ -531,7 +528,7 @@
       "topic": "loa andmisest keeldumine",
       "text": "Millised asjaolud on samuti aluseks soetamis- või relvaloa andmata jätmisele?",
       "options": [
-        "Taotleja esitab loa saamisel tahtlikult olulisi valeandmeid",
+        "Taotleja esitab soetamis- või relvaloa taotlemisel tahtlikult olulisi valeandmeid",
         "Taotleja hoidub kõrvale kaitseväeteenistusest",
         "Taotleja vahetas hiljuti töökohta",
         "Taotlejal puuduvad nõuetekohased relva ja laskemoona hoidmise tingimused"
@@ -542,7 +539,7 @@
         3
       ],
       "multiple": true,
-      "explanation": "Puudulik hoiukoht, oluliste valeandmete tahtlik esitamine ja kaitseväeteenistusest kõrvalehoidmine on seaduses nimetatud välistavad asjaolud.",
+      "explanation": "Puudulik hoiukoht, oluliste valeandmete tahtlik esitamine loa taotlemisel ja kaitseväeteenistusest kõrvalehoidmine on seaduses nimetatud välistavad asjaolud.",
       "references": [
         "RelvS § 36 lg 1 p 4, 9 ja 10"
       ]
@@ -576,7 +573,7 @@
       "text": "Millised tingimused kehtivad kohaliku relvaveo puhul?",
       "options": [
         "Vedu on lubatud igale juhiloa omanikule sõltumata relvalubadest",
-        "Vedu võib teha relva-, soetamis- või asjakohase tegevusloaga isik",
+        "Vedu võib teha relva- või soetamisloaga isik või relvade valmistamise või müügi tegevusloaga isik",
         "Relvad ja laskemoon peavad olema valmistajapakendis või pakitud viisil, mis takistab kohest kasutamist",
         "Valve ja kaitse tagab omanik või valdaja"
       ],
@@ -586,7 +583,7 @@
         3
       ],
       "multiple": true,
-      "explanation": "Kohalikku relvavedu võib korraldada vaid nõutava loaga isik ning saadetis tuleb pakkida ja kaitsta seaduses kirjeldatud viisil.",
+      "explanation": "Kohalikku relvavedu võib teha relva- või soetamisloaga isik või relvade valmistamise või müügi tegevusloaga isik. Saadetis tuleb pakkida ja kaitsta seaduses kirjeldatud viisil.",
       "references": [
         "RelvS § 57 lg 1–3"
       ]
@@ -595,7 +592,7 @@
       "id": "rw-028",
       "legacyId": 28,
       "topic": "hädakaitse ja hädaseisund",
-      "text": "Millised väited kirjeldavad õiguspärasust välistavaid olukordi õigesti?",
+      "text": "Millised väited hädakaitse ja hädaseisundi kohta on õiged?",
       "options": [
         "Hädaseisundis peab valitud vahend olema ohu kõrvaldamiseks vajalik ja kaitstav huvi kahjustatavast selgelt olulisem",
         "Hädakaitse võimalus kaob alati, kui ründe eest saanuks põgeneda",
@@ -673,27 +670,26 @@
       "multiple": true,
       "explanation": "Soomust läbistava kõvasüdamikuga kuul ja õõnsaotsaline püstoli- või revolvripadrun kuuluvad keelatud laskemoona hulka. Süüteviis üksi ei tee padrunit keelatuks.",
       "references": [
-        "RelvS § 20 lg 4 p 2 ja 6"
+        "RelvS § 20 lg 4 p 2 ja 5"
       ]
     },
     {
       "id": "rw-032",
       "legacyId": 32,
       "topic": "loaandmete muutmine ja teavitamine",
-      "text": "Millal ja kui kiiresti peab loaomanik PPA-d teavitama?",
+      "text": "Loaomanik avastab, et tema relv on kadunud, ning muudab ka relva registreeritud hoiukoha aadressi. Millised teavitamistähtajad kehtivad?",
       "options": [
-        "Relva kadumisest, vargusest või hävimisest viivitamata",
-        "Relva hoiukoha muutumisest seitsme tööpäeva jooksul",
-        "Relva otstarbe muutmise soovist seitsme tööpäeva jooksul",
-        "Töökoha vahetusest viivitamata"
+        "Relva kadumisest tuleb PPA-d teavitada viivitamata",
+        "Hoiukoha muutusest tuleb PPA-d teavitada seitsme tööpäeva jooksul",
+        "Mõlemast võib teatada alles loa pikendamisel",
+        "Kadumisest teatatakse seitsme tööpäeva jooksul ja hoiukoha muutusest alles 30 päeva jooksul"
       ],
       "correct": [
         0,
-        1,
-        2
+        1
       ],
       "multiple": true,
-      "explanation": "Kaotsiminekust või hävimisest tuleb teatada kohe. Hoiukoha või soovitava otstarbe muudatusest tuleb teatada seitsme tööpäeva jooksul.",
+      "explanation": "Relva kadumisest, vargusest või hävimisest tuleb PPA-d teavitada viivitamata. Relva hoiukoha asukoha muutusest tuleb teatada seitsme tööpäeva jooksul.",
       "references": [
         "RelvS § 42 lg 1–2"
       ]
@@ -707,7 +703,7 @@
         "Kollektsiooni tulirelvi hoitakse relvahoidlas",
         "Kollektsiooni relva võib kollektsioneerimisloa alusel igapäevaselt kanda",
         "Kollektsioneerimise eesmärk võib olla ajalooline, teaduslik, tehniline või kultuuriline",
-        "Pärast 1945. aastat toodetud padrunimudelit võib kollektsioonis olla kuni 200 padrunit"
+        "Padrunimudelit, mille tootmist alustati pärast 1945. aastat, võib kollektsioonis olla kuni 200 padrunit"
       ],
       "correct": [
         0,
@@ -715,7 +711,7 @@
         3
       ],
       "multiple": true,
-      "explanation": "Kollektsioneerimine teenib seaduses nimetatud uurimis- ja säilitamiseesmärke. Uuemate padrunimudelite kogus on piiratud ning kollektsioneerimisluba ei anna üldist kandmisõigust.",
+      "explanation": "Kollektsioneerimine teenib seaduses nimetatud uurimis- ja säilitamiseesmärke. Padrunimudelitele, mille tootmist alustati pärast 1945. aastat, kehtib 200 padruni piir ning kollektsioneerimisluba ei anna üldist kandmisõigust.",
       "references": [
         "RelvS § 25 lg 1, 3^1, 5 ja 7"
       ]
@@ -791,7 +787,7 @@
         "Nõuetele vastavust kontrollib relva parandamise või ümbertegemise tegevusloaga isik",
         "Laskekõlbmatuks tunnistab relva PPA pärast kontrolli",
         "Omanik võib relva ise kirjaliku kinnitusega laskekõlbmatuks tunnistada",
-        "Esitada 30 päeva jooksul PPA-le taotlus nõuetele vastavuse tuvastamiseks"
+        "Esitada 30 päeva jooksul relva Eestisse toomisest PPA-le taotlus nõuetele vastavuse tuvastamiseks"
       ],
       "correct": [
         0,
@@ -830,22 +826,20 @@
       "id": "rw-039",
       "legacyId": 39,
       "topic": "loa pikendamise dokumendid",
-      "text": "Millised toimingud kuuluvad relvaloa kehtivuse pikendamise tavamenetlusse?",
+      "text": "Tavaline relvaloa omanik esitab pikendamistaotluse õigel ajal ja tasub riigilõivu, kuid jätab tervisetõendi esitamata. Talle ei kohaldu seaduse erand. Kas taotlus sisaldab kõiki nõutud dokumente?",
       "options": [
-        "Taotlus esitatakse ainult pärast loa aegumist",
-        "Taotlus ja nõutud andmed esitatakse vähemalt kaks kuud enne kehtivuse lõppu",
-        "Esitatakse tervisetõend",
-        "Enne taotluse esitamist tasutakse riigilõiv"
+        "Ei, tervisetõend on nõutav",
+        "Jah, riigilõivu tasumine asendab tervisetõendi",
+        "Jah, tervisetõend on nõutav ainult esmakordsel loa taotlemisel",
+        "Jah, kui relva hoitakse nõuetekohases relvakapis"
       ],
       "correct": [
-        1,
-        2,
-        3
+        0
       ],
-      "multiple": true,
-      "explanation": "Pikendamiseks tuleb õigel ajal esitada taotlus ja tervisetõend ning tasuda enne taotluse esitamist riigilõiv. Mõnel seaduses nimetatud teenistujal on erandid.",
+      "multiple": false,
+      "explanation": "Tavamenetluses tuleb pikendamistaotlusega esitada tervisetõend. Seaduses nimetatud isikutele võib kehtida erand, kuid stsenaarium välistab selle.",
       "references": [
-        "RelvS § 41 lg 2, 5–6 ja 9"
+        "RelvS § 41 lg 2 p 2 ja lg 9"
       ]
     },
     {
@@ -938,8 +932,8 @@
       "multiple": true,
       "explanation": "Gaasipihusti, allveerelv ja ajaloolise traditsiooniga külmrelv on seaduses loetletud piiramata käibega relvad. Elektrišokirelv ja varjatud kujuga tulirelv on keelatud.",
       "references": [
-        "RelvS § 18 lg 1",
-        "RelvS § 20 lg 2 p 1 ja lg 3"
+        "RelvS § 18 lg 1 p 1, 6 ja 9 ning lg 6",
+        "RelvS § 20 lg 1 p 1 ja lg 3"
       ]
     },
     {
@@ -965,24 +959,21 @@
     {
       "id": "rw-045",
       "legacyId": 45,
-      "topic": "osad, olulised osad ja lisaseadmed",
-      "text": "Millised väited tulirelva komponentide kohta on õiged?",
+      "topic": "tulirelva olulise osa õiguslik liigitus",
+      "text": "Relvaomanik soovib eraldi soetada relvaraua. Milline väide kirjeldab selle õiguslikku liigitust?",
       "options": [
-        "Relvaraud ja lukukoda on tulirelva olulised osad",
-        "Öösihik on tulirelva lisaseade",
-        "Padrunisalv on laskemoon, mitte tulirelva osa",
-        "Adapter ja trummel kuuluvad tulirelva osade hulka"
+        "Relvaraud on tulirelva oluline osa ja eraldi esemena kuulub samasse klassi tulirelvaga, millele see on ette nähtud",
+        "Relvaraud on piiramata käibega lisaseade nagu relvarihm",
+        "Relvaraud on laskemoon",
+        "Relvaraud muutub reguleeritud osaks alles pärast relvale kinnitamist"
       ],
       "correct": [
-        0,
-        1,
-        3
+        0
       ],
-      "multiple": true,
-      "explanation": "Adapter, trummel ja salv on tulirelva osad; relvaraud ning lukukoda on olulised osad. Öösihik liigitatakse lisaseadmeks.",
+      "multiple": false,
+      "explanation": "Relvaraud on tulirelva oluline osa ja eraldi esemena kuulub samasse klassi tulirelvaga, mille jaoks see on ette nähtud. Selle käitlemisele kohaldub vastava relvaliigi kord, kui seadus ei sätesta teisiti.",
       "references": [
-        "RelvS § 20^1 lg 1–2",
-        "RelvS § 21 lg 1"
+        "RelvS § 21 lg 1–2"
       ]
     },
     {
@@ -1022,7 +1013,7 @@
         2
       ],
       "multiple": true,
-      "explanation": "Ajutine hoiuleandmine vormistatakse aktiga. Teisele relvaloa omanikule võib relva anda kuni üheks ööpäevaks; pikem teenuslik hoidmine eeldab tegevusluba.",
+      "explanation": "Teisele relvaloa omanikule võib relva aktiga hoiule anda kuni üheks ööpäevaks. Relvade hoidmise teenuse tegevusloaga isikule üleandmine vormistatakse samuti aktiga.",
       "references": [
         "RelvS § 45 lg 4–7"
       ]
@@ -1051,23 +1042,22 @@
     {
       "id": "rw-049",
       "legacyId": 49,
-      "topic": "Euroopa Liidus edasitoimetamise dokumendid",
-      "text": "Millised dokumendid nimetab relvaseadus relva ja laskemoona Euroopa Liidus edasitoimetamise alustena?",
+      "topic": "ajutine laskespordireis Euroopa Liidus",
+      "text": "Füüsiline isik viib B-klassi sporditulirelva ajutiselt Eestist teise Euroopa Liidu liikmesriiki laskespordivõistlusele. Millised dokumendid tõendavad relvaseaduse § 62^5 järgi selle reisi eesmärki ja relva edasitoimetamise õigust?",
       "options": [
-        "Euroopa Liidus edasitoimetamise luba",
-        "Euroopa tulirelvapass",
-        "Mis tahes liikmesriigi siseriiklik relvaluba üksinda",
-        "Euroopa Liidus edasitoimetamise eelluba"
+        "Kehtiv Euroopa tulirelvapass, kuhu relv on kantud",
+        "Kutse või muu tõend laskespordiga tegelemise eesmärgi kohta",
+        "Üksnes relva alalise edasitoimetamise eelluba, ilma tulirelvapassi ja reisi eesmärgi tõendita",
+        "Üksnes Eesti relvaluba, ilma tulirelvapassi ja reisi eesmärgi tõendita"
       ],
       "correct": [
         0,
-        1,
-        3
+        1
       ],
       "multiple": true,
-      "explanation": "Kehtiv loetelu koosneb eelloast, loast ja Euroopa tulirelvapassist. Vana küsimuse väide, et ükskõik milline siseriiklik relvaluba on iseseisev alus, ei ole õige.",
+      "explanation": "Ajutisel laskespordireisil võib A-, B- või C-klassi relva edasi toimetada tulirelvapassi alusel, kui relv on passi kantud ja reisi eesmärk on kutse või muu tõendiga tõendatud. Lisaks tuleb arvestada sihtriigi piirangute ja võimalike eelneva nõusoleku nõuetega; alalist edasitoimetamist käsitleb teine menetlus.",
       "references": [
-        "RelvS § 62^4 lg 1"
+        "RelvS § 62^5 lg 2 p 2 ja lg 3"
       ]
     },
     {
@@ -1111,7 +1101,7 @@
       "multiple": false,
       "explanation": "Surm või teadmata kadunuks tunnistamine on kehtetuks tunnistamise alus. Teised kirjeldatud asjaolud on seaduses eeskätt loa peatamise alused.",
       "references": [
-        "RelvS § 43 lg 1 p 2, 3 ja 5 ning lg 3 p 4"
+        "RelvS § 43 lg 1 p 2, 3 ja 5, lg 1^2 ning lg 3 p 4"
       ]
     },
     {
@@ -1158,7 +1148,7 @@
       "id": "rw-054",
       "legacyId": 54,
       "topic": "loa liigi vahetamine",
-      "text": "Kui paralleelrelvaluba või relvakandmisluba kaotab seaduses nimetatud põhjusel kehtivuse, kui kaua on isikul aega taotleda selle vahetamist relvaloa vastu?",
+      "text": "Juriidilise isiku töötaja relvakandmisluba kaotab töösuhte lõppemisel kehtivuse. Kui kaua on tal aega taotleda selle vahetamist relvaloa vastu?",
       "options": [
         "Üks aasta kehtivuse lõppemisest",
         "Selline vahetamine ei ole võimalik",
@@ -1169,9 +1159,8 @@
         2
       ],
       "multiple": false,
-      "explanation": "Nii seaduses kirjeldatud paralleelrelvaloa kui ka relvakandmisloa lõppemise puhul on vahetamise tähtaeg kolm kuud.",
+      "explanation": "Töösuhte lõppemisel kaotab töötaja relvakandmisluba kehtivuse ning ta võib taotleda selle vahetamist relvaloa vastu kolme kuu jooksul loa kehtivuse lõppemise päevast.",
       "references": [
-        "RelvS § 34 lg 7",
         "RelvS § 40^1 lg 8"
       ]
     },
@@ -1184,7 +1173,7 @@
         "Laenaja võib relva pärast treeningut koju kaasa võtta",
         "Ainult selles samas lasketiirus või laskepaigas",
         "Üldjuhul laskeinstruktori juhendamisel",
-        "Iseseisvalt, kui laenajal on relvaluba või seaduses nimetatud laskmisalane litsents"
+        "Iseseisvalt, kui laenajal on relvaluba või laskeinstruktori, lasketreeneri või laskesportlase litsents"
       ],
       "correct": [
         1,
@@ -1200,21 +1189,21 @@
     {
       "id": "rw-056",
       "legacyId": 56,
-      "topic": "hoiukoha muutusest teatamine",
-      "text": "Loaomanik muudab relva registreeritud hoiukohta. Millise tähtaja jooksul tuleb PPA-d teavitada?",
+      "topic": "loaandmete muutmise menetlustähtaeg",
+      "text": "Relvaloa omaja esitab nõuetekohase taotluse loaandmete muutmiseks ja loa andmist välistavaid asjaolusid ei esine. Mis aja jooksul muudab PPA loa andmed?",
       "options": [
         "Seitsme tööpäeva jooksul",
-        "Seitsme kalendripäeva jooksul",
-        "Kolmekümne tööpäeva jooksul",
+        "30 päeva jooksul taotluse esitamisest",
+        "Kahe kuu jooksul taotluse esitamisest",
         "Alles järgmise loa pikendamise ajal"
       ],
       "correct": [
-        0
+        1
       ],
       "multiple": false,
-      "explanation": "Hoiukoha aadressi muutusest tuleb PPA-d teavitada seitsme tööpäeva jooksul.",
+      "explanation": "Kui taotlus on nõuetekohane ja välistavaid asjaolusid ei esine, muudab PPA loa andmed 30 päeva jooksul taotluse esitamisest.",
       "references": [
-        "RelvS § 42 lg 1 p 2 ja lg 2"
+        "RelvS § 42 lg 5"
       ]
     },
     {
@@ -1330,7 +1319,7 @@
       "topic": "relvahoidla uksed",
       "text": "Millised omadused peavad relvahoidla ustel olema?",
       "options": [
-        "Uksed avanevad väljapoole",
+        "Välisuks avaneb ainult väljapoole",
         "Piisab ühest 4 mm alumiiniumuksest",
         "Topeltuksed: välimine vähemalt 6 mm terasest ja sisemine vähemalt 15 mm terasvarrastest",
         "Välimisel uksel on kaks turvalukku"
@@ -1341,9 +1330,9 @@
         3
       ],
       "multiple": true,
-      "explanation": "Määrus nõuab topeltuksi, välisuksel kaht turvalukku ja väljapoole avanemist. Sisemise võre avad on samuti mõõtudega piiratud.",
+      "explanation": "Määrus nõuab topeltuksi, välisuksel kaht turvalukku ja välisukse väljapoole avanemist. Sisemise võre avad on samuti mõõtudega piiratud.",
       "references": [
-        "Hoidmine § 3 lg 2–3"
+        "Hoidmine § 3 lg 2"
       ]
     },
     {
@@ -1431,18 +1420,18 @@
       "id": "rw-068",
       "legacyId": 68,
       "topic": "soetamisloa seos otstarbega",
-      "text": "Taotlejal on sportimiseks väljastatud soetamisluba. Kas ta võib sama loaga osta teist liiki relva üksnes enese ja vara kaitseks?",
+      "text": "Taotleja soetamisluba lubab soetada sportimiseks püstoli. Millise relva võib ta selle loaga soetada?",
       "options": [
-        "Ei, soetatava relva liik ja otstarve peavad vastama loale",
-        "Jah, sest kõik tsiviilrelvad on omavahel asendatavad",
-        "Jah, kui ost toimub sularahas",
-        "Jah, kui relva ei registreerita"
+        "Sportimiseks sobiva püstoli",
+        "Jahipidamiseks mõeldud püstoli, sest relvaliik on sama",
+        "Sportimiseks mõeldud püssi, sest otstarve on sama",
+        "Turvalisuse tagamiseks mõeldud revolvri, sest see on käsitulirelv"
       ],
       "correct": [
         0
       ],
       "multiple": false,
-      "explanation": "Soetamisluba antakse kindlat liiki relvale ning üksnes taotluses ja loal oleva otstarbega kooskõlas.",
+      "explanation": "Soetamisluba annab õiguse soetada ainult loale märgitud liiki relva ning relvaliik peab sobima loal märgitud otstarbeks. Siin peavad korraga vastama nii püstol kui ka sportimise otstarve.",
       "references": [
         "RelvS § 32 lg 2, 4 ja 6"
       ]
@@ -1475,13 +1464,13 @@
       "topic": "loa peatamise kestus",
       "text": "Kui loaomanikku karistatakse lubatud alkoholipiiri ületades mootorsõiduki juhtimise eest, kui kauaks peatatakse soetamis- või relvaluba?",
       "options": [
-        "Alati tähtajatult",
-        "Luba ei peatata kunagi",
+        "Kolmest kuust kuni kuue kuuni",
         "Kuuest kuust kuni ühe aastani",
-        "Täpselt üheks nädalaks"
+        "Täpselt üheks aastaks igal juhul",
+        "Kuni uue tervisetõendi väljastamiseni"
       ],
       "correct": [
-        2
+        1
       ],
       "multiple": false,
       "explanation": "Selle väärteokaristuse korral näeb relvaseadus ette loa peatamise kuuest kuust kuni ühe aastani.",
