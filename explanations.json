@@ -10,7 +10,7 @@
     },
     {
       "id": 3,
-      "text": "Standardile mittevastav kuni kaheksa relva kapp peab olema vähemalt 3 mm terasplekist ja vähemalt ühe turvalukuga. Vana küsimuse nõue kahe eraldi laeka kohta ei vasta kehtivale määrusele."
+      "text": "Selline kapp peab olema vähemalt 3 mm terasplekist ja vähemalt ühe turvalukuga. Kui relv ja laskemoon on samas kapis, vajab laskemoon eraldi lukustatavat osa ning selle võtit ei tohi hoida kapis. Varasema küsimuse kahe eraldi laeka nõue ei vasta kehtivale määrusele."
     },
     {
       "id": 4,
@@ -26,7 +26,7 @@
     },
     {
       "id": 7,
-      "text": "Relva omavoliline hävitamine ei ole õige menetlus. Politsei korraldab hävitamise ja selle kohta koostatakse akt; ajaloo- või kultuuriväärtusega relva ei hävitata."
+      "text": "Hävitamisele kuuluv relv ja laskemoon antakse koos avaldusega politseile. Hävitamise kohta koostatakse akt; ajaloo- või kultuuriväärtusega relva ei hävitata."
     },
     {
       "id": 8,
@@ -38,7 +38,7 @@
     },
     {
       "id": 10,
-      "text": "Eksamikord nõuab relva käsitamist laetuna, ohutut suunda ning sõrme hoidmist sirgelt relvaraamil väljaspool päästikukaitset kuni lasu sooritamiseni. Nende nõuete rikkumine tähendab katse ebaõnnestumist."
+      "text": "Eksamil kehtivad kogu käsitsemise vältel laetuna käsitamise, ohutu suuna ja päästikust eemal hoitava sõrme nõuded. Ohutuks tegemisel ei tõenda salve eemaldamine üksi tühja padrunipesa; kontrollida tuleb ka padrunipesa ja salvekanalit. Kontrolllask ei ole üldine ega ohutu viis tühjuse tõendamiseks. Konkreetne käsitsemisvõte sõltub relvast ja eksamineerija juhistest."
     },
     {
       "id": 11,
@@ -46,11 +46,11 @@
     },
     {
       "id": 12,
-      "text": "Paralleelrelvaloa andmiseks peab omanik kirjalikult nõustuma, et tema relva kasutab nõusolekus konkreetselt nimetatud isik. Lubade arvu käsitleb eraldi küsimus."
+      "text": "Paralleelrelvaluba annab teisele isikule õiguse kasutada omaniku relva, kui omanik on nimetatud kasutajaga kirjalikult nõustunud ja luba on välja antud. Suuline nõusolek üksi ei asenda luba ega tähenda omandi üleminekut. Varasem eraldi § 34 lg 5 üleandmisakti nõue on kehtetuks tunnistatud; ajutisel hoiuleandmisel võivad kehtida teised reeglid."
     },
     {
       "id": 13,
-      "text": "Varjatud kujuga või nõuetekohase markeeringuta tulirelv ja õõnsaotsalise kuuliga püstoli- või revolvripadrun on keelatud. Akustiline relv on piiratud käibega ning ajaloolise traditsiooniga külmrelv võib olla piiramata käibega."
+      "text": "Tsiviilkäibes on keelatud muu eseme kuju imiteeriv, valmistaja markeeringuta või lahtivõetuna lasu tegemist võimaldav tulirelv ning nimetatud eriohtlik laskemoon. Nõuetele vastav akustiline relv on piiratud käibega ja ajaloolise traditsiooniga külmrelv võib olla piiramata käibega."
     },
     {
       "id": 14,
@@ -78,7 +78,7 @@
     },
     {
       "id": 20,
-      "text": "Lammutamiseks on vaja PPA luba. Selle alusel võib töö teha omanik või valdaja ise või nõutava tegevusloaga teenuseosutaja."
+      "text": "Lammutamine vajab PPA luba. Selle alusel võib töö teha omanik või valdaja ise või nõutava tegevusloaga teenuseosutaja. Alles jäänud kasutuskõlblikke olulisi osi tohib kasutada vaid parandamiseks või ümbertegemiseks; kõlbmatud osad hävitatakse ettenähtud korras."
     },
     {
       "id": 21,
@@ -90,7 +90,7 @@
     },
     {
       "id": 23,
-      "text": "Joobes kandmine ja relva kandmine avalikul üritusel on keelatud, välja arvatud üritusel teenistus- või tööülesannet täitval isikul."
+      "text": "Relva kandmiseks peab isikul olema seda lubav kehtiv luba. Joobes kandmine ja relva kandmine avalikul üritusel on keelatud, välja arvatud üritusel teenistus- või tööülesannet täitval isikul. Nõuetekohaselt pakitud relva edasitoimetamine ei ole sama mis kandmine."
     },
     {
       "id": 24,
@@ -110,11 +110,11 @@
     },
     {
       "id": 28,
-      "text": "Hädaseisund eeldab vajalikkust ja huvide kaalumist. Hädakaitse lubab tõrjuda vahetut või vahetult eesseisvat õigusvastast rünnet enda või teise kaitseks; põgenemisvõimalus ei võta kaitseõigust automaatselt ära."
+      "text": "Hädaseisund eeldab vajalikkust ja huvide kaalumist. Hädakaitse lubab tõrjuda vahetut või vahetult eesseisvat õigusvastast rünnet enda või teise kaitseks. KarS § 28 lg 2 seob hädakaitse piiri ületamise ilmselgelt sobimatu vahendi või ilmselgelt liigse kahju kavatsetud või otsese tahtlusega tekitamisega; pelk ettevaatamatus ei täida seda tunnust. See ei tähenda, et iga ettevaatamatu tegu oleks muudel alustel vastutusest vaba."
     },
     {
       "id": 29,
-      "text": "Seadus eristab tulirelva osi ja lisaseadmeid. Padrun on laskemoon ning relvarihm ei ole oluline osa."
+      "text": "Seadus loetleb tulirelva osadena muu hulgas relvaraua, lukukoja, padrunisalve, trumli, kaitseriivi ja adapteri; lisaseadmeid käsitatakse samuti tulirelva osadena. Padrun on laskemoon ning relvarihm ei ole tulirelva kasutamiseks vajalik reguleeritud osa."
     },
     {
       "id": 30,
@@ -130,7 +130,7 @@
     },
     {
       "id": 33,
-      "text": "Kollektsioneerimine teenib seaduses nimetatud uurimis- ja säilitamiseesmärke. Padrunimudelitele, mille tootmist alustati pärast 1945. aastat, kehtib 200 padruni piir ning kollektsioneerimisluba ei anna üldist kandmisõigust."
+      "text": "Kollektsioneerimine teenib seaduses nimetatud uurimis- ja säilitamiseesmärke. Pärast 1945. aastat tootma hakatud padrunimudelitele kehtib 200 padruni piir ning kollektsioneerimisluba ei anna üldist kandmisõigust. Üle 12,7 mm vintraudse mudeli piirang puudutab mudeleid, mille tootmist alustati pärast 1945. aastat; vanema mudeli puhul kehtivad siiski kõik muud nõuded."
     },
     {
       "id": 34,
@@ -150,7 +150,7 @@
     },
     {
       "id": 38,
-      "text": "PPA-d tuleb teavitada hoiukoha muutusest ja otstarbe muutmise soovist. Töökoha või lühiajalise puhkuse muutus pole iseenesest loaandmete muudatus."
+      "text": "Hoiukoha asukoha muutusest ja otstarbe muutmise soovist tuleb PPA-d teavitada seitsme tööpäeva jooksul. Kui loale kantud omaniku või relva andmed on ebaõiged, tuleb pöörduda PPA poole nende parandamiseks; § 42 ei sätesta neile sama seitsme tööpäeva tähtaega. Töökoha või lühiajalise puhkuse muutus pole iseenesest loaandmete muudatus."
     },
     {
       "id": 39,
@@ -166,7 +166,7 @@
     },
     {
       "id": 42,
-      "text": "KarS §-d 418, 418^1 ja 419 kirjeldavad vastavaid kuriteokoosseise. Pelgalt võtme taskusse unustamine ei ole nende sätete järgi automaatselt kuritegu."
+      "text": "KarS §-d 418, 418^1 ja 419 kirjeldavad vastavaid kuriteokoosseise. Keelatud laskemoona ebaseadusliku käitlemise § 418^1 erand puudutab ebaolulist kogust. Pelgalt võtme taskusse unustamine ei ole nende sätete järgi automaatselt kuritegu."
     },
     {
       "id": 43,
@@ -198,11 +198,11 @@
     },
     {
       "id": 50,
-      "text": "Seadus loetleb need kollektsioneerimise eranditena. Ajaloolise traditsiooniga mõõk ei kuulu sellesse keelunimekirja."
+      "text": "RelvS § 25 lg 3 loetleb kollektsioneerimise keelud, sealhulgas nimetatud relvad, laskemoona ja kehavigastuse tekitamiseks mõeldud esemed. Suure kaliibriga tulirelvade piirang sõltub mudeli tootmise algusajast, mitte konkreetse eksemplari valmistamise aastast. Nõuetele vastav ajalooline mõõk ei kuulu sellesse keelunimekirja."
     },
     {
       "id": 51,
-      "text": "Surm või teadmata kadunuks tunnistamine on kehtetuks tunnistamise alus. Teised kirjeldatud asjaolud on seaduses eeskätt loa peatamise alused."
+      "text": "Surm või teadmata kadunuks tunnistamine ning korduvad rikkumised või ettekirjutuse täitmata jätmine on kohustuslikud kehtetuks tunnistamise alused. Turvalisust ohustava eluviisi või käitumise tõttu sobimatuks osutunud isiku loa võib PPA kehtetuks tunnistada. Ainuüksi nõuetekohaste hoiutingimuste puudumise tuvastamisel luba esmalt peatatakse."
     },
     {
       "id": 52,
@@ -262,7 +262,7 @@
     },
     {
       "id": 67,
-      "text": "Kui kontrollis selgub, et nõuetekohased hoiutingimused puuduvad, peatab PPA loa kehtivuse."
+      "text": "PPA järelevalve võib hõlmata küsitlemist ja vajalike dokumentide nõudmist, joobekontrolli ning relva või hoiukoha kontrollimist korrakaitseseaduses ette nähtud alustel ja korras. See ei anna piiramatut õigust eluruumi ilma õigusliku aluseta läbi otsida. Kui kontroll tuvastab nõutavate hoiutingimuste puudumise, peatab PPA loa kehtivuse."
     },
     {
       "id": 68,
@@ -270,7 +270,7 @@
     },
     {
       "id": 69,
-      "text": "Alkoholipiiri ületades juhtimise eest karistamine, nimetatud kuriteos kahtlustamine või süüdistamine ja puudulikud hoiutingimused on konkreetsed peatamise alused. Iga suvaline väärtegu, näiteks üks parkimisrikkumine, seda automaatselt ei ole."
+      "text": "Alkoholipiiri ületades juhtimise eest karistamine, nimetatud kuriteos kahtlustamine või süüdistamine, puudulikud hoiutingimused ja põhjendatud ohukahtlus eluviisi või käitumise tõttu on peatamise alused. Iga suvaline väärtegu, näiteks üks parkimisrikkumine, seda automaatselt ei ole."
     },
     {
       "id": 70,

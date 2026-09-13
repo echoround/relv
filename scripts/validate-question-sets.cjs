@@ -8,6 +8,7 @@ const paths = {
   explanations: path.join(root, 'explanations.json'),
   explanationsMin: path.join(root, 'explanations.min.json'),
   canonical: path.join(root, 'question-sets', 'current-rewritten.json'),
+  coverage: path.join(root, 'question-sets', 'coverage-audit.md'),
   rejected: path.join(root, 'question-sets', 'new-original.json')
 };
 
@@ -17,6 +18,7 @@ const activeMin = readJson(paths.activeMin);
 const explanations = readJson(paths.explanations);
 const explanationsMin = readJson(paths.explanationsMin);
 const canonical = readJson(paths.canonical);
+const coverage = fs.readFileSync(paths.coverage, 'utf8');
 const rejected = readJson(paths.rejected);
 const errors = [];
 
@@ -88,6 +90,33 @@ validateQuestions(active.questions, 'active');
 
 if (canonical.questions?.length !== 71 || active.questions?.length !== 71) {
   errors.push('Aktiivses ja kanoonilises komplektis peab olema täpselt 71 küsimust.');
+}
+
+const originalIds = [
+  ...Array.from({ length: 63 }, (_, index) => index + 1),
+  65, 66, 67, 68, 69, 70, 72, 73
+];
+const canonicalLegacyIds = canonical.questions?.map((question) => question.legacyId) ?? [];
+if (new Set(canonicalLegacyIds).size !== originalIds.length ||
+    originalIds.some((id) => !canonicalLegacyIds.includes(id))) {
+  errors.push('canonical: kõik 71 algset legacyId väärtust peavad säilima täpselt ühe korra.');
+}
+
+const coverageRows = [...coverage.matchAll(/^\|[ \t]*(\d+)[ \t]*\|[ \t]*([\d, ]+)[ \t]*\|/gm)]
+  .map((match) => ({
+    originalId: Number(match[1]),
+    currentIds: match[2].split(',').map((id) => Number(id.trim()))
+  }));
+const mappedOriginalIds = coverageRows.map((row) => row.originalId);
+if (coverageRows.length !== originalIds.length ||
+    new Set(mappedOriginalIds).size !== originalIds.length ||
+    originalIds.some((id) => !mappedOriginalIds.includes(id))) {
+  errors.push('coverage-audit.md: iga algne küsimus peab olema kaardistatud täpselt ühe korra.');
+}
+for (const row of coverageRows) {
+  if (row.currentIds.length === 0 || row.currentIds.some((id) => !canonicalLegacyIds.includes(id))) {
+    errors.push(`coverage-audit.md: algse küsimuse ${row.originalId} viide puudub aktiivsest komplektist.`);
+  }
 }
 
 const expectedActive = {

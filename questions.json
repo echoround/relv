@@ -33,19 +33,21 @@
     },
     {
       "id": 3,
-      "text": "Kuni kaheksa relva jaoks mõeldud kapp ei vasta standardile EN 1143-1 ega EN 14450. Millised miinimumnõuded siis kehtivad?",
+      "text": "Kuni kaheksa relva kapp ei vasta standardile EN 1143-1 ega EN 14450 ning selles hoitakse koos relvaga ka laskemoona. Millised nõuded peavad olema täidetud?",
       "options": [
         "Piisab lukustatavast puidust kapist",
         "Kapp peab olema tervikuna vähemalt 3 mm terasplekist",
         "Kapil peab olema vähemalt üks turvalukk",
+        "Laskemoona jaoks peab kapis olema eraldi lukustatav osa, mille võtit ei hoita kapis",
         "Kapil peab alati olema kaks turvalukku"
       ],
       "correct": [
         1,
-        2
+        2,
+        3
       ],
       "multiple": true,
-      "explanation": "Standardile mittevastav kuni kaheksa relva kapp peab olema vähemalt 3 mm terasplekist ja vähemalt ühe turvalukuga. Vana küsimuse nõue kahe eraldi laeka kohta ei vasta kehtivale määrusele."
+      "explanation": "Selline kapp peab olema vähemalt 3 mm terasplekist ja vähemalt ühe turvalukuga. Kui relv ja laskemoon on samas kapis, vajab laskemoon eraldi lukustatavat osa ning selle võtit ei tohi hoida kapis. Varasema küsimuse kahe eraldi laeka nõue ei vasta kehtivale määrusele."
     },
     {
       "id": 4,
@@ -100,11 +102,11 @@
     },
     {
       "id": 7,
-      "text": "Omanik soovib loobuda relvast nii, et see hävitatakse. Kuidas tuleb toimida?",
+      "text": "Omanik soovib loobuda relvast ja selle laskemoonast nii, et need hävitatakse. Kuidas tuleb toimida?",
       "options": [
         "Hävitamise kohta ei koostata dokumenti",
-        "Relv antakse koos avaldusega politseile, kes korraldab hävitamise",
-        "Omanik võib relva ise purustada ja osad olmejäätmetesse panna",
+        "Relv ja laskemoon antakse koos avaldusega politseile, kes korraldab hävitamise",
+        "Omanik võib relva ise purustada ja laskemoona olmejäätmetesse panna",
         "Ajaloo- või kultuuriväärtusega relva ei hävitata, vaid see säilitatakse kollektsioonis"
       ],
       "correct": [
@@ -112,7 +114,7 @@
         3
       ],
       "multiple": true,
-      "explanation": "Relva omavoliline hävitamine ei ole õige menetlus. Politsei korraldab hävitamise ja selle kohta koostatakse akt; ajaloo- või kultuuriväärtusega relva ei hävitata."
+      "explanation": "Hävitamisele kuuluv relv ja laskemoon antakse koos avaldusega politseile. Hävitamise kohta koostatakse akt; ajaloo- või kultuuriväärtusega relva ei hävitata."
     },
     {
       "id": 8,
@@ -147,20 +149,21 @@
     },
     {
       "id": 10,
-      "text": "Milliseid põhimõtteid peab eksamil relva käsitsemise algusest lõpuni järgima?",
+      "text": "Eksamil tuleb kontrollida, kas padrunisalvega püstol on ohutu. Millised tegevused ja põhimõtted kuuluvad sellesse kontrolli?",
       "options": [
-        "Sõrm on sirgelt relvaraamil, väljaspool päästikukaitset, ning liigub päästikule ainult lasu sooritamise ajaks",
-        "Kontrollimata relva võib suunata eksamineerija poole, kui salv on eemaldatud",
-        "Relva tuleb käsitada laetuna",
-        "Relv peab olema suunatud ohutusse suunda ehk märklehe sektorisse"
+        "Relva käsitatakse laetuna ja hoitakse ohutus suunas; sõrm jääb päästikukaitsest välja",
+        "Padrunisalv eemaldatakse enne padrunipesa kontrollimist",
+        "Padrunipesa ja salvekanalit kontrollitakse enne, kui relv tunnistatakse tühjaks",
+        "Salve eemaldamisest piisab; padrunipesa pole vaja vaadata",
+        "Tühjuse kinnitamiseks tuleb alati teha kontrolllask"
       ],
       "correct": [
         0,
-        2,
-        3
+        1,
+        2
       ],
       "multiple": true,
-      "explanation": "Eksamikord nõuab relva käsitamist laetuna, ohutut suunda ning sõrme hoidmist sirgelt relvaraamil väljaspool päästikukaitset kuni lasu sooritamiseni. Nende nõuete rikkumine tähendab katse ebaõnnestumist."
+      "explanation": "Eksamil kehtivad kogu käsitsemise vältel laetuna käsitamise, ohutu suuna ja päästikust eemal hoitava sõrme nõuded. Ohutuks tegemisel ei tõenda salve eemaldamine üksi tühja padrunipesa; kontrollida tuleb ka padrunipesa ja salvekanalit. Kontrolllask ei ole üldine ega ohutu viis tühjuse tõendamiseks. Konkreetne käsitsemisvõte sõltub relvast ja eksamineerija juhistest."
     },
     {
       "id": 11,
@@ -179,18 +182,19 @@
     },
     {
       "id": 12,
-      "text": "Relvaomanik soovib, et teine füüsiline isik saaks tema relva kasutada paralleelrelvaloa alusel. Milline omaniku nõusolek on loa andmiseks nõutav?",
+      "text": "Relvaomanik annab oma relva teisele inimesele kasutamiseks paralleelrelvaloa alusel. Millised väited peavad paika?",
       "options": [
-        "Kirjalik nõusolek, milles on konkreetselt nimetatud relva kasutama hakkav isik",
-        "Suuline nõusolek tunnistaja juuresolekul",
-        "Notariaalne relva omandi üleandmine",
-        "Omaniku nõusolekut pole vaja, kui taotlejal on muu relvaluba"
+        "Kasutajal peab olema selle relva kohta kehtiv paralleelrelvaluba",
+        "Omanik on loa andmiseks kirjalikult nõustunud konkreetselt nimetatud isiku kasutusõigusega",
+        "Piisab omaniku suulisest loast, isegi kui kasutajal paralleelrelvaluba ei ole",
+        "Relv tuleb kasutajale notariaalselt võõrandada"
       ],
       "correct": [
-        0
+        0,
+        1
       ],
-      "multiple": false,
-      "explanation": "Paralleelrelvaloa andmiseks peab omanik kirjalikult nõustuma, et tema relva kasutab nõusolekus konkreetselt nimetatud isik. Lubade arvu käsitleb eraldi küsimus."
+      "multiple": true,
+      "explanation": "Paralleelrelvaluba annab teisele isikule õiguse kasutada omaniku relva, kui omanik on nimetatud kasutajaga kirjalikult nõustunud ja luba on välja antud. Suuline nõusolek üksi ei asenda luba ega tähenda omandi üleminekut. Varasem eraldi § 34 lg 5 üleandmisakti nõue on kehtetuks tunnistatud; ajutisel hoiuleandmisel võivad kehtida teised reeglid."
     },
     {
       "id": 13,
@@ -200,15 +204,19 @@
         "Ajaloolise võitlus- või sporditraditsiooniga seotud mõõk",
         "Muu eseme kuju imiteeriv tulirelv",
         "Tulirelv, millel puudub valmistaja nõutud markeering",
-        "Õõnsaotsalise kuuliga püstoli- või revolvripadrun"
+        "Õõnsaotsalise kuuliga püstoli- või revolvripadrun",
+        "Tulirelv, millega saab lasu teha ka lahtivõetuna",
+        "Soomust läbistava toimega lõhkelaskemoon"
       ],
       "correct": [
         2,
         3,
-        4
+        4,
+        5,
+        6
       ],
       "multiple": true,
-      "explanation": "Varjatud kujuga või nõuetekohase markeeringuta tulirelv ja õõnsaotsalise kuuliga püstoli- või revolvripadrun on keelatud. Akustiline relv on piiratud käibega ning ajaloolise traditsiooniga külmrelv võib olla piiramata käibega."
+      "explanation": "Tsiviilkäibes on keelatud muu eseme kuju imiteeriv, valmistaja markeeringuta või lahtivõetuna lasu tegemist võimaldav tulirelv ning nimetatud eriohtlik laskemoon. Nõuetele vastav akustiline relv on piiratud käibega ja ajaloolise traditsiooniga külmrelv võib olla piiramata käibega."
     },
     {
       "id": 14,
@@ -303,19 +311,20 @@
     },
     {
       "id": 20,
-      "text": "Kes võib relva lammutamise loa alusel relva koostisosadeks võtta?",
+      "text": "Relva lammutamiseks on saadud PPA luba. Millised väited lammutaja ja alles jäävate osade kohta on õiged?",
       "options": [
         "Relva omanik või valdaja",
         "Omaniku tellimusel relva parandamise või ümbertegemise tegevusloaga isik",
-        "Iga täisealine, kes oskab tööriistu kasutada",
-        "Üksnes relvamüüja"
+        "Kasutuskõlblikke tulirelva olulisi osi võib edaspidi kasutada üksnes relvade parandamiseks või ümbertegemiseks",
+        "Iga täisealine võib relva loata lammutada, kui osad jäävad talle"
       ],
       "correct": [
         0,
-        1
+        1,
+        2
       ],
       "multiple": true,
-      "explanation": "Lammutamiseks on vaja PPA luba. Selle alusel võib töö teha omanik või valdaja ise või nõutava tegevusloaga teenuseosutaja."
+      "explanation": "Lammutamine vajab PPA luba. Selle alusel võib töö teha omanik või valdaja ise või nõutava tegevusloaga teenuseosutaja. Alles jäänud kasutuskõlblikke olulisi osi tohib kasutada vaid parandamiseks või ümbertegemiseks; kõlbmatud osad hävitatakse ettenähtud korras."
     },
     {
       "id": 21,
@@ -353,19 +362,21 @@
     },
     {
       "id": 23,
-      "text": "Millises olukorras on tavalisel loaomanikul relva kandmine keelatud?",
+      "text": "Millistes olukordades puudub õigus tsiviilrelva kanda või on selle kandmine keelatud?",
       "options": [
         "Oma hoiukohast lasketiiru edasitoimetamisel nõuetekohaselt pakituna",
         "Joobeseisundis",
         "Pidustusel või muul avalikul üritusel, kui ta ei täida seal teenistus- või tööülesannet",
-        "Avalikus kohas varjatult, kaasas isikut tõendav dokument"
+        "Avalikus kohas varjatult, kui kandjal on nõutav kehtiv relvaluba ja isikut tõendav dokument",
+        "Isikul ei ole relva kandmist lubavat kehtivat luba"
       ],
       "correct": [
         1,
-        2
+        2,
+        4
       ],
       "multiple": true,
-      "explanation": "Joobes kandmine ja relva kandmine avalikul üritusel on keelatud, välja arvatud üritusel teenistus- või tööülesannet täitval isikul."
+      "explanation": "Relva kandmiseks peab isikul olema seda lubav kehtiv luba. Joobes kandmine ja relva kandmine avalikul üritusel on keelatud, välja arvatud üritusel teenistus- või tööülesannet täitval isikul. Nõuetekohaselt pakitud relva edasitoimetamine ei ole sama mis kandmine."
     },
     {
       "id": 24,
@@ -435,19 +446,22 @@
     },
     {
       "id": 28,
-      "text": "Millised väited hädakaitse ja hädaseisundi kohta on õiged?",
+      "text": "Millised väited hädakaitse, selle piiride ja hädaseisundi kohta on õiged?",
       "options": [
         "Hädaseisundis peab valitud vahend olema ohu kõrvaldamiseks vajalik ja kaitstav huvi kahjustatavast selgelt olulisem",
         "Hädakaitse võimalus kaob alati, kui ründe eest saanuks põgeneda",
         "Hädakaitses võib kaitsta nii enda kui ka teise isiku õigushüve",
-        "Lõppenud ründe eest hiljem kättemaksmine on hädakaitse"
+        "Lõppenud ründe eest hiljem kättemaksmine on hädakaitse",
+        "KarS § 28 lg 2 järgi ületatakse hädakaitse piiri siis, kui ilmselgelt sobimatu kaitsevahend või ilmselgelt liigne kahju valitakse kavatsetult või otsese tahtlusega",
+        "KarS § 28 lg 2 järgi on iga ettevaatamatusest tekkinud liigne tagajärg automaatselt hädakaitse piiri ületamine"
       ],
       "correct": [
         0,
-        2
+        2,
+        4
       ],
       "multiple": true,
-      "explanation": "Hädaseisund eeldab vajalikkust ja huvide kaalumist. Hädakaitse lubab tõrjuda vahetut või vahetult eesseisvat õigusvastast rünnet enda või teise kaitseks; põgenemisvõimalus ei võta kaitseõigust automaatselt ära."
+      "explanation": "Hädaseisund eeldab vajalikkust ja huvide kaalumist. Hädakaitse lubab tõrjuda vahetut või vahetult eesseisvat õigusvastast rünnet enda või teise kaitseks. KarS § 28 lg 2 seob hädakaitse piiri ületamise ilmselgelt sobimatu vahendi või ilmselgelt liigse kahju kavatsetud või otsese tahtlusega tekitamisega; pelk ettevaatamatus ei täida seda tunnust. See ei tähenda, et iga ettevaatamatu tegu oleks muudel alustel vastutusest vaba."
     },
     {
       "id": 29,
@@ -456,14 +470,16 @@
         "Helisummuti, lasersihik ja öösihik on tulirelva lisaseadmed",
         "Padrun on tulirelva osa",
         "Relvarihm on tulirelva oluline osa",
-        "Relvaraud, lukukoda ja padrunisalv on tulirelva osad"
+        "Relvaraud, lukukoda ja padrunisalv on tulirelva osad",
+        "Trummel, kaitseriiv ja adapter võivad olla tulirelva osad"
       ],
       "correct": [
         0,
-        3
+        3,
+        4
       ],
       "multiple": true,
-      "explanation": "Seadus eristab tulirelva osi ja lisaseadmeid. Padrun on laskemoon ning relvarihm ei ole oluline osa."
+      "explanation": "Seadus loetleb tulirelva osadena muu hulgas relvaraua, lukukoja, padrunisalve, trumli, kaitseriivi ja adapteri; lisaseadmeid käsitatakse samuti tulirelva osadena. Padrun on laskemoon ning relvarihm ei ole tulirelva kasutamiseks vajalik reguleeritud osa."
     },
     {
       "id": 30,
@@ -514,20 +530,22 @@
     },
     {
       "id": 33,
-      "text": "Millised väited kehtivad relva- ja padrunikollektsiooni kohta?",
+      "text": "Millised väited kehtivad relva- ja padrunikollektsiooni kohta, sealhulgas vanemate mudelite puhul?",
       "options": [
         "Kollektsiooni tulirelvi hoitakse relvahoidlas",
         "Kollektsiooni relva võib kollektsioneerimisloa alusel igapäevaselt kanda",
         "Kollektsioneerimise eesmärk võib olla ajalooline, teaduslik, tehniline või kultuuriline",
-        "Padrunimudelit, mille tootmist alustati pärast 1945. aastat, võib kollektsioonis olla kuni 200 padrunit"
+        "Padrunimudelit, mille tootmist alustati pärast 1945. aastat, võib kollektsioonis olla kuni 200 padrunit",
+        "Enne 1946. aastat tootma hakatud mudeliga üle 12,7 mm laskekõlblik vintraudne tulirelv ei ole üksnes § 25 lg 3 p 1 kaliibri- ja aastapiirangu tõttu keelatud"
       ],
       "correct": [
         0,
         2,
-        3
+        3,
+        4
       ],
       "multiple": true,
-      "explanation": "Kollektsioneerimine teenib seaduses nimetatud uurimis- ja säilitamiseesmärke. Padrunimudelitele, mille tootmist alustati pärast 1945. aastat, kehtib 200 padruni piir ning kollektsioneerimisluba ei anna üldist kandmisõigust."
+      "explanation": "Kollektsioneerimine teenib seaduses nimetatud uurimis- ja säilitamiseesmärke. Pärast 1945. aastat tootma hakatud padrunimudelitele kehtib 200 padruni piir ning kollektsioneerimisluba ei anna üldist kandmisõigust. Üle 12,7 mm vintraudse mudeli piirang puudutab mudeleid, mille tootmist alustati pärast 1945. aastat; vanema mudeli puhul kehtivad siiski kõik muud nõuded."
     },
     {
       "id": 34,
@@ -594,19 +612,21 @@
     },
     {
       "id": 38,
-      "text": "Millised muudatused nõuavad relvaloa andmete muutmise menetlust?",
+      "text": "Millistes olukordades tuleb PPA-ga tegeleda relvaloa andmete parandamise või muutmisega?",
       "options": [
         "Omanik vahetab tööandjat, kuid loaandmed ei muutu",
         "Omanik läheb nädalaks puhkusele",
-        "Relva hoiukoha aadress muutub",
-        "Omanik soovib muuta relva kasutamise otstarvet"
+        "Relva registreeritud hoiukoha aadress muutub",
+        "Omanik soovib muuta relva kasutamise otstarvet",
+        "Loal olev omaniku nimi või registreeritud relva mark, kaliiber või markeering ei vasta õigetele andmetele"
       ],
       "correct": [
         2,
-        3
+        3,
+        4
       ],
       "multiple": true,
-      "explanation": "PPA-d tuleb teavitada hoiukoha muutusest ja otstarbe muutmise soovist. Töökoha või lühiajalise puhkuse muutus pole iseenesest loaandmete muudatus."
+      "explanation": "Hoiukoha asukoha muutusest ja otstarbe muutmise soovist tuleb PPA-d teavitada seitsme tööpäeva jooksul. Kui loale kantud omaniku või relva andmed on ebaõiged, tuleb pöörduda PPA poole nende parandamiseks; § 42 ei sätesta neile sama seitsme tööpäeva tähtaega. Töökoha või lühiajalise puhkuse muutus pole iseenesest loaandmete muudatus."
     },
     {
       "id": 39,
@@ -658,20 +678,22 @@
     },
     {
       "id": 42,
-      "text": "Millised teod on karistusseadustikus käsitletud relvadega seotud kuritegudena?",
+      "text": "Millised teod on karistusseadustikus käsitletud tulirelva või laskemoonaga seotud kuritegudena?",
       "options": [
         "Tulirelva lohakas hoidmine, kui selle tagajärjel kasutatakse relva kuriteos",
         "Iga relvakapi võtme korraks taskusse unustamine",
         "Tulirelva ebaseaduslik käitlemine",
-        "Tsiviilkäibes keelatud tulirelva ebaseaduslik käitlemine"
+        "Tsiviilkäibes keelatud tulirelva ebaseaduslik käitlemine",
+        "Tsiviilkäibes keelatud laskemoona ebaseaduslik käitlemine, välja arvatud seaduses nimetatud ebaoluline kogus"
       ],
       "correct": [
         0,
         2,
-        3
+        3,
+        4
       ],
       "multiple": true,
-      "explanation": "KarS §-d 418, 418^1 ja 419 kirjeldavad vastavaid kuriteokoosseise. Pelgalt võtme taskusse unustamine ei ole nende sätete järgi automaatselt kuritegu."
+      "explanation": "KarS §-d 418, 418^1 ja 419 kirjeldavad vastavaid kuriteokoosseise. Keelatud laskemoona ebaseadusliku käitlemise § 418^1 erand puudutab ebaolulist kogust. Pelgalt võtme taskusse unustamine ei ole nende sätete järgi automaatselt kuritegu."
     },
     {
       "id": 43,
@@ -787,37 +809,44 @@
     },
     {
       "id": 50,
-      "text": "Mida ei tohi ka kollektsioneerimisloa alusel kollektsiooni võtta?",
+      "text": "Millised esemed on ka kollektsioneerimisloa puhul kollektsioonist välistatud?",
       "options": [
         "Elektrienergial, radioaktiivsel kiirgusel või bioloogilisel faktoril põhinevat relva",
         "Lõhke- või süütelaskemoona",
         "Kasteeti, kasteetnuga või teraspiitsa",
-        "Pärast 1945. aastat tootma hakatud üle 12,7 mm vintraudse tulirelva laskemoona",
-        "Nõuetele vastavat ajaloolist mõõka"
+        "Üle 12,7 mm vintraudse tulirelva laskemoona, mille padrunimudeli tootmist alustati pärast 1945. aastat",
+        "Nõuetele vastavat ajaloolist mõõka",
+        "Üle 12,7 mm laskekõlblikku vintraudset tulirelva, mille mudeli tootmist alustati pärast 1945. aastat",
+        "Üle 20 mm laskekõlblikku sileraudset tulirelva, mille mudeli tootmist alustati pärast 1945. aastat"
       ],
       "correct": [
         0,
         1,
         2,
-        3
+        3,
+        5,
+        6
       ],
       "multiple": true,
-      "explanation": "Seadus loetleb need kollektsioneerimise eranditena. Ajaloolise traditsiooniga mõõk ei kuulu sellesse keelunimekirja."
+      "explanation": "RelvS § 25 lg 3 loetleb kollektsioneerimise keelud, sealhulgas nimetatud relvad, laskemoona ja kehavigastuse tekitamiseks mõeldud esemed. Suure kaliibriga tulirelvade piirang sõltub mudeli tootmise algusajast, mitte konkreetse eksemplari valmistamise aastast. Nõuetele vastav ajalooline mõõk ei kuulu sellesse keelunimekirja."
     },
     {
       "id": 51,
-      "text": "Milline asjaolu toob kaasa loa kehtetuks tunnistamise, mitte üksnes ajutise peatamise?",
+      "text": "Millised väited soetamis- või relvaloa kehtetuks tunnistamise kohta on õiged?",
       "options": [
-        "Relva kasutamisega põhjustati varaline kahju ja oodatakse uut tervisekontrolli",
-        "Loaomanik on surnud või tunnistatud teadmata kadunuks",
-        "Kontrollis selgub ajutiselt, et nõuetekohased hoiutingimused puuduvad",
-        "Loaomanik on kahtlustatav seaduses nimetatud kuriteos"
+        "Loaomaniku surma või teadmata kadunuks tunnistamise korral tunnistab PPA loa kehtetuks",
+        "Kui omanik on kolme aasta jooksul vähemalt kaks korda rikkunud relvanõudeid või jätnud ettekirjutuse täitmata, tunnistab PPA loa kehtetuks",
+        "Kui isik on oma eluviisi või käitumise tõttu relva omamiseks sobimatu, võib PPA loa kehtetuks tunnistada",
+        "Üks parkimistrahv tähendab alati relvaloa kehtetuks tunnistamist",
+        "Hoiutingimuste puudumise tuvastamine tähendab alati kohe kehtetuks tunnistamist, mitte peatamist"
       ],
       "correct": [
-        1
+        0,
+        1,
+        2
       ],
-      "multiple": false,
-      "explanation": "Surm või teadmata kadunuks tunnistamine on kehtetuks tunnistamise alus. Teised kirjeldatud asjaolud on seaduses eeskätt loa peatamise alused."
+      "multiple": true,
+      "explanation": "Surm või teadmata kadunuks tunnistamine ning korduvad rikkumised või ettekirjutuse täitmata jätmine on kohustuslikud kehtetuks tunnistamise alused. Turvalisust ohustava eluviisi või käitumise tõttu sobimatuks osutunud isiku loa võib PPA kehtetuks tunnistada. Ainuüksi nõuetekohaste hoiutingimuste puudumise tuvastamisel luba esmalt peatatakse."
     },
     {
       "id": 52,
@@ -1042,18 +1071,20 @@
     },
     {
       "id": 67,
-      "text": "PPA kontroll tuvastab, et loaomanikul puuduvad seaduses nõutud relva ja laskemoona hoiutingimused. Mis on seaduses ette nähtud esmane tagajärg loale?",
+      "text": "PPA teeb seaduslikul alusel järelevalvet tsiviilrelva käitlemise üle. Millised toimingud võivad kontrolli eesmärgi ja seaduses sätestatud tingimuste korral kõne alla tulla?",
       "options": [
-        "Maksu- ja Tolliamet muudab relva omanikku",
-        "PPA peatab soetamis- või relvaloa kehtivuse",
-        "Luba pikeneb automaatselt ühe aasta võrra",
-        "Kontrollil ei ole loa kehtivusele mingit mõju"
+        "Isiku küsitlemine ja asjakohaste dokumentide nõudmine",
+        "Relva ja selle hoiukoha kontrollimine seaduses sätestatud alustel",
+        "Alkoholijoobe kontrollimine, kui selleks on seaduses sätestatud alus",
+        "Iga kodu piiramatu läbiotsimine mis tahes ajal ilma seadusliku aluseta"
       ],
       "correct": [
-        1
+        0,
+        1,
+        2
       ],
-      "multiple": false,
-      "explanation": "Kui kontrollis selgub, et nõuetekohased hoiutingimused puuduvad, peatab PPA loa kehtivuse."
+      "multiple": true,
+      "explanation": "PPA järelevalve võib hõlmata küsitlemist ja vajalike dokumentide nõudmist, joobekontrolli ning relva või hoiukoha kontrollimist korrakaitseseaduses ette nähtud alustel ja korras. See ei anna piiramatut õigust eluruumi ilma õigusliku aluseta läbi otsida. Kui kontroll tuvastab nõutavate hoiutingimuste puudumise, peatab PPA loa kehtivuse."
     },
     {
       "id": 68,
@@ -1072,20 +1103,22 @@
     },
     {
       "id": 69,
-      "text": "Millistel juhtudel peatab PPA soetamis- või relvaloa kehtivuse?",
+      "text": "Millistel juhtudel peab PPA soetamis- või relvaloa kehtivuse peatama?",
       "options": [
         "Loaomanik on seaduses nimetatud relva- või vägivallakuriteos kahtlustatav või süüdistatav",
         "Kontrollis puuduvad nõuetekohased hoiutingimused",
         "Loaomanik sai ühe parkimistrahvi",
-        "Loaomanikku on karistatud mootorsõiduki juhtimise eest üle lubatud alkoholipiiri"
+        "Loaomanikku on karistatud mootorsõiduki juhtimise eest üle lubatud alkoholipiiri",
+        "On põhjendatud kahtlus, et loaomanik võib oma eluviisi või käitumisega ohustada enda või teise isiku turvalisust"
       ],
       "correct": [
         0,
         1,
-        3
+        3,
+        4
       ],
       "multiple": true,
-      "explanation": "Alkoholipiiri ületades juhtimise eest karistamine, nimetatud kuriteos kahtlustamine või süüdistamine ja puudulikud hoiutingimused on konkreetsed peatamise alused. Iga suvaline väärtegu, näiteks üks parkimisrikkumine, seda automaatselt ei ole."
+      "explanation": "Alkoholipiiri ületades juhtimise eest karistamine, nimetatud kuriteos kahtlustamine või süüdistamine, puudulikud hoiutingimused ja põhjendatud ohukahtlus eluviisi või käitumise tõttu on peatamise alused. Iga suvaline väärtegu, näiteks üks parkimisrikkumine, seda automaatselt ei ole."
     },
     {
       "id": 70,
